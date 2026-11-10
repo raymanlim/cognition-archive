@@ -2,9 +2,10 @@
 
 Rayman Lim 的个人思想认知网站 —— 「世纪文库·极简典藏风」。
 
-- 站点：`https://raymanlim.us.ci`
+- 站点：`https://cognition.raymanlim.us.ci`
+- 预览域：`https://cognition-archive.pages.dev`
 - 构建：Astro 5 + Tailwind CSS + TypeScript，静态输出（`output: 'static'`）
-- 部署：GitHub → Cloudflare Pages（Framework preset: Astro；Build command: `npm run build`；Output: `dist`）
+- 部署：GitHub (`raymanlim/cognition-archive`, main) → Cloudflare Pages（Framework preset: Astro；Build command: `npm run build`；Output: `dist`），push main 自动重新部署
 
 ## 三大版块 + 交叉图谱
 
