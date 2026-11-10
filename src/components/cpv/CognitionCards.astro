@@ -1,0 +1,32 @@
+---
+import I18nText from '../I18nText.astro';
+import I18nBlock from '../I18nBlock.astro';
+import CognitiveCard from '../CognitiveCard.astro';
+import { cognitionCards, cognitionAuthors } from '../../data/cognition';
+import { cogCardAnchor } from '../../utils/anchors';
+---
+<div>
+  <div class="flex flex-wrap items-center gap-2 mb-6">
+    <span class="eyebrow mr-2"><I18nText k="cardLibrary" /></span>
+    <button type="button" class="chip" data-filter-group="author" data-filter-value="all" aria-pressed="true">
+      <I18nText k="all" />
+    </button>
+    {cognitionAuthors.map((a) => (
+      <button type="button" class="chip" data-filter-group="author" data-filter-value={a.id} aria-pressed="false">
+        <I18nBlock zh={a.zh} en={a.en} />
+      </button>
+    ))}
+    <span class="ml-auto text-[.78rem]" style="color:var(--ink-faint)"><span data-filter-count>23</span> / 23</span>
+  </div>
+
+  <div data-filter-scope class="space-y-6">
+    {cognitionCards.map((c) => (
+      <CognitiveCard
+        card={c}
+        anchor={cogCardAnchor(c.num)}
+        numeral={String(c.num).padStart(2, '0')}
+        extraTags={c.author.id}
+      />
+    ))}
+  </div>
+</div>

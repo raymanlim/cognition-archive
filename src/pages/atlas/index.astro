@@ -1,0 +1,144 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import I18nText from '../../components/I18nText.astro';
+import I18nBlock from '../../components/I18nBlock.astro';
+import SectionNumeral from '../../components/SectionNumeral.astro';
+import SourceText from '../../components/SourceText.astro';
+import { dict } from '../../data/uiDictionary';
+import { axioms, buildFullMatrix, relevance, crossStats } from '../../utils/cognitiveEngine';
+import { realityById } from '../../data/reality-lens';
+import { lensCardAnchor } from '../../utils/anchors';
+
+const matrix = buildFullMatrix();
+const cards = matrix.map((m) => ({ m, card: realityById.get(m.cardId)! }));
+---
+<BaseLayout title="交叉图谱 / Cross Atlas" active="atlas"
+  description="8 大跨库串联公理与 25 × 3 层认知交叉矩阵：哲学底座、CPV 诊断、芒格模型。">
+
+  <section class="archive-shell page-head">
+    <div class="eyebrow mb-3">DIVISION IV</div>
+    <I18nBlock as="div" class="display-title" zh="交叉图谱" en="Cross Atlas" />
+    <I18nBlock as="div" class="mt-4 body-text text-[.95rem] max-w-3xl"
+      zh="8 大跨库串联公理 · 25 × 3 层认知交叉矩阵"
+      en="8 cross-library axioms · a 25 × 3-layer cognitive matrix" />
+    <div class="flex flex-wrap gap-3 mt-6">
+      <span class="badge badge-cinnabar">{crossStats.philosophers} <I18nText k="statPhilosophers" /></span>
+      <span class="badge badge-cinnabar">{crossStats.cognition} <I18nText k="statCognition" /></span>
+      <span class="badge badge-cinnabar">{crossStats.models} <I18nText k="statModels" /></span>
+      <span class="badge badge-cinnabar">{crossStats.cards} <I18nText k="statReality" /></span>
+    </div>
+  </section>
+
+  <!-- Eight axioms -->
+  <section class="archive-shell py-10">
+    <div class="eyebrow mb-5"><I18nText k="axiomsLabel" /></div>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      {axioms.map((a, i) => {
+        const count = cards.filter(({ card }) => card.topics.includes(a.key)).length;
+        return (
+          <div class="paper-card p-5" id={`axiom-${a.key}`}>
+            <div class="flex items-start justify-between gap-2">
+              <SectionNumeral num={String(i + 1).padStart(2, '0')} class="!text-[2rem]" />
+              <span class="badge">{count} <I18nText k="resultCount" /></span>
+            </div>
+            <I18nBlock as="div" class="mt-2 text-[1.02rem] font-bold" zh={a.name} en={a.nameEn} />
+            <SourceText html={a.html} text={a.text} class="mt-2 text-[.8rem] body-text leading-relaxed" />
+            <div class="mt-3 flex flex-wrap gap-1">
+              {a.keywords.slice(0, 5).map((k) => (
+                <span class="badge"><SourceText html={k} text={k} /></span>
+              ))}
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  </section>
+
+  <!-- 25 × 8 heat matrix -->
+  <section class="archive-shell py-10 border-t" style="border-color:var(--rule)">
+    <div class="eyebrow mb-2"><I18nText k="matrixLabel" /></div>
+    <p class="text-[.82rem] mb-5" style="color:var(--ink-faint)"><I18nText k="matrixHint" /></p>
+    <div class="leaf-card p-3 sm:p-5 overflow-x-auto">
+      <table class="archive-table" style="min-width:680px">
+        <thead>
+          <tr>
+            <th style="width:44px">§</th>
+            <th><I18nText t={dict.realityCardCol} /></th>
+            {axioms.map((a) => (
+              <th style="width:52px;text-align:center" title={a.nameEn}>
+                <I18nText zh={a.name.slice(0, 2)} en={a.nameEn.slice(0, 3)} />
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {cards.map(({ card }) => (
+            <tr>
+              <td style="color:var(--cinnabar)">{String(card.num).padStart(2, '0')}</td>
+              <td>
+                <a href={`/reality-lens#${lensCardAnchor(card.num)}`} class="hover:underline">
+                  <I18nBlock zh={card.title} en={card.titleEn} />
+                </a>
+              </td>
+              {axioms.map((a) => {
+                const r = relevance(card.id, a.key);
+                return (
+                  <td style="text-align:center;padding:.4rem">
+                    {r > 0
+                      ? <a href={`#axiom-${a.key}`} title={`${a.nameEn} · ${r - 1} keyword hits`}
+                           class="inline-block w-3.5 h-3.5 rounded-full"
+                           style={`background:var(--cinnabar);opacity:${Math.min(.35 + (r - 1) * .16, 1)}`}></a>
+                      : <span style="color:var(--ink-faint);opacity:.35">·</span>}
+                  </td>
+                );
+              })}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Full three-layer link index -->
+  <section class="archive-shell py-10 border-t" style="border-color:var(--rule)">
+    <div class="eyebrow mb-5"><I18nText k="fullIndex" /></div>
+    <div class="space-y-2">
+      {cards.map(({ m, card }) => (
+        <div class="paper-card collapsible" id={`atlas-${card.id}`} data-collapsible data-open="false">
+          <button type="button" class="collapsible-toggle w-full text-left p-4 flex items-center gap-4" data-collapsible-toggle>
+            <span class="font-serif text-[1.25rem] font-bold shrink-0" style="color:var(--cinnabar)">{String(card.num).padStart(2, '0')}</span>
+            <span class="flex-1 min-w-0 text-[.9rem] font-bold"><I18nBlock zh={card.title} en={card.titleEn} /></span>
+            <span class="hidden sm:flex gap-1 flex-wrap justify-end">
+              {m.axioms.map((a) => <span class="badge"><I18nText zh={a.name} en={a.nameEn} /></span>)}
+            </span>
+            <span class="chev shrink-0" style="color:var(--cinnabar)">›</span>
+          </button>
+          <div class="collapsible-body px-4 pb-5 grid sm:grid-cols-3 gap-4">
+            {[
+              { k: 'layerPhilosophers' as const, links: m.philosophers },
+              { k: 'layerCpv' as const, links: [...m.cpv, ...m.cognition] },
+              { k: 'layerModels' as const, links: m.models },
+            ].map((g) => (
+              <div>
+                <div class="eyebrow mb-2"><I18nText k={g.k} /> · {g.links.length}</div>
+                <ul class="space-y-1">
+                  {g.links.map((l) => (
+                    <li>
+                      <a href={l.href} class="text-[.78rem] leading-snug block px-2 py-1.5"
+                         style="background:var(--card-2);border-left:2px solid var(--rule-strong)" title={l.labelEn}>
+                        <I18nBlock zh={l.label} en={l.labelEn} />
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+            <div class="sm:col-span-3 pt-2 border-t" style="border-color:var(--rule)">
+              <a href={`/reality-lens#${lensCardAnchor(card.num)}`} class="chip"><I18nText k="openFullCard" /> →</a>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+</BaseLayout>

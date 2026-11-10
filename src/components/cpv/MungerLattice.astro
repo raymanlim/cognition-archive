@@ -1,0 +1,159 @@
+---
+import I18nText from '../I18nText.astro';
+import I18nBlock from '../I18nBlock.astro';
+import ObiStrip from '../ObiStrip.astro';
+import SectionNumeral from '../SectionNumeral.astro';
+import CognitiveCard from '../CognitiveCard.astro';
+import InterpretationTable from '../InterpretationTable.astro';
+import SourceText from '../SourceText.astro';
+import { dict } from '../../data/uiDictionary';
+import { mungerCatAnchor, mungerModelAnchor } from '../../utils/anchors';
+import {
+  mungerCards, mungerAxiom, sixSections,
+  preDecisionQuestions, postMortemQuestions, toolCards,
+} from '../../data/munger';
+
+const modelHeaders = [
+  dict.mungerModelHeaders.modelName,
+  dict.mungerModelHeaders.definition,
+  dict.mungerModelHeaders.application,
+];
+const toolHeaders = [dict.toolConcept, dict.toolKeyPoint, dict.toolImplication];
+---
+<div class="space-y-12">
+
+  <!-- Core axiom -->
+  <section>
+    <div class="eyebrow mb-3"><I18nText k="coreAxiom" /></div>
+    <ObiStrip zh={mungerAxiom.zh} en={mungerAxiom.en} />
+  </section>
+
+  <!-- Six-section master analysis -->
+  <section id="six-root">
+    <div class="eyebrow mb-3"><I18nText k="sixSections" /></div>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+      {sixSections.map((s) => (
+        <div class="leaf-card p-4" id={`six-${s.num}`} data-collapsible-child>
+          <div class="font-serif text-[1.5rem] font-bold mb-1" style="color:var(--cinnabar)">{String(s.num).padStart(2, '0')}</div>
+          <SourceText html={s.title} text={s.title} class="text-[.9rem] font-bold mb-2" />
+          <ul class="space-y-1.5">
+            {s.points.slice(0, 4).map((p) => (
+              <li class="text-[.78rem] body-text leading-snug flex gap-2">
+                <span class="rule-dot mt-1.5"></span>
+                <SourceText html={p.html} text={p.text} />
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- Six discipline cards + 52 raw models -->
+  <section>
+    <div class="flex items-end justify-between gap-3 mb-5">
+      <div class="eyebrow"><I18nText k="sixDisciplines" /></div>
+      <span class="text-[.78rem]" style="color:var(--ink-faint)">M1–M6 · 52</span>
+    </div>
+
+    <div class="space-y-6">
+      {mungerCards.map((c) => (
+        <CognitiveCard
+          card={c}
+          anchor={mungerCatAnchor(c.num)}
+          numeral={`M${c.num}`}
+          showReverse={true}
+        >
+          <div slot="extra" class="collapsible border-t pt-5" style="border-color:var(--rule)"
+               data-collapsible data-open="false" data-model-table={c.num}>
+            <button type="button" class="collapsible-toggle flex items-center justify-between w-full text-[.85rem] font-bold" data-collapsible-toggle>
+              <span><I18nText k="expandModels" /> · {c.modelCount} <I18nText k="modelCount" /></span>
+              <span class="chev" style="color:var(--cinnabar)">›</span>
+            </button>
+            <div class="collapsible-body mt-4">
+              <div class="overflow-x-auto">
+                <table class="archive-table">
+                  <thead>
+                    <tr>{modelHeaders.map((h) => (<th><I18nText t={h} /></th>))}</tr>
+                  </thead>
+                  <tbody>
+                    {c.models.map((m, j) => (
+                      <tr id={mungerModelAnchor(c.num, j + 1)} data-model-row>
+                        <td>
+                          {m.code && <span class="text-[.7rem] mr-1" style="color:var(--cinnabar)">{m.code}</span>}
+                          <I18nBlock zh={m.name} en={m.nameEn ?? m.name} />
+                        </td>
+                        <td><SourceText html={m.definitionHtml || m.definition} text={m.definition} /></td>
+                        <td><SourceText html={m.applicationHtml || m.application} text={m.application} /></td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </CognitiveCard>
+      ))}
+    </div>
+  </section>
+
+  <!-- Interactive checklist -->
+  <section>
+    <div class="eyebrow mb-2"><I18nText k="checklistHint" /></div>
+    <div class="grid lg:grid-cols-2 gap-5">
+      <div class="leaf-card p-5">
+        <div class="flex items-center gap-2 mb-4">
+          <SectionNumeral num="7" class="!text-[2rem]" />
+          <h3 class="text-[1.05rem] font-bold"><I18nText k="checklistPre" /></h3>
+        </div>
+        <div class="space-y-2">
+          {preDecisionQuestions.map((q, i) => (
+            <button type="button" data-check-id={`pre-${i}`} aria-pressed="false"
+                    class="w-full text-left text-[.83rem] leading-relaxed px-3 py-2.5 border transition-colors flex gap-3">
+              <span class="shrink-0 font-sans font-bold" style="color:var(--cinnabar)">{String(i + 1).padStart(2, '0')}</span>
+              <I18nBlock t={q} />
+            </button>
+          ))}
+        </div>
+      </div>
+      <div class="leaf-card p-5">
+        <div class="flex items-center gap-2 mb-4">
+          <SectionNumeral num="5" class="!text-[2rem]" />
+          <h3 class="text-[1.05rem] font-bold"><I18nText k="checklistPost" /></h3>
+        </div>
+        <div class="space-y-2">
+          {postMortemQuestions.map((q, i) => (
+            <button type="button" data-check-id={`post-${i}`} aria-pressed="false"
+                    class="w-full text-left text-[.83rem] leading-relaxed px-3 py-2.5 border transition-colors flex gap-3">
+              <span class="shrink-0 font-sans font-bold" style="color:var(--pine)">{String(i + 1).padStart(2, '0')}</span>
+              <I18nBlock t={q} />
+            </button>
+          ))}
+        </div>
+        <div class="mt-4 pt-4 border-t text-[.78rem] body-text" style="border-color:var(--rule)">
+          <I18nBlock
+            zh="清单本身也有「能解释一切」的自洽风险：必须配基础率与复盘，否则清单会变成给结论背书的修辞。"
+            en="A checklist can also explain everything. Pair it with base rates and post-mortems, or it becomes rhetoric serving your conclusion." />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Supplementary logic & metaphor toolkit -->
+  <section>
+    <div class="eyebrow mb-4"><I18nText k="toolCards" /></div>
+    <div class="space-y-4">
+      {toolCards.map((t) => (
+        <div class="paper-card p-5 sm:p-6" id={`tool-${t.id}`}>
+          <div class="flex items-baseline gap-3 mb-3">
+            <span class="font-serif text-[1.5rem] font-bold" style="color:var(--cinnabar)">{t.code}</span>
+            <I18nBlock as="div" class="text-[1.05rem] font-bold" zh={t.title} en={t.titleEn} />
+          </div>
+          <InterpretationTable rows={t.rows} headers={toolHeaders} />
+          <I18nBlock class="mt-4 text-[.83rem] body-text border-l-2 pl-3"
+            style="border-color:var(--pine)" zh={t.note} en={t.noteEn} />
+        </div>
+      ))}
+    </div>
+  </section>
+</div>

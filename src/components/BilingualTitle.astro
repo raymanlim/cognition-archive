@@ -1,0 +1,12 @@
+---
+interface Props {
+  zh: string;
+  en: string;
+  level?: 'h1' | 'h2' | 'h3' | 'h4';
+  class?: string;
+}
+const { zh, en, level: Level = 'h3', class: cls = '' } = Astro.props;
+---
+<Level class:list={[cls]}>
+  <span class="t-zh">{zh}</span><span class="t-en">{en}</span>
+</Level>

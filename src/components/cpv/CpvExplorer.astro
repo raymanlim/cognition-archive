@@ -1,0 +1,161 @@
+---
+import I18nText from '../I18nText.astro';
+import I18nBlock from '../I18nBlock.astro';
+import SectionNumeral from '../SectionNumeral.astro';
+import ObiStrip from '../ObiStrip.astro';
+import SourceText from '../SourceText.astro';
+import { cpvChain, cpvLevels, cpvSystems, motivationAxes, chapterSource } from '../../data/cpv';
+import { escapeHtml } from '../../utils/text';
+
+const numeralEn = (n: string): string =>
+  n === '导论' ? 'Intro' : n === '附录' ? 'Appendix' : n;
+---
+<div class="space-y-12">
+
+  <!-- Continuous problem chain overview -->
+  <section>
+    <div class="flex items-end justify-between gap-3 mb-3">
+      <div class="eyebrow"><I18nText k="chainLabel" /></div>
+      <span class="text-[.76rem]" style="color:var(--ink-faint)"><I18nText k="chainHint" /></span>
+    </div>
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2">
+      {cpvChain.map((n) => (
+        <a href={`#${n.anchor}`} class="leaf-card p-3 hover:border-cinnabar transition-colors">
+          <div class="font-serif text-[1.05rem] font-bold mb-1" style="color:var(--cinnabar)"><I18nText zh={n.numeral} en={numeralEn(n.numeral)} /></div>
+          <I18nBlock class="text-[.8rem] font-bold leading-snug" zh={n.titleZh} en={n.titleEn} />
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <!-- Chapter detail accordions -->
+  <section class="space-y-3" id="chain-root">
+    {cpvChain.map((n, idx) => {
+      const src = chapterSource(n.sourceKey);
+      return (
+        <article class="paper-card collapsible" id={n.anchor} data-collapsible data-open={idx === 0 ? 'true' : 'false'}>
+          <button type="button" class="collapsible-toggle w-full text-left p-5 sm:p-6 flex items-start gap-4" data-collapsible-toggle>
+            <SectionNumeral num={n.numeral} numEn={numeralEn(n.numeral)} class="!text-[1.7rem] sm:!text-[2.2rem] !min-w-0 shrink-0" />
+            <div class="min-w-0 flex-1">
+              <div class="eyebrow mb-1"><I18nText k="problemChain" /> · <I18nText zh={n.numeral} en={numeralEn(n.numeral)} /></div>
+              <I18nBlock as="div" class="text-[1.15rem] font-bold leading-snug" zh={n.titleZh} en={n.titleEn} />
+              <I18nBlock class="mt-1.5 text-[.9rem]" zh={n.question} en={n.questionEn} />
+            </div>
+            <span class="chev shrink-0 text-[1.4rem] leading-none mt-2" style="color:var(--cinnabar)">›</span>
+          </button>
+
+          <div class="collapsible-body px-5 sm:px-6 pb-6">
+            <ObiStrip zh={n.question} en={n.questionEn} />
+            <div class="mt-5 space-y-2">
+              {n.points.map((p) => (
+                <div class="flex gap-3 text-[.9rem] leading-relaxed">
+                  <span class="rule-dot mt-2"></span>
+                  <I18nBlock t={p} />
+                </div>
+              ))}
+            </div>
+
+            {src && src.sections.length > 0 && (
+              <div class="mt-5 collapsible border-t pt-4" style="border-color:var(--rule)" data-collapsible data-open="false">
+                <button type="button" class="collapsible-toggle flex items-center gap-2 text-[.8rem] font-bold" data-collapsible-toggle>
+                  <span class="chev" style="color:var(--cinnabar)">›</span>
+                  <span><I18nText k="showSource" /></span>
+                  <span class="badge">{src.sections.length} <I18nText k="chapterSections" /></span>
+                </button>
+                <div class="collapsible-body mt-4 space-y-4">
+                  <SourceText html={escapeHtml(src.heading)} text={src.heading} class="text-[.78rem]" />
+                  {src.sections.map((s) => (
+                    <div class="text-[.85rem]">
+                      <SourceText html={escapeHtml(s.title)} text={s.title} class="font-bold mb-1" />
+                      {s.paras.slice(0, 2).map((p) => (
+                        <SourceText html={p.html} text={p.text} class="body-text leading-relaxed" />
+                      ))}
+                    </div>
+                  ))}
+                  <SourceText html={src.summaryHtml} text={src.summaryText}
+                    class="text-[.82rem] pt-3 border-t" />
+                </div>
+              </div>
+            )}
+          </div>
+        </article>
+      );
+    })}
+  </section>
+
+  <!-- L1–L7 levels -->
+  <section id="level-root">
+    <div class="eyebrow mb-3"><I18nText k="levelsLabel" /></div>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-2">
+      {cpvLevels.map((l) => (
+        <div class="paper-card collapsible" id={`level-${l.id}`} data-collapsible data-open="false">
+          <button type="button" class="collapsible-toggle w-full text-left p-4 flex items-center justify-between gap-2" data-collapsible-toggle>
+            <span class="font-serif text-[1.3rem] font-bold" style="color:var(--cinnabar)">{l.id}</span>
+            <span class="text-[.86rem] font-bold text-right flex-1"><I18nBlock zh={l.zh} en={l.en} /></span>
+            <span class="chev" style="color:var(--cinnabar)">›</span>
+          </button>
+          <div class="collapsible-body px-4 pb-4 text-[.8rem] body-text">
+            <I18nBlock zh={l.desc} en={l.descEn} />
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- CPV1–CPV5 system bridge -->
+  <section id="system-root">
+    <div class="eyebrow mb-3"><I18nText k="systemsLabel" /></div>
+    <div class="chain-flow">
+      {cpvSystems.map((s, i) => (
+        <Fragment>
+          {i > 0 && <div class="chain-arrow" aria-hidden="true">➔</div>}
+          <div class="chain-node paper-card p-4">
+            <div class="font-serif text-[1.15rem] font-bold mb-1" style="color:var(--cinnabar)">{s.id}</div>
+            <I18nBlock class="text-[.85rem] font-bold" zh={s.zh} en={s.en} />
+            <I18nBlock class="mt-2 text-[.76rem] body-text leading-snug" zh={s.desc} en={s.descEn} />
+          </div>
+        </Fragment>
+      ))}
+    </div>
+  </section>
+
+  <!-- Motivation vector: conceptual three-axis radar (no invented scores) -->
+  <section id="axis-root">
+    <div class="eyebrow mb-3"><I18nText k="axesLabel" /></div>
+    <div class="grid lg:grid-cols-[minmax(0,260px)_minmax(0,1fr)] gap-6 items-center">
+      <div class="leaf-card p-5 flex justify-center">
+        <svg viewBox="0 0 220 200" width="100%" style="max-width:220px" role="img"
+             aria-label="Three-axis motivation profile">
+          <polygon points="110,20 195,165 25,165" fill="none" stroke="var(--rule-strong)" stroke-width="1.5" />
+          <polygon points="110,55 165,150 55,150" fill="none" stroke="var(--pine)" stroke-width="1" stroke-dasharray="4 3" opacity=".7" />
+          <line x1="110" y1="105" x2="110" y2="20" stroke="var(--cinnabar)" stroke-width="1" />
+          <line x1="110" y1="105" x2="195" y2="165" stroke="var(--cinnabar)" stroke-width="1" />
+          <line x1="110" y1="105" x2="25" y2="165" stroke="var(--cinnabar)" stroke-width="1" />
+          <circle cx="110" cy="105" r="4" fill="var(--cinnabar)" />
+          <text class="lang-zh" x="110" y="14" text-anchor="middle" font-size="12" fill="var(--ink)">荣誉 / Honor</text>
+          <text class="lang-en" x="110" y="14" text-anchor="middle" font-size="12" fill="var(--ink)">Honor</text>
+          <text class="lang-zh" x="202" y="180" text-anchor="end" font-size="12" fill="var(--ink)">利益 / Interest</text>
+          <text class="lang-en" x="202" y="180" text-anchor="end" font-size="12" fill="var(--ink)">Interest</text>
+          <text class="lang-zh" x="18" y="180" font-size="12" fill="var(--ink)">恐惧 / Fear</text>
+          <text class="lang-en" x="18" y="180" font-size="12" fill="var(--ink)">Fear</text>
+        </svg>
+      </div>
+      <div class="space-y-3">
+        <I18nBlock class="text-[.78rem]" style="color:var(--ink-faint)"
+          zh="概念剖面：三轴不构成固定评分，只标示动机向量的三个可分离方向。点击展开各轴的诊断含义。"
+          en="Conceptual profile: the three axes are directions, not fixed scores. Expand each axis for its diagnostic meaning." />
+        {motivationAxes.map((a) => (
+          <div class="paper-card collapsible" id={`axis-${a.id}`} data-collapsible data-open="false">
+            <button type="button" class="collapsible-toggle w-full text-left p-4 flex items-center justify-between gap-3" data-collapsible-toggle>
+              <span class="font-bold text-[.95rem]"><I18nBlock zh={a.zh} en={a.en} /></span>
+              <span class="chev" style="color:var(--cinnabar)">›</span>
+            </button>
+            <div class="collapsible-body px-4 pb-4 text-[.85rem] body-text">
+              <I18nBlock zh={a.desc} en={a.descEn} />
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+</div>

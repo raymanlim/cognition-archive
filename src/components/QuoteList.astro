@@ -1,0 +1,25 @@
+---
+import type { Quote } from '../data/types';
+import I18nBlock from './I18nBlock.astro';
+import SourceText from './SourceText.astro';
+import { translateWork } from '../data/termDictionary';
+
+// Work titles are proper nouns: use a real English title when one is mapped,
+// otherwise keep 《...》 verbatim. Never degrade to a generic placeholder.
+interface Props { quotes: Quote[]; class?: string }
+const { quotes, class: cls = '' } = Astro.props;
+---
+{quotes.length > 0 && (
+  <div class:list={['space-y-3', cls]}>
+    {quotes.map((q) => (
+      <div class="quote-block">
+        {q.source && (
+          <I18nBlock class="quote-source"
+            zh={`《${q.source}》`}
+            en={translateWork(q.source) ?? `《${q.source}》`} />
+        )}
+        <SourceText html={q.html} text={q.text} />
+      </div>
+    ))}
+  </div>
+)}

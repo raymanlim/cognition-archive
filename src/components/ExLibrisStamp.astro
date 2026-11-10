@@ -1,0 +1,7 @@
+---
+interface Props { text?: string; enText?: string; title?: string }
+const { text = '思', enText = 'R', title = 'Ex Libris' } = Astro.props;
+---
+<span class="ex-libris" title={title} aria-label={title}>
+  <span class="lang-zh">{text}</span><span class="lang-en">{enText}</span>
+</span>

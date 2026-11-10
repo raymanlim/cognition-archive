@@ -1,0 +1,129 @@
+---
+import I18nText from './I18nText.astro';
+import I18nBlock from './I18nBlock.astro';
+import SectionNumeral from './SectionNumeral.astro';
+import ExLibrisStamp from './ExLibrisStamp.astro';
+import type { PhilosopherCard, LocalizedText } from '../types/schema';
+
+interface Props { card: PhilosopherCard }
+const { card } = Astro.props;
+
+const steps: { key: 'premise' | 'argument' | 'conclusion'; label: 'premise' | 'argument' | 'conclusionStep'; text: LocalizedText }[] = [
+  { key: 'premise', label: 'premise', text: card.logicChain.premise },
+  { key: 'argument', label: 'argument', text: card.logicChain.argument },
+  { key: 'conclusion', label: 'conclusionStep', text: card.logicChain.conclusion },
+];
+
+const themeMap: Record<string, LocalizedText> = {
+  chinese: { zh: '东方哲思与心性', en: 'Chinese Philosophy' },
+  epistemology: { zh: '西方认识论与语言科学', en: 'Epistemology & Language' },
+  critique: { zh: '存在、伦理与社会批判', en: 'Existence, Ethics & Critique' },
+};
+const themeLocalized = themeMap[card.theme] ?? { zh: card.theme, en: card.theme };
+---
+<article class="paper-card" id={card.id} data-phil-card data-phil-theme={card.theme} data-section-num={card.sectionNum}>
+  <!-- Hanging Wittgenstein-style paragraph numeral -->
+  <div class="p-5 sm:p-7">
+    <div class="numeral-hang">
+      <SectionNumeral num={card.sectionNum} />
+      <div class="min-w-0 flex-1">
+        <I18nBlock t={card.name} as="div" class="text-[1.5rem] sm:text-[1.75rem] font-bold leading-tight" />
+        <div class="flex flex-wrap items-center gap-2 mt-2.5">
+          <span class="badge badge-cinnabar"><I18nText t={card.era} /></span>
+          <span class="badge"><I18nText k="born" /> · {card.yearSort}</span>
+          <span class="badge"><I18nText t={themeLocalized} /></span>
+        </div>
+        <div class="flex flex-wrap gap-1.5 mt-3">
+          {card.tags.map((tag) => (
+            <span class="text-[.76rem] px-2 py-1 border" style="border-color:var(--rule);background:var(--card-2)">
+              <I18nText t={tag} />
+            </span>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- #3B4D5E obi strip: bilingual one-line historical positioning -->
+  <div class="obi-strip">
+    <I18nBlock t={card.oneLiner} />
+  </div>
+
+  <div class="p-5 sm:p-7 space-y-7">
+    <!-- Core ideas -->
+    <section>
+      <div class="field-label mb-3"><I18nText k="coreIdeas" /></div>
+      <div class="space-y-3">
+        {card.coreIdeas.map((idea) => (
+          <div class="pl-4 border-l-2" style="border-color:var(--rule-strong)">
+            <I18nBlock t={idea.title} class="text-[1rem] font-bold" />
+            <I18nBlock t={idea.desc} class="body-text text-[.9rem] mt-1" />
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- Three-step logic chain: horizontal desktop / vertical stair mobile -->
+    <section>
+      <div class="field-label mb-3"><I18nText k="logicChain" /></div>
+      <div class="logic-flow">
+        {steps.map((step, i) => (
+          <Fragment>
+            {i > 0 && <div class="logic-arrow" aria-hidden="true"><span class="arrow-h">➔</span><span class="arrow-v">↓</span></div>}
+            <div class="logic-step leaf-card p-3 sm:p-4">
+              <div class="eyebrow mb-2"><I18nText k={step.label} /></div>
+              <I18nBlock t={step.text} class="text-[.82rem] leading-relaxed" />
+            </div>
+          </Fragment>
+        ))}
+      </div>
+    </section>
+
+    <!-- Layered reading path -->
+    <section>
+      <div class="field-label mb-3"><I18nText k="works" /></div>
+      <div class="grid sm:grid-cols-2 gap-3">
+        <div class="leaf-card works-entry p-4">
+          <div class="eyebrow mb-2"><I18nText k="worksEntry" /></div>
+          <I18nBlock t={card.works.entry.title} class="text-[.92rem] font-bold" />
+          <I18nBlock t={card.works.entry.note} class="text-[.8rem] body-text mt-1" />
+        </div>
+        <div class="leaf-card works-advanced p-4">
+          <div class="eyebrow mb-2"><I18nText k="worksAdvanced" /></div>
+          <I18nBlock t={card.works.advanced.title} class="text-[.92rem] font-bold" />
+          <I18nBlock t={card.works.advanced.note} class="text-[.8rem] body-text mt-1" />
+        </div>
+      </div>
+    </section>
+
+    <!-- Lineage -->
+    <section>
+      <div class="field-label mb-3"><I18nText k="lineage" /></div>
+      <div class="grid sm:grid-cols-2 gap-3">
+        <div class="leaf-card p-4">
+          <div class="eyebrow mb-2"><I18nText k="lineageFrom" /></div>
+          <I18nBlock t={card.lineage.from} class="text-[.85rem] body-text" />
+        </div>
+        <div class="leaf-card p-4">
+          <div class="eyebrow mb-2"><I18nText k="lineageTo" /></div>
+          <I18nBlock t={card.lineage.to} class="text-[.85rem] body-text" />
+        </div>
+      </div>
+    </section>
+
+    <!-- Canonical quote -->
+    <section class="quote-block py-3">
+      <div class="field-label mb-2"><I18nText k="quote" /></div>
+      <I18nBlock t={card.quote} class="text-[1rem] font-serif leading-relaxed" />
+    </section>
+
+    <!-- Modern insight -->
+    <section class="pt-5 border-t flex items-start gap-3" style="border-color:var(--rule)">
+      <ExLibrisStamp text="思" />
+      <div class="min-w-0 flex-1">
+        <div class="field-label mb-2"><I18nText k="modernInsight" /></div>
+        <I18nBlock t={card.modernInsight} class="body-text text-[.92rem]" />
+      </div>
+    </section>
+  </div>
+</article>

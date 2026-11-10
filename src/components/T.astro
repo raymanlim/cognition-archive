@@ -1,0 +1,17 @@
+---
+import I18nText from './I18nText.astro';
+import { ui, type UiKey } from '../data/i18n';
+
+/** Legacy adapter: every old <T /> call now renders the unified I18nText. */
+interface Props {
+  k?: UiKey;
+  zh?: string;
+  en?: string;
+  inline?: boolean;
+  class?: string;
+}
+const { k, zh, en, class: cls = '' } = Astro.props;
+const z = k ? ui[k].zh : (zh ?? '');
+const e = k ? ui[k].en : (en ?? '');
+---
+<I18nText zh={z} en={e} class={cls} />

@@ -1,0 +1,17 @@
+---
+import I18nText from './I18nText.astro';
+const items = [
+  { key: 'paper', zh: '宣', en: 'P', title: 'Paper' },
+  { key: 'dark', zh: '夜', en: 'D', title: 'Dark' },
+  { key: 'crisp', zh: '白', en: 'C', title: 'Crisp' },
+] as const;
+---
+<!-- Pure aria-label: no sr-only bilingual span (it expanded to 122px in BI). -->
+<div class="flex items-center gap-1" role="group" aria-label="Appearance / 外观">
+  {items.map((it) => (
+    <button type="button" data-theme-set={it.key}
+      aria-pressed={it.key === 'paper' ? 'true' : 'false'}
+      class="theme-btn w-7 h-7 text-[.78rem] border border-rule hover:border-cinnabar transition-colors font-serif"
+      title={it.title}><I18nText zh={it.zh} en={it.en} /></button>
+  ))}
+</div>

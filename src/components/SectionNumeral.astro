@@ -1,0 +1,5 @@
+---
+interface Props { num: string | number; numEn?: string; class?: string }
+const { num, numEn, class: cls = '' } = Astro.props;
+---
+<span class:list={['section-numeral', cls]} aria-hidden="true"><span class="lang-zh">§ {num}</span><span class="lang-en">§ {numEn ?? num}</span></span>

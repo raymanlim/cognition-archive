@@ -1,0 +1,16 @@
+---
+const items = [
+  { key: 'zh', label: 'ZH', title: 'Chinese' },
+  { key: 'en', label: 'EN', title: 'English' },
+  { key: 'bi', label: 'BI', title: 'Bilingual' },
+] as const;
+---
+<!-- Pure aria-label: no sr-only bilingual span (it expanded to 122px in BI). -->
+<div class="flex items-center gap-1" role="group" aria-label="Language / 语言">
+  {items.map((it) => (
+    <button type="button" data-lang-set={it.key}
+      aria-pressed={it.key === 'zh' ? 'true' : 'false'}
+      class="lang-btn px-2 py-1 text-[.7rem] font-sans tracking-wider border border-rule hover:border-cinnabar transition-colors"
+      title={it.title}>{it.label}</button>
+  ))}
+</div>

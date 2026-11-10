@@ -1,0 +1,164 @@
+---
+import I18nText from './I18nText.astro';
+import I18nBlock from './I18nBlock.astro';
+import ObiStrip from './ObiStrip.astro';
+import SectionNumeral from './SectionNumeral.astro';
+import QuoteList from './QuoteList.astro';
+import InterpretationTable from './InterpretationTable.astro';
+import SourceText from './SourceText.astro';
+import { escapeHtml } from '../utils/text';
+import type { BaseCard } from '../data/types';
+
+type Card = BaseCard & { titleEn?: string; obiEn?: string };
+interface Props {
+  card: Card;
+  anchor: string;
+  numeral?: string | number;
+  extraTags?: string;
+  showReverse?: boolean;
+  asFilterItem?: boolean;
+}
+const {
+  card, anchor, numeral = String(card.num).padStart(2, '0'),
+  extraTags = '', showReverse = false, asFilterItem = true,
+} = Astro.props;
+
+const obiZh = (card.conclusionText.split(/[。！？!?]/)[0] || card.conclusionText).slice(0, 90);
+const reverse = (card as unknown as { reverse?: string }).reverse;
+const nextStep = (card as unknown as { nextStep?: string }).nextStep;
+const themeText = card.theme ? escapeHtml(card.theme) : '';
+
+/** X handle is a proper noun: identical in all three language states. */
+const handle = card.author.handle || 'unknown';
+
+/**
+ * English side of the credit line: keep @handle, ISO dates and archive paths
+ * verbatim (all ASCII), never fall back to a generic "Source account" text.
+ */
+const creditEn = (() => {
+  const s = card.sourceText || '';
+  const handles = s.match(/@[A-Za-z0-9_]+/g) ?? [];
+  const dates = s.match(/\d{4}-\d{2}(?:-\d{2})?(?:\/\d{1,2})?/g) ?? [];
+  const archives = s.match(/x\/02[A-Za-z0-9_&]*/g) ?? [];
+  const parts = [...new Set([...handles, ...dates, ...archives])];
+  return escapeHtml(parts.length ? parts.join(' · ') : handle);
+})();
+
+const sourceLinks = card.links ?? [];
+const linkLabels = sourceLinks.map((url) => {
+  try {
+    const u = new URL(url);
+    return { url, host: u.hostname, path: u.pathname.slice(0, 30) };
+  } catch {
+    return { url, host: url.slice(0, 40), path: '' };
+  }
+});
+---
+<article class="paper-card" id={anchor} data-filter-item={asFilterItem ? '' : undefined} data-tags={extraTags}>
+  <div class="p-5 sm:p-7">
+    <div class="numeral-hang">
+      <SectionNumeral num={numeral} />
+      <div class="min-w-0 flex-1">
+        <I18nBlock as="div" class="section-title" zh={card.title} en={card.titleEn ?? card.title} />
+        <div class="flex flex-wrap items-center gap-2 mt-2.5">
+          <!-- Attribution: proper noun, never translated, never hidden by lang state. -->
+          <span class="badge badge-cinnabar" data-attribution={handle}>{handle}</span>
+          <span class="badge"><I18nBlock zh={card.author.zh} en={card.author.en} /></span>
+          {card.theme && (
+            <span class="text-[.75rem]" style="color:var(--ink-faint)">
+              <SourceText html={themeText} text={card.theme} />
+            </span>
+          )}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <ObiStrip zh={obiZh} en={card.obiEn} />
+
+  <div class="p-5 sm:p-7 space-y-6">
+    {card.quotes.length > 0 && (
+      <section>
+        <div class="eyebrow mb-3"><I18nText k="quotesLabel" /></div>
+        <QuoteList quotes={card.quotes} />
+      </section>
+    )}
+
+    {card.sourcePool && (
+      <section class="text-[.78rem] leading-relaxed" style="color:var(--ink-faint)">
+        <span class="font-bold" style="color:var(--ink-soft)"><I18nText k="sourcePool" /> · </span>
+        <SourceText html={escapeHtml(card.sourcePool)} text={card.sourcePool} />
+      </section>
+    )}
+
+    <!-- Source & attribution: creator credit + original URLs -->
+    <section class="pt-4 border-t" style="border-color:var(--rule)">
+      <div class="eyebrow mb-2"><I18nText k="sourceCredit" /></div>
+      {card.sourceText && (
+        <div class="text-[.82rem] body-text">
+          <SourceText html={escapeHtml(card.sourceText)} text={card.sourceText} enHtml={creditEn} />
+        </div>
+      )}
+      {linkLabels.length > 0 && (
+        <div class="mt-3">
+          <div class="text-[.72rem] font-bold mb-1.5"><I18nText k="sourceLinks" /></div>
+          <ul class="flex flex-col gap-1">
+            {linkLabels.map((l) => (
+              <li>
+                <a href={l.url} target="_blank" rel="noopener noreferrer"
+                   title={l.url} data-source-link
+                   class="inline-flex items-baseline gap-1.5 text-[.75rem] underline decoration-dotted underline-offset-2 hover:opacity-70 transition-opacity break-all"
+                   style="color:var(--pine)">
+                  <span class="font-mono">{l.host}</span><span class="opacity-70">{l.path}</span>
+                  <span aria-hidden="true">↗</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </section>
+
+    {card.relation && (
+      <section>
+        <div class="eyebrow mb-2"><I18nText k="relationLabel" /></div>
+        <SourceText html={card.relation} text={card.relationText} class="text-[.92rem]" />
+      </section>
+    )}
+
+    {card.interpretations.length > 0 && (
+      <section>
+        <div class="eyebrow mb-3"><I18nText k="modelsTable" /></div>
+        <InterpretationTable rows={card.interpretations} />
+      </section>
+    )}
+
+    {showReverse && reverse && (
+      <section>
+        <div class="eyebrow mb-2"><I18nText k="reverseLabel" /></div>
+        <SourceText html={reverse} class="text-[.92rem]" />
+      </section>
+    )}
+
+    <section class="pt-5 border-t" style="border-color:var(--rule)">
+      <div class="eyebrow mb-2"><I18nText k="conclusionLabel" /></div>
+      <SourceText
+        html={card.conclusion}
+        text={card.conclusionText}
+        enHtml={`<strong>${escapeHtml(card.obiEn ?? '')}</strong>`}
+        class="text-[.97rem] leading-[1.95]"
+      />
+    </section>
+
+    {showReverse && nextStep && (
+      <section class="p-3 text-[.8rem]" style="background:var(--card-2);border-left:3px solid var(--pine)">
+        <span class="font-bold"><I18nText k="nextStepLabel" /> · </span>
+        <SourceText html={nextStep} />
+      </section>
+    )}
+
+    <slot name="extra" />
+
+    <p class="source-note text-[.75rem]"><I18nText k="sourceNoteZh" /></p>
+  </div>
+</article>

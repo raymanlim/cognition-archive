@@ -1,0 +1,84 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import I18nText from '../../components/I18nText.astro';
+import I18nBlock from '../../components/I18nBlock.astro';
+import PhilosopherCard from '../../components/PhilosopherCard.astro';
+import { philosophers } from '../../data/philosophers';
+import { dict } from '../../data/uiDictionary';
+import { philosophyFormula } from '../../data/cpv';
+
+const milestones = [
+  { zh: '前 600', en: '600 BCE' }, { zh: '前 400', en: '400 BCE' },
+  { zh: '公元 0', en: 'Year 0' }, { zh: '1400', en: '1400' },
+  { zh: '1600', en: '1600' }, { zh: '1750', en: '1750' },
+  { zh: '1900', en: '1900' }, { zh: '1960', en: '1960' },
+];
+const filters = Object.entries(dict.philFilters);
+---
+<BaseLayout title="哲学源流 / Philosophy" active="philosophy"
+  description="27 位中西哲学家完整双语档案：核心命题、三步推导链、著作梯度、思想承启、金句与现代启发。">
+
+  <section class="archive-shell page-head">
+    <div class="eyebrow mb-3">DIVISION I</div>
+    <I18nBlock as="div" class="display-title" zh="哲学源流" en="Philosophical Sources" />
+    <I18nBlock as="div" class="mt-4 body-text text-[.95rem] max-w-3xl"
+      zh="27 位中西哲学家完整档案 · 按主题分组，组内严格按出生年份升序 · 三步推导逻辑链与思想承启网络"
+      en="27 fully documented Chinese and Western philosophers · grouped by theme, ascending birth year within each · three-step reasoning chains and intellectual lineage" />
+  </section>
+
+  <!-- Special bridge -->
+  <section class="archive-shell pt-10">
+    <div class="leaf-card p-5 sm:p-7" style="border-color:var(--rule-strong)">
+      <div class="eyebrow mb-3"><I18nText k="bridgeLabel" /></div>
+      <I18nBlock class="font-serif text-[1.1rem] sm:text-[1.35rem] font-bold leading-relaxed"
+        zh={philosophyFormula.zh} en={philosophyFormula.en} />
+      <I18nBlock class="mt-3 body-text text-[.86rem]"
+        zh={philosophyFormula.note} en={philosophyFormula.noteEn} />
+    </div>
+  </section>
+
+  <!-- Filters + sort -->
+  <section class="archive-shell pt-10 space-y-3 no-print">
+    <div class="flex flex-wrap items-center gap-2">
+      <span class="eyebrow mr-2"><I18nText k="all" /></span>
+      {filters.map(([key, label]) => (
+        <button type="button" class="chip" data-filter-group="theme" data-filter-value={key}
+                aria-pressed={key === 'all' ? 'true' : 'false'}>
+          <I18nText t={label} />
+        </button>
+      ))}
+      <span class="ml-auto text-[.78rem]" style="color:var(--ink-faint)">
+        <span data-filter-count>{philosophers.length}</span> / {philosophers.length}
+      </span>
+    </div>
+    <div class="flex flex-wrap items-center gap-2">
+      <span class="eyebrow mr-2"><I18nText zh="排序" en="Order" /></span>
+      <button type="button" class="chip" data-sort-set="number" aria-pressed="true"><I18nText k="sortByNumber" /></button>
+      <button type="button" class="chip" data-sort-set="year" aria-pressed="false"><I18nText k="sortByYear" /></button>
+    </div>
+  </section>
+
+  <!-- Timeline rail + all 27 cards -->
+  <section class="archive-shell py-9 grid lg:grid-cols-[8.5rem_minmax(0,1fr)] gap-8 lg:gap-12">
+    <aside class="hidden lg:block sticky top-24 self-start no-print">
+      <div class="eyebrow mb-4"><I18nText k="yearAxis" /></div>
+      <div class="relative border-l-2 pl-4 space-y-[2.6rem]" style="border-color:var(--rule-strong)">
+        {milestones.map((m) => (
+          <div class="relative">
+            <span class="absolute -left-[1.32rem] top-2 w-2 h-2 rounded-full" style="background:var(--cinnabar)"></span>
+            <I18nText t={m} class="text-[.8rem] font-bold" />
+          </div>
+        ))}
+      </div>
+    </aside>
+
+    <div data-filter-scope data-sort-scope class="space-y-6">
+      {philosophers.map((p) => (
+        <div data-filter-item data-tags={p.theme} data-sort-item
+             data-section-num={p.sectionNum} data-year-sort={p.yearSort}>
+          <PhilosopherCard card={p} />
+        </div>
+      ))}
+    </div>
+  </section>
+</BaseLayout>

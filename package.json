@@ -1,0 +1,26 @@
+{
+  "name": "rayman-mind-archive",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Rayman's Mind & Philosophy — 世纪文库·极简典藏风 (The Editorial Archive)",
+  "scripts": {
+    "parse": "node scripts/parse-sources.mjs && node scripts/parse-patch.mjs",
+    "predev": "npm run parse",
+    "dev": "astro dev",
+    "prebuild": "npm run parse",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "check": "astro check"
+  },
+  "dependencies": {
+    "@astrojs/tailwind": "^6.0.2",
+    "astro": "^5.13.0",
+    "tailwindcss": "^3.4.17"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.12",
+    "typescript": "^5.9.0"
+  }
+}

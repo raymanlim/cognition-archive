@@ -1,0 +1,11 @@
+---
+import I18nBlock from './I18nBlock.astro';
+import type { LocalizedText } from '../types/schema';
+
+/** 世纪文库灰蓝通栏腰封 · bilingual one-line core proposition */
+interface Props { zh?: string; en?: string; t?: LocalizedText; class?: string }
+const { zh, en, t, class: cls = '' } = Astro.props;
+---
+<div class:list={['obi-strip', cls]}>
+  <I18nBlock t={t} zh={zh} en={en} />
+</div>

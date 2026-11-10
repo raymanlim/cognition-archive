@@ -1,0 +1,103 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import I18nText from '../../components/I18nText.astro';
+import I18nBlock from '../../components/I18nBlock.astro';
+import CognitiveCard from '../../components/CognitiveCard.astro';
+import MarginaliaNote from '../../components/MarginaliaNote.astro';
+import { realityCards } from '../../data/reality-lens';
+import { dict } from '../../data/uiDictionary';
+import { axiomTopics, buildCrossLibraryMatrix } from '../../utils/cognitiveEngine';
+import { lensCardAnchor, lensItemAnchor } from '../../utils/anchors';
+
+const authorFilters = Object.entries(dict.lensAuthorFilters);
+const topicFilters = axiomTopics;
+---
+<BaseLayout title="现实透镜 / Reality Lens" active="reality"
+  description="25 张现实拆解卡片，按作者与 8 大跨库串联主题过滤，算法自动匹配哲学底座、CPV 诊断与芒格模型。">
+
+  <section class="archive-shell page-head">
+    <div class="eyebrow mb-3">DIVISION III</div>
+    <I18nBlock as="div" class="display-title" zh="现实透镜" en="Reality Lens" />
+    <I18nBlock as="div" class="mt-4 body-text text-[.95rem] max-w-3xl"
+      zh="25 张现实拆解卡片 · 三层认知交叉解剖 · 8 大跨库串联主题"
+      en="25 reality cards · three-layer cognitive dissection · 8 cross-library axioms" />
+  </section>
+
+  <!-- Filters -->
+  <section class="archive-shell pt-8 space-y-4 no-print">
+    <div class="flex flex-wrap items-center gap-2">
+      <span class="eyebrow w-28 shrink-0"><I18nText k="filterAuthor" /></span>
+      {authorFilters.map(([key, label]) => (
+        <button type="button" class="chip" data-filter-group="author" data-filter-value={key}
+                aria-pressed={key === 'all' ? 'true' : 'false'}>
+          <I18nText t={label} />
+        </button>
+      ))}
+    </div>
+    <div class="flex flex-wrap items-center gap-2">
+      <span class="eyebrow w-28 shrink-0"><I18nText k="filterTopic" /></span>
+      <button type="button" class="chip" data-filter-group="topic" data-filter-value="all" aria-pressed="true">
+        <I18nText k="filterAllTopics" />
+      </button>
+      {topicFilters.map((a) => (
+        <button type="button" class="chip" data-filter-group="topic" data-filter-value={a.key} aria-pressed="false">
+          <I18nText zh={a.zh} en={a.en} />
+        </button>
+      ))}
+    </div>
+    <div class="flex items-center justify-between pt-2 border-b pb-3" style="border-color:var(--rule)">
+      <span class="text-[.8rem]" style="color:var(--ink-faint)">
+        <span data-filter-count>25</span> / 25 <I18nText k="resultCount" />
+      </span>
+      <span class="text-[.76rem]" style="color:var(--ink-faint)"><I18nText k="marginaliaHint" /></span>
+    </div>
+  </section>
+
+  <!-- Cards: 65% main / 35% marginalia, collapsing to an inline drawer on mobile -->
+  <section class="archive-shell py-8" data-filter-scope>
+    <div class="space-y-9">
+      {realityCards.map((c) => {
+        const matrix = buildCrossLibraryMatrix(c.id);
+        return (
+          <div data-filter-item data-tags={`${c.group} ${c.topics.join(' ')}`} id={lensItemAnchor(c.num)}>
+            <div class="split-layout">
+              <div class="min-w-0">
+                <CognitiveCard
+                  card={c}
+                  anchor={lensCardAnchor(c.num)}
+                  numeral={String(c.num).padStart(2, '0')}
+                  extraTags={c.group}
+                  asFilterItem={false}
+                >
+                  <div slot="extra" class="marginalia-drawer collapsible" data-collapsible data-open="false">
+                    <button type="button" class="collapsible-toggle w-full flex items-center justify-between gap-2 px-3 py-2.5 text-[.82rem] font-bold"
+                            style="background:var(--card-2);border:1px solid var(--cinnabar);color:var(--cinnabar)"
+                            data-collapsible-toggle>
+                      <span><I18nText k="openMarginalia" /> · {matrix.cardId}</span>
+                      <span class="chev">›</span>
+                    </button>
+                    <div class="collapsible-body">
+                      <MarginaliaNote matrix={matrix} inDrawer={true} />
+                    </div>
+                  </div>
+                </CognitiveCard>
+              </div>
+
+              <aside class="marginalia no-print">
+                <div class="border-l-2 pl-4" style="border-color:var(--cinnabar)">
+                  <MarginaliaNote matrix={matrix} />
+                </div>
+              </aside>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  </section>
+
+  <section class="archive-shell pb-4">
+    <I18nBlock as="p" class="source-note text-[.76rem]"
+      zh="联动眉批由 src/utils/cognitiveEngine.ts 的 buildCrossLibraryMatrix() 生成：策展映射 + 8 大公理关键词加权自动补全，点击可跳转至对应版块锚点。"
+      en="Marginalia links are produced by buildCrossLibraryMatrix(): curated mapping plus keyword-weighted augmentation over the 8 axioms. Click to jump to the source anchor." />
+  </section>
+</BaseLayout>

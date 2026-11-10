@@ -1,0 +1,41 @@
+---
+import I18nBlock from './I18nBlock.astro';
+import I18nText from './I18nText.astro';
+import { dict } from '../data/uiDictionary';
+import { translateTerm } from '../data/termDictionary';
+import { escapeHtml } from '../utils/text';
+
+/**
+ * A source-note fragment with NO sentence-level English translation in the
+ * patch data. EN mode never renders bare Chinese: short cells show a term
+ * translation or a compact "Original (ZH)" marker; long passages show an
+ * explicit English notice plus an opt-in expandable verbatim original.
+ */
+interface Props {
+  html: string;
+  text?: string;
+  /** Explicit English HTML when a real translation/summary exists. */
+  enHtml?: string;
+  class?: string;
+}
+const { html, text = '', enHtml, class: cls = '' } = Astro.props;
+const term = text ? translateTerm(text) : null;
+const isLong = (text || html).length > 30;
+const enNotice = enHtml ?? (term
+  ? `<span class="source-untranslated">${escapeHtml(term)}</span>`
+  : isLong
+    ? `<span class="source-untranslated">${escapeHtml(dict.sourceUntranslated.en)}</span>`
+    : `<span class="source-untranslated">Original (ZH)</span>`);
+const showOriginal = isLong;
+---
+<div class:list={['source-text', cls]}>
+  <I18nBlock htmlZh={html} htmlEn={enNotice} />
+  {showOriginal && (
+    <div class="orig-source" data-orig-source>
+      <button type="button" class="chip orig-toggle" data-original-source-toggle aria-expanded="false">
+        <I18nText k="originalSource" />
+      </button>
+      <div class="orig-body" hidden set:html={html}></div>
+    </div>
+  )}
+</div>

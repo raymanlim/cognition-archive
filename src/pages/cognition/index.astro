@@ -1,0 +1,47 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import I18nText from '../../components/I18nText.astro';
+import I18nBlock from '../../components/I18nBlock.astro';
+import CpvExplorer from '../../components/cpv/CpvExplorer.astro';
+import CognitionCards from '../../components/cpv/CognitionCards.astro';
+import MungerLattice from '../../components/cpv/MungerLattice.astro';
+import { dict } from '../../data/uiDictionary';
+
+const tabs = [
+  { id: 'cpv', t: dict.cognitionTabs.cpv },
+  { id: 'cards', t: dict.cognitionTabs.cards },
+  { id: 'munger', t: dict.cognitionTabs.munger },
+] as const;
+---
+<BaseLayout title="思想认知 / Cognition" active="cognition"
+  description="CPV 原理交互式问题链、23 张思想认知卡片、芒格 6 大学科与 52 个思维模型。">
+
+  <section class="archive-shell page-head">
+    <div class="eyebrow mb-3">DIVISION II</div>
+    <I18nBlock as="div" class="display-title" zh="思想认知" en="Cognition" />
+    <I18nBlock as="div" class="mt-4 body-text text-[.95rem] max-w-3xl"
+      zh="《CPV 原理》交互式问题链 · 23 张思想认知综合卡片 · 芒格 6 大学科 / 52 个思维模型格栅"
+      en="The interactive CPV problem chain · 23 cognitive structure cards · Munger's latticework of 6 disciplines and 52 mental models" />
+  </section>
+
+  <section class="archive-shell pt-8">
+    <div class="flex flex-wrap gap-2 pb-4 border-b no-print" style="border-color:var(--rule)" role="tablist" aria-label="Cognition views">
+      {tabs.map((tab) => (
+        <button type="button" role="tab"
+                class:list={['chip px-4 py-2 text-[.86rem]', { 'is-active': tab.id === 'cpv' }]}
+                data-tab-group="cognition" data-tab-set={tab.id}
+                aria-selected={tab.id === 'cpv' ? 'true' : 'false'}>
+          <I18nText t={tab.t} />
+        </button>
+      ))}
+    </div>
+
+    <div class="pt-8">
+      <div data-tab-panel="cpv" data-tab-group="cognition" role="tabpanel"><CpvExplorer /></div>
+      <div data-tab-panel="cards" data-tab-group="cognition" role="tabpanel" hidden><CognitionCards /></div>
+      <div data-tab-panel="munger" data-tab-group="cognition" role="tabpanel" hidden><MungerLattice /></div>
+    </div>
+
+    <p class="source-note mt-10 text-[.76rem]"><I18nText k="sourceNoteZh" /></p>
+  </section>
+</BaseLayout>

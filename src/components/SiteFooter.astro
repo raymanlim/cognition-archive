@@ -1,0 +1,16 @@
+---
+import I18nText from './I18nText.astro';
+import ExLibrisStamp from './ExLibrisStamp.astro';
+---
+<footer class="mt-20 border-t no-print" style="border-color:var(--rule);background:var(--card)">
+  <div class="archive-shell py-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+    <div class="flex items-start gap-4">
+      <ExLibrisStamp text="藏" enText="A" />
+      <div class="max-w-2xl text-[.8rem] leading-relaxed" style="color:var(--ink-faint)">
+        <p><I18nText k="footerNote" /></p>
+        <p class="mt-1"><I18nText k="footerRights" /> · raymanlim.us.ci</p>
+      </div>
+    </div>
+    <a href="#top" class="chip shrink-0" data-back-to-top><I18nText k="backToTop" /></a>
+  </div>
+</footer>

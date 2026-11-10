@@ -1,0 +1,54 @@
+---
+import '../styles/global.css';
+import SiteHeader from '../components/SiteHeader.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import MobileBottomNav from '../components/MobileBottomNav.astro';
+
+interface Props {
+  title?: string;
+  description?: string;
+  active?: string;
+}
+const { title, description, active = '' } = Astro.props;
+const pageTitle = title
+  ? `${title} · 思想文库 / The Editorial Archive`
+  : '思想文库 · The Editorial Archive — Rayman’s Mind & Philosophy';
+const pageDesc = description ??
+  '世纪文库·极简典藏风个人思想认知网站：27 位哲学家、CPV 原理、23 张认知卡片、52 个芒格思维模型、25 张现实透镜与跨库交叉算法。';
+---
+<!doctype html>
+<html lang="zh" data-theme="paper" data-lang="zh" id="top">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={pageDesc} />
+    <meta name="generator" content="Astro 5" />
+    <title>{pageTitle}</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="canonical" href={`https://raymanlim.us.ci${Astro.url.pathname}`} />
+
+    {/* Anti-FOUC: apply persisted language + appearance before first paint. */}
+    <script is:inline>
+      (function () {
+        try {
+          var d = document.documentElement;
+          var t = localStorage.getItem('rayman_theme');
+          var l = localStorage.getItem('rayman_lang');
+          if (t && ['paper', 'dark', 'crisp'].indexOf(t) !== -1) d.setAttribute('data-theme', t);
+          if (l && ['zh', 'en', 'bi'].indexOf(l) !== -1) d.setAttribute('data-lang', l);
+        } catch (e) {}
+      })();
+    </script>
+  </head>
+  <body>
+    <SiteHeader active={active} />
+    <main>
+      <slot />
+    </main>
+    <SiteFooter />
+    <MobileBottomNav active={active} />
+    <script>
+      import '../scripts/site.ts';
+    </script>
+  </body>
+</html>

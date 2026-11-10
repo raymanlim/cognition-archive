@@ -1,0 +1,38 @@
+---
+import type { TableRow } from '../data/types';
+import type { LocalizedText } from '../types/schema';
+import I18nText from './I18nText.astro';
+import SourceText from './SourceText.astro';
+import { dict } from '../data/uiDictionary';
+
+interface Props {
+  rows: TableRow[];
+  headers?: LocalizedText[];
+}
+const { rows, headers } = Astro.props;
+const h: LocalizedText[] = headers ?? [
+  dict.interpretationHeaders.dimension,
+  dict.interpretationHeaders.corePoint,
+  dict.interpretationHeaders.theory,
+];
+---
+{rows.length > 0 && (
+  <div class="overflow-x-auto">
+    <table class="archive-table">
+      <thead>
+        <tr>
+          {h.map((x) => (<th><I18nText t={x} /></th>))}
+        </tr>
+      </thead>
+      <tbody>
+        {rows.map((r) => (
+          <tr>
+            {r.cells.map((c) => (
+              <td><SourceText html={c.html} text={c.text} /></td>
+            ))}
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+)}

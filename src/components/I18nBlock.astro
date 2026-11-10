@@ -1,0 +1,33 @@
+---
+import type { LocalizedText } from '../types/schema';
+import { dict, type DictKey } from '../data/uiDictionary';
+import { escapeHtml, inlineMd } from '../utils/text';
+
+/**
+ * Long text: obi proposition, core idea, paragraph, table cell.
+ * ZH -> Chinese | EN -> English | BI -> Chinese (top) + English (smaller italic serif, second line).
+ */
+interface Props {
+  t?: LocalizedText;
+  k?: DictKey;
+  zh?: string;
+  en?: string;
+  /** Pre-rendered safe HTML for the Chinese side (skips escaping). */
+  htmlZh?: string;
+  /** Pre-rendered safe HTML for the English side. */
+  htmlEn?: string;
+  md?: boolean;
+  class?: string;
+  style?: string;
+  as?: 'div' | 'p' | 'span';
+}
+const { t, k, zh, en, htmlZh, htmlEn, md = false, class: cls = '', style: inlineStyle, as: Tag = 'div' } = Astro.props;
+const value: LocalizedText = t ?? (k ? (dict[k] as unknown as LocalizedText) : { zh: zh ?? '', en: en ?? '' });
+const render = (s: string) => (md ? inlineMd(s) : escapeHtml(s));
+const zhHtml = htmlZh ?? render(value.zh);
+const enHtml = htmlEn ?? render(value.en);
+---
+<Tag class:list={['i18n', 'i18n-long', cls]} style={inlineStyle}>
+  <span class="lang-zh" set:html={zhHtml}></span>
+  <span class="lang-en" set:html={enHtml}></span>
+</Tag>

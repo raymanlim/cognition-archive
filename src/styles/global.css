@@ -1,0 +1,489 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* =========================================================================
+   THE EDITORIAL ARCHIVE — 世纪文库·极简典藏风
+   Three appearance states via [data-theme]; three language states via [data-lang].
+   All colours are CSS variables so switching never re-renders the DOM.
+   No external fonts: system serif stacks keep the build fully offline.
+   ========================================================================= */
+
+:root,
+html[data-theme='paper'] {
+  --paper: #fbf9f5;
+  --leaf: #ffffff;
+  --card: #f4f0e8;
+  --card-2: #f8f5ee;
+  --obi: #3b4d5e;
+  --obi-ink: #f7f5ef;
+  --ink: #24211c;
+  --ink-soft: #4d4940;
+  --ink-faint: #7d7769;
+  --cinnabar: #9e2a2b;
+  --pine: #2d5a4c;
+  --rule: #ddd6c7;
+  --rule-strong: #c8bfab;
+  --stamp-bg: #9e2a2b;
+  --shadow: 0 1px 2px rgba(46, 38, 26, .04), 0 8px 28px rgba(46, 38, 26, .05);
+  --shadow-lift: 0 2px 6px rgba(46, 38, 26, .07), 0 18px 46px rgba(46, 38, 26, .10);
+  --sel: #e8dfc9;
+}
+
+html[data-theme='dark'] {
+  --paper: #121316;
+  --leaf: #17191c;
+  --card: #1c1e22;
+  --card-2: #212428;
+  --obi: #2b3b4b;
+  --obi-ink: #eef0ec;
+  --ink: #e9e5dc;
+  --ink-soft: #c0bbaf;
+  --ink-faint: #8d887e;
+  --cinnabar: #c9564d;
+  --pine: #72ac96;
+  --rule: #303338;
+  --rule-strong: #44484e;
+  --stamp-bg: #a83b35;
+  --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 10px 30px rgba(0, 0, 0, .25);
+  --shadow-lift: 0 4px 12px rgba(0, 0, 0, .35), 0 22px 52px rgba(0, 0, 0, .4);
+  --sel: #35404a;
+}
+
+html[data-theme='crisp'] {
+  --paper: #ffffff;
+  --leaf: #ffffff;
+  --card: #f6f6f5;
+  --card-2: #fafafa;
+  --obi: #2f3b47;
+  --obi-ink: #ffffff;
+  --ink: #1b1b1b;
+  --ink-soft: #4c4c4c;
+  --ink-faint: #8c8c8c;
+  --cinnabar: #9e2a2b;
+  --pine: #2d5a4c;
+  --rule: #e3e3e1;
+  --rule-strong: #cfcfcc;
+  --stamp-bg: #9e2a2b;
+  --shadow: 0 1px 2px rgba(0, 0, 0, .03), 0 8px 26px rgba(0, 0, 0, .05);
+  --shadow-lift: 0 4px 12px rgba(0, 0, 0, .07), 0 20px 48px rgba(0, 0, 0, .09);
+  --sel: #e6e6e3;
+}
+
+/* -------------------------------------------------------------------------- */
+/* Base                                                                        */
+/* -------------------------------------------------------------------------- */
+@layer base {
+  html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "Noto Serif SC", "Source Han Serif SC", "Songti SC", "STSong", "SimSun", Georgia, serif;
+    font-size: 16px;
+    line-height: 1.85;
+    -webkit-font-smoothing: antialiased;
+    transition: background-color .25s ease, color .25s ease;
+  }
+  ::selection { background: var(--sel); color: var(--ink); }
+  a { color: inherit; text-decoration: none; }
+  strong { font-weight: 700; color: var(--ink); }
+  code, .math {
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+    font-size: .9em; background: var(--card); padding: .1em .35em;
+    border: 1px solid var(--rule); border-radius: 2px;
+  }
+  [id] { scroll-margin-top: 5.5rem; }
+  :focus-visible { outline: 2px solid var(--cinnabar); outline-offset: 3px; }
+}
+
+/* -------------------------------------------------------------------------- */
+/* Bilingual typesetting                                                      */
+/* -------------------------------------------------------------------------- */
+.t-en { display: none; }
+html[data-lang='en'] .t-zh { display: none; }
+html[data-lang='en'] .t-en { display: inline; }
+
+/* BI = 上中下英对照：英文以较小字号另起一行，还原双语学术译著 */
+html[data-lang='bi'] .t-en {
+  display: block;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: .78em;
+  line-height: 1.55;
+  letter-spacing: .01em;
+  color: var(--ink-faint);
+  font-style: italic;
+  margin-top: .18em;
+}
+html[data-lang='bi'] .t-zh { display: block; }
+html[data-lang='bi'] .bi-inline.t-en { display: inline; margin-left: .5em; font-size: .72em; }
+
+/* Inline bilingual units must not break a sentence in BI mode. */
+.t-inline .t-zh, html[data-lang='bi'] .t-inline .t-zh { display: inline; }
+html[data-lang='bi'] .t-inline .t-en { display: inline; margin: 0 0 0 .45em; font-size: .72em; }
+
+/* Content body text stays in the original Chinese in every mode; only chrome,
+   titles and core propositions are translated. Marked explicitly. */
+.source-note {
+  font-size: .78rem; color: var(--ink-faint); letter-spacing: .02em;
+  border-left: 2px solid var(--rule-strong); padding-left: .75rem;
+}
+html:not([data-lang='en']) .source-note-en { display: none; }
+html[data-lang='en'] .source-note-zh { display: none; }
+
+/* -------------------------------------------------------------------------- */
+/* Layout primitives                                                          */
+/* -------------------------------------------------------------------------- */
+@layer components {
+  .archive-shell { @apply mx-auto w-full max-w-archive px-5 sm:px-8 lg:px-12; }
+  .page-head { @apply pt-12 pb-8 sm:pt-16 sm:pb-10; border-bottom: 1px solid var(--rule); }
+  .eyebrow {
+    font-family: ui-sans-serif, system-ui, sans-serif;
+    font-size: .68rem; letter-spacing: .24em; text-transform: uppercase;
+    color: var(--cinnabar); font-weight: 700;
+  }
+  .display-title { font-size: clamp(2rem, 4.6vw, 3.5rem); line-height: 1.25; font-weight: 700; letter-spacing: .02em; }
+  .section-title { font-size: clamp(1.35rem, 2.4vw, 1.9rem); font-weight: 700; letter-spacing: .03em; }
+  .body-text { color: var(--ink-soft); line-height: 1.95; }
+  .hairline { border-top: 1px solid var(--rule); }
+
+  .paper-card {
+    background: var(--card);
+    border: 1px solid var(--rule);
+    box-shadow: var(--shadow);
+    transition: box-shadow .25s ease, transform .25s ease, border-color .25s ease;
+  }
+  .paper-card:hover { box-shadow: var(--shadow-lift); border-color: var(--rule-strong); }
+  .leaf-card { background: var(--leaf); border: 1px solid var(--rule); }
+
+  /* Obi strip — 世纪文库灰蓝通栏腰封 */
+  .obi-strip {
+    background: var(--obi); color: var(--obi-ink);
+    text-align: center; padding: 1.05rem 1.4rem;
+    font-size: clamp(.95rem, 1.5vw, 1.15rem);
+    line-height: 1.75; letter-spacing: .04em; font-weight: 600;
+    position: relative;
+  }
+  .obi-strip::before, .obi-strip::after {
+    content: ''; position: absolute; left: 0; right: 0; height: 1px;
+    background: rgba(255, 255, 255, .28);
+  }
+  .obi-strip::before { top: 5px; }
+  .obi-strip::after { bottom: 5px; }
+  .obi-en { display: none; font-family: Georgia, serif; font-size: .78em; font-style: italic; opacity: .82; margin-top: .4em; font-weight: 400; }
+  html[data-lang='bi'] .obi-en, html[data-lang='en'] .obi-en { display: block; }
+
+  /* Hanging Wittgenstein-style paragraph numeral */
+  .section-numeral {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(2.4rem, 5vw, 4.2rem);
+    font-weight: 700; line-height: 1; color: var(--cinnabar);
+    opacity: .88; letter-spacing: -.03em; font-variant-numeric: lining-nums;
+  }
+  .numeral-hang { display: flex; gap: 1.1rem; align-items: flex-start; }
+  .numeral-hang > .section-numeral { min-width: 3.4rem; }
+
+  /* Ex-libris cinnabar seal */
+  .ex-libris {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 2.15rem; height: 2.15rem;
+    background: var(--stamp-bg); color: #fff;
+    font-size: 1.05rem; font-weight: 700; line-height: 1;
+    border-radius: 2px; transform: rotate(-3deg);
+    box-shadow: inset 0 0 0 2px rgba(255,255,255,.35);
+    letter-spacing: 0;
+  }
+
+  .archive-table { width: 100%; border-collapse: collapse; font-size: .88rem; }
+  .archive-table th {
+    text-align: left; font-weight: 700; color: var(--ink);
+    background: var(--card-2); border-bottom: 2px solid var(--rule-strong);
+    padding: .62rem .8rem; letter-spacing: .04em;
+  }
+  .archive-table td {
+    border-bottom: 1px solid var(--rule); padding: .6rem .8rem;
+    color: var(--ink-soft); vertical-align: top; line-height: 1.7;
+  }
+  .archive-table td:first-child { color: var(--ink); font-weight: 600; width: 22%; }
+  .archive-table tr:last-child td { border-bottom: none; }
+  .archive-table strong { color: var(--cinnabar); }
+
+  .quote-block {
+    border-left: 3px solid var(--pine);
+    padding: .15rem 0 .15rem 1rem;
+    color: var(--ink-soft); font-size: .93rem; line-height: 1.9;
+  }
+  .quote-source { font-size: .74rem; color: var(--pine); letter-spacing: .08em; font-weight: 700; }
+
+  .badge {
+    display: inline-flex; align-items: center; gap: .3rem;
+    font-family: ui-sans-serif, system-ui, sans-serif;
+    font-size: .68rem; letter-spacing: .06em; padding: .16rem .55rem;
+    border: 1px solid var(--rule-strong); color: var(--ink-faint);
+    background: var(--leaf); border-radius: 2px;
+  }
+  .badge-cinnabar { border-color: var(--cinnabar); color: var(--cinnabar); }
+
+  .chip {
+    font-family: ui-sans-serif, system-ui, sans-serif;
+    font-size: .76rem; padding: .34rem .8rem;
+    border: 1px solid var(--rule-strong); background: var(--leaf);
+    color: var(--ink-soft); cursor: pointer; border-radius: 2px;
+    transition: all .18s ease; white-space: nowrap;
+  }
+  .chip:hover { border-color: var(--cinnabar); color: var(--cinnabar); }
+  .chip[aria-pressed='true'], .chip.is-active {
+    background: var(--obi); color: var(--obi-ink); border-color: var(--obi);
+  }
+
+  .link-arrow::after { content: ' →'; color: var(--cinnabar); }
+  .rule-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--cinnabar); flex-shrink: 0; }
+
+  .collapsible-body { display: none; }
+  .collapsible[data-open='true'] .collapsible-body { display: block; }
+  .collapsible-toggle { cursor: pointer; user-select: none; }
+  .collapsible-toggle .chev { display: inline-block; transition: transform .2s ease; }
+  .collapsible[data-open='true'] .collapsible-toggle .chev { transform: rotate(90deg); }
+}
+
+/* -------------------------------------------------------------------------- */
+/* Responsive flows                                                            */
+/* -------------------------------------------------------------------------- */
+.chain-flow { display: flex; align-items: stretch; gap: .5rem; }
+.chain-flow > .chain-node { flex: 1 1 0; min-width: 0; }
+.chain-flow > .chain-arrow {
+  display: flex; align-items: center; color: var(--cinnabar); flex-shrink: 0;
+  font-size: 1.1rem; font-family: ui-sans-serif, system-ui, sans-serif;
+}
+
+.split-layout { display: grid; grid-template-columns: minmax(0, 65fr) minmax(0, 35fr); gap: 2rem; align-items: start; }
+.marginalia { position: sticky; top: 5.5rem; }
+.marginalia-drawer { display: none; }
+
+.mobile-bottom-nav { display: none; }
+
+@media (max-width: 1023px) {
+  .split-layout { grid-template-columns: 1fr; gap: 1.25rem; }
+  .marginalia { position: static; }
+}
+
+@media (max-width: 767px) {
+  body { padding-bottom: 4.5rem; }
+  /* Keep all 6 language/appearance buttons inside a 360–430px viewport. */
+  header .archive-shell { padding-left: .7rem; padding-right: .7rem; gap: .35rem; }
+  .lang-btn { padding-left: .3rem; padding-right: .3rem; font-size: .62rem; }
+  .theme-btn { width: 1.5rem; height: 1.5rem; font-size: .68rem; }
+  .mobile-bottom-nav {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    position: fixed; bottom: 0; left: 0; right: 0; z-index: 60;
+    background: var(--leaf); border-top: 1px solid var(--rule-strong);
+    box-shadow: 0 -4px 20px rgba(0,0,0,.08);
+    padding-bottom: env(safe-area-inset-bottom, 0);
+  }
+  .mobile-bottom-nav a {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: .15rem; padding: .55rem .2rem; font-size: .72rem;
+    color: var(--ink-faint); font-family: ui-sans-serif, system-ui, sans-serif;
+    /* Hard guarantee: four tabs never wrap or squeeze at any narrow width. */
+    white-space: nowrap; min-width: 0; overflow: hidden;
+  }
+  .mobile-bottom-nav a[aria-current='page'] { color: var(--cinnabar); font-weight: 700; }
+  .mobile-bottom-nav .nav-mark { font-size: 1.05rem; font-family: Georgia, serif; }
+  /* Keep the thumb nav one line in bilingual mode. */
+  html[data-lang='bi'] .mobile-bottom-nav .t-en { display: none; }
+
+  .chain-flow { flex-direction: column; }
+  .chain-flow > .chain-arrow { justify-content: center; transform: rotate(90deg); padding: .1rem 0; }
+  .split-layout .marginalia { display: none; }
+  .marginalia-drawer { display: block; }
+  .marginalia-drawer .collapsible-body { display: none; }
+  .marginalia-drawer[data-open='true'] .collapsible-body { display: block; }
+  .numeral-hang { gap: .65rem; }
+  .numeral-hang > .section-numeral { min-width: 2.4rem; font-size: 2.1rem; }
+  .archive-table { font-size: .8rem; display: block; overflow-x: auto; }
+  .archive-table td:first-child { width: auto; min-width: 5.5rem; }
+  .obi-strip { padding: .85rem 1rem; font-size: .92rem; }
+
+  /* ----------------------------------------------------------------------
+     Header overflow fix (root cause: Logo 184px + switchers 170px, both
+     shrink-0, plus BI sr-only spans expanding to 122px each).
+     Target: Logo <=120px, switcher group <=150px at 320px viewport.
+     ---------------------------------------------------------------------- */
+  .site-logo { flex-shrink: 1; min-width: 0; gap: .4rem; }
+  .site-title-wrap { min-width: 0; }
+  .site-title-main { font-size: .82rem; }
+  .site-title-sub { display: none; }          /* drop the latin subtitle on phones */
+  .header-switchers { flex-shrink: 0; gap: .25rem; }
+  header [role='group'] { flex-shrink: 0; }
+  .lang-btn { padding-left: .25rem; padding-right: .25rem; font-size: .6rem; }
+  .theme-btn { width: 1.4rem; height: 1.4rem; font-size: .64rem; }
+
+  /* On phones the switcher glyphs stay single-character in BI; the long
+     "中文 / English" expansion is reserved for wider screens. This also
+     applies to every filter chip / Tab: a nowrap chip showing both languages
+     reached 371–429px and was the real cause of horizontal overflow on the
+     philosophy / cognition / reality-lens pages. */
+  html[data-lang='bi'] header .lang-btn .lang-en,
+  html[data-lang='bi'] header .lang-btn .lang-sep,
+  html[data-lang='bi'] header .theme-btn .lang-en,
+  html[data-lang='bi'] header .theme-btn .lang-sep,
+  html[data-lang='bi'] .chip .lang-en,
+  html[data-lang='bi'] .chip .lang-sep,
+  html[data-lang='bi'] [data-tab-set] .lang-en,
+  html[data-lang='bi'] [data-tab-set] .lang-sep,
+  html[data-lang='bi'] .badge .lang-en,
+  html[data-lang='bi'] .badge .lang-sep { display: none !important; }
+  .chip, [data-tab-set] { max-width: 100%; }
+  /* Long Latin strings (English notices, archive paths, URLs) must wrap. */
+  .i18n-long, .source-text, .body-text, .leaf-card, .paper-card,
+  .quote-block, .archive-table td, .archive-table th { overflow-wrap: anywhere; word-break: break-word; }
+}
+
+@media print {
+  .mobile-bottom-nav, .no-print { display: none !important; }
+  body { background: #fff; }
+}
+
+/* =========================================================================
+   Unified i18n (I18nText / I18nBlock) — PATCH Part 3 §1
+   -------------------------------------------------------------------------
+   ZH: only .lang-zh | EN: only .lang-en | BI: short labels inline
+   "中文 / English", long text stacked Chinese + smaller italic serif English.
+   ========================================================================= */
+.lang-en, .lang-sep { display: none; }
+.i18n-long .lang-zh { display: block; }
+
+html[data-lang='en'] .lang-zh { display: none !important; }
+html[data-lang='en'] .lang-sep { display: none !important; }
+html[data-lang='en'] .lang-en { display: inline; }
+html[data-lang='en'] .i18n-long .lang-en {
+  display: block;
+  font-style: normal;
+  font-size: inherit;
+  opacity: 1;
+  line-height: inherit;
+  margin-top: 0;
+}
+
+html[data-lang='bi'] .lang-sep { display: inline; color: var(--ink-faint); }
+html[data-lang='bi'] .i18n-short .lang-en { display: inline; }
+html[data-lang='bi'] .i18n-long .lang-zh { display: block; }
+html[data-lang='bi'] .i18n-long .lang-en {
+  display: block;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: .82em;
+  font-style: italic;
+  opacity: .8;
+  line-height: 1.7;
+  margin-top: .4em;
+  letter-spacing: .01em;
+}
+html[data-lang='bi'] .i18n-long .lang-en strong { font-style: italic; }
+
+/* Explicit marker for source passages without an English translation. */
+.source-untranslated {
+  font-family: ui-sans-serif, system-ui, sans-serif;
+  font-size: .7rem;
+  letter-spacing: .02em;
+  color: var(--ink-faint);
+  font-style: normal;
+  opacity: .75;
+}
+
+/* -------------------------------------------------------------------------- */
+/* Cross-page hash target highlight (cinnabar border animation)               */
+/* -------------------------------------------------------------------------- */
+@keyframes archiveHighlight {
+  0%   { box-shadow: 0 0 0 3px var(--cinnabar), var(--shadow-lift); border-color: var(--cinnabar); }
+  70%  { box-shadow: 0 0 0 3px var(--cinnabar), var(--shadow-lift); border-color: var(--cinnabar); }
+  100% { box-shadow: var(--shadow); border-color: var(--rule); }
+}
+.hash-highlight {
+  animation: archiveHighlight 2.6s ease-out forwards;
+  border-color: var(--cinnabar) !important;
+  outline: 2px solid var(--cinnabar);
+  outline-offset: 3px;
+}
+
+/* -------------------------------------------------------------------------- */
+/* Philosopher logic chain: horizontal on desktop, vertical stair on mobile   */
+/* -------------------------------------------------------------------------- */
+.logic-flow { display: flex; align-items: stretch; gap: .5rem; }
+.logic-step { flex: 1 1 0; min-width: 0; }
+.logic-arrow {
+  display: flex; align-items: center; justify-content: center;
+  color: var(--cinnabar); font-size: 1.15rem; flex-shrink: 0;
+  font-family: ui-sans-serif, system-ui, sans-serif;
+}
+.logic-arrow .arrow-v { display: none; }
+@media (max-width: 767px) {
+  .logic-flow { flex-direction: column; gap: 0; }
+  .logic-arrow { height: 1.6rem; }
+  .logic-arrow .arrow-h { display: none; }
+  .logic-arrow .arrow-v { display: inline; }
+}
+
+/* -------------------------------------------------------------------------- */
+/* Field-label micro typography for the full philosopher schema               */
+/* -------------------------------------------------------------------------- */
+.field-label {
+  font-family: ui-sans-serif, system-ui, sans-serif;
+  font-size: .66rem; letter-spacing: .18em; text-transform: uppercase;
+  color: var(--pine); font-weight: 700;
+}
+.works-entry { border-left: 3px solid var(--pine); }
+.works-advanced { border-left: 3px solid var(--cinnabar); }
+
+/* -------------------------------------------------------------------------- */
+/* Opt-in verbatim Chinese source (EN mode stays 100% English by default)     */
+/* -------------------------------------------------------------------------- */
+.orig-source { display: none; margin-top: .55rem; }
+html[data-lang='en'] .orig-source { display: block; }
+.orig-toggle { font-size: .68rem; padding: .2rem .55rem; }
+.orig-body {
+  margin-top: .5rem; padding: .6rem .75rem;
+  border-left: 2px solid var(--cinnabar);
+  background: var(--card-2);
+  font-size: .85rem; line-height: 1.8; color: var(--ink-soft);
+}
+
+/* Ex-libris seal: switch glyph in EN, keep the Chinese seal in BI. */
+.ex-libris .lang-en { display: none; }
+html[data-lang='en'] .ex-libris .lang-zh { display: none !important; }
+html[data-lang='en'] .ex-libris .lang-en { display: inline; }
+html[data-lang='bi'] .ex-libris .lang-en { display: none; }
+
+/* Thumb navigation must stay compact in bilingual mode. */
+html[data-lang='bi'] .mobile-bottom-nav .lang-en,
+html[data-lang='bi'] .mobile-bottom-nav .lang-sep { display: none; }
+
+/* Defensive: any sr-only bilingual span in the header must never expand in BI.
+   (The switchers now use pure aria-label, but keep this for any future span.) */
+html[data-lang='bi'] header .sr-only .lang-en,
+html[data-lang='bi'] header .sr-only .lang-sep { display: none !important; }
+
+/* Hanging paragraph numerals keep the Chinese glyph in BI (they are
+   typographic markers, not translatable prose). */
+html[data-lang='bi'] .section-numeral .lang-en,
+html[data-lang='bi'] .ex-libris .lang-en { display: none; }
+html[data-lang='bi'] .section-numeral .lang-zh { display: inline; }
+
+/* SVG <text> nodes honour the same three-state rules. */
+svg text.lang-zh, svg text.lang-en { font-family: Georgia, "Times New Roman", serif; }
+html[data-lang='en'] svg text.lang-zh { display: none !important; }
+html[data-lang='en'] svg text.lang-en { display: inline; }
+html[data-lang='bi'] svg text.lang-en { display: none; }
+
+@media (max-width: 360px) {
+  .mobile-bottom-nav a { font-size: .65rem; padding: .5rem .1rem; }
+  .mobile-bottom-nav .nav-mark { font-size: .95rem; }
+  /* iPhone SE (320px): one more notch down for the header. */
+  header .archive-shell { padding-left: .45rem; padding-right: .45rem; gap: .2rem; }
+  .site-title-main { font-size: .75rem; }
+  .lang-btn { font-size: .56rem; padding-left: .18rem; padding-right: .18rem; }
+  .theme-btn { width: 1.3rem; height: 1.3rem; font-size: .6rem; }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; }
+}

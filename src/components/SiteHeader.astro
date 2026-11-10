@@ -1,0 +1,45 @@
+---
+import I18nText from './I18nText.astro';
+import ExLibrisStamp from './ExLibrisStamp.astro';
+import LanguageSwitcher from './LanguageSwitcher.astro';
+import ThemeSwitcher from './ThemeSwitcher.astro';
+import type { DictKey } from '../data/uiDictionary';
+
+interface Props { active?: string }
+const { active = '' } = Astro.props;
+const nav: { key: string; href: string; k: DictKey }[] = [
+  { key: 'philosophy', href: '/philosophy/', k: 'navPhilosophy' },
+  { key: 'cognition', href: '/cognition/', k: 'navCognition' },
+  { key: 'reality', href: '/reality-lens/', k: 'navReality' },
+  { key: 'atlas', href: '/atlas/', k: 'navAtlas' },
+];
+---
+<header class="sticky top-0 z-50 border-b no-print" style="background:var(--leaf); border-color:var(--rule)">
+  <div class="archive-shell flex items-center justify-between gap-3 h-[4.25rem]">
+    <!-- Logo: must be allowed to shrink on narrow viewports (320px). -->
+    <a href="/" class="site-logo flex items-center gap-2 min-w-0 shrink" aria-label="Home">
+      <ExLibrisStamp text="思" enText="R" />
+      <span class="site-title-wrap leading-tight min-w-0">
+        <span class="site-title-main block text-[.98rem] font-bold tracking-[.08em] truncate"><I18nText k="siteTitle" /></span>
+        <span class="site-title-sub block text-[.6rem] tracking-[.22em] font-sans truncate" style="color:var(--ink-faint)"><I18nText k="siteLatin" /></span>
+      </span>
+    </a>
+
+    <nav class="hidden md:flex items-center gap-4 lg:gap-6 text-[.82rem]" aria-label="Main navigation">
+      {nav.map((n) => (
+        <a href={n.href}
+           class="pb-1 border-b-2 transition-colors whitespace-nowrap"
+           style={active === n.key ? 'border-color:var(--cinnabar);color:var(--cinnabar)' : 'border-color:transparent'}
+           aria-current={active === n.key ? 'page' : undefined}>
+          <I18nText k={n.k} />
+        </a>
+      ))}
+    </nav>
+
+    <div class="header-switchers flex items-center gap-2 shrink-0">
+      <LanguageSwitcher />
+      <span class="hidden sm:block w-px h-5" style="background:var(--rule)"></span>
+      <ThemeSwitcher />
+    </div>
+  </div>
+</header>

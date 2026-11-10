@@ -1,0 +1,136 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import I18nText from '../components/I18nText.astro';
+import I18nBlock from '../components/I18nBlock.astro';
+import ObiStrip from '../components/ObiStrip.astro';
+import ExLibrisStamp from '../components/ExLibrisStamp.astro';
+import SectionNumeral from '../components/SectionNumeral.astro';
+import SourceText from '../components/SourceText.astro';
+import { mungerAxiom } from '../data/munger';
+import { axioms, crossStats } from '../utils/cognitiveEngine';
+import { cpvChain } from '../data/cpv';
+
+const stats = [
+  { n: crossStats.philosophers, k: 'statPhilosophers' as const },
+  { n: crossStats.cognition, k: 'statCognition' as const },
+  { n: crossStats.models, k: 'statModels' as const },
+  { n: crossStats.cards, k: 'statReality' as const },
+  { n: cpvChain.length - 1, k: 'statChapters' as const },
+  { n: crossStats.axioms, k: 'statAxioms' as const },
+];
+
+const divisions = [
+  {
+    mark: '壱', numeral: 'I', href: '/philosophy/',
+    zh: '哲学源流', en: 'Philosophical Sources',
+    descZh: '27 位中西哲学家完整档案：核心命题、三步推导逻辑链、著作梯度、思想承启、金句与现代启发。按主题分组，组内严格按出生年份升序。',
+    descEn: '27 fully documented philosophers: core ideas, three-step reasoning chains, layered reading paths, intellectual lineage, canonical quotes and modern insight.',
+    countZh: '27 位 · 三大主题', countEn: '27 · 3 themes',
+  },
+  {
+    mark: '弐', numeral: 'II', href: '/cognition/',
+    zh: '思想认知', en: 'Cognition',
+    descZh: '《CPV 原理》交互式问题链（投影 → 结构恢复 → 位置 → L1-L7 → 跃迁 → 净值 → 动机 → 结构之镜），23 张综合卡片，以及芒格 6 大学科 / 52 个思维模型格栅。',
+    descEn: 'The interactive CPV problem chain, 23 structure cards, and Munger’s latticework of 6 disciplines / 52 mental models with a usable decision checklist.',
+    countZh: 'CPV + 23 卡 + 52 模型', countEn: 'CPV + 23 + 52',
+  },
+  {
+    mark: '叁', numeral: 'III', href: '/reality-lens/',
+    zh: '现实透镜', en: 'Reality Lens',
+    descZh: '25 张现实拆解卡片，按作者与 8 大跨库串联主题过滤。每张卡片由算法自动挂载【哲学底座 + CPV 诊断 + 芒格模型】，右侧古籍眉批可跳转回源版块。',
+    descEn: '25 reality cards filterable by author and 8 cross-library axioms. Each is auto-linked to philosophical foundations, CPV diagnosis and Munger models in a marginalia rail.',
+    countZh: '25 卡 · 三层交叉', countEn: '25 · 3 layers',
+  },
+];
+---
+<BaseLayout active="home">
+  <section class="archive-shell pt-14 sm:pt-20 pb-12 sm:pb-16">
+    <div class="flex items-center gap-3 mb-7">
+      <ExLibrisStamp text="思" />
+      <div class="eyebrow"><I18nText k="heroKicker" /></div>
+    </div>
+
+    <div class="grid lg:grid-cols-[minmax(0,1.25fr)_minmax(0,.75fr)] gap-10 lg:gap-16 items-start">
+      <div>
+        <I18nBlock as="div" class="display-title"
+          zh="结构决定可能性集合" en="Structure Determines the Set of Possibilities" />
+        <I18nBlock class="mt-4 text-[1.05rem] sm:text-[1.2rem]"
+          zh="行为是结构约束下的次优解" en="Behaviour Is a Second-Best Solution Under Constraint" />
+        <div class="mt-8 max-w-2xl"><ObiStrip zh={mungerAxiom.zh} en={mungerAxiom.en} /></div>
+        <I18nBlock class="mt-7 body-text text-[.95rem] leading-[2]"
+          zh="一座关于认知、哲学与现实的思想文库。以投影—结构恢复—位置—层级—净值—动机为经，以 27 位哲学家、23 张认知卡片、52 个思维模型与 25 张现实透镜为纬，把散落的洞察连成可检索、可交叉、可复用的结构。"
+          en="An archive of cognition, philosophy and lived reality. Projection → structural recovery → position → levels → net value → motivation forms the warp; 27 philosophers, 23 cognition cards, 52 mental models and 25 reality lenses form the weft." />
+        <div class="flex flex-wrap gap-3 mt-8">
+          <a href="/philosophy/" class="chip px-5 py-2.5 text-[.85rem] link-arrow"><I18nText k="heroEnter" /></a>
+          <a href="/atlas/" class="chip px-5 py-2.5 text-[.85rem]"><I18nText k="heroAtlas" /></a>
+        </div>
+        <p class="source-note mt-6 text-[.75rem]"><I18nText k="sourceNoteZh" /></p>
+      </div>
+
+      <div class="leaf-card p-6 sm:p-8" style="border-color:var(--rule-strong)">
+        <div class="eyebrow mb-5">EX LIBRIS · <I18nText zh="藏书印" en="Seal" /></div>
+        <div class="space-y-5">
+          {stats.map((s) => (
+            <div class="flex items-baseline justify-between gap-4 pb-3 border-b" style="border-color:var(--rule)">
+              <span class="font-serif text-[2.1rem] leading-none font-bold" style="color:var(--cinnabar)">{s.n}</span>
+              <span class="text-[.82rem] text-right"><I18nText k={s.k} /></span>
+            </div>
+          ))}
+        </div>
+        <div class="mt-6 pt-4 border-t text-[.72rem] leading-relaxed" style="border-color:var(--rule);color:var(--ink-faint)">
+          <I18nText k="footerNote" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Three divisions -->
+  <section class="archive-shell py-14 border-t" style="border-color:var(--rule)">
+    <div class="flex items-end justify-between gap-4 mb-9">
+      <div>
+        <div class="eyebrow mb-2"><I18nText k="sectionLabel" /></div>
+        <I18nBlock as="div" class="section-title" zh="三大版块 · 一座文库" en="Three Divisions, One Archive" />
+      </div>
+      <a href="/atlas/" class="chip hidden sm:inline-flex"><I18nText k="navAtlas" /></a>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-5">
+      {divisions.map((d) => (
+        <a href={d.href} class="paper-card group flex flex-col">
+          <div class="p-6 flex-1">
+            <div class="flex items-start justify-between gap-3">
+              <span class="font-serif text-[2.6rem] leading-none" style="color:var(--cinnabar)">{d.mark}</span>
+              <SectionNumeral num={d.numeral} class="!text-[1.6rem] !opacity-60" />
+            </div>
+            <I18nBlock as="div" class="mt-5 text-[1.35rem] font-bold" zh={d.zh} en={d.en} />
+            <div class="badge mt-3"><I18nBlock zh={d.countZh} en={d.countEn} /></div>
+            <I18nBlock class="mt-4 body-text text-[.86rem] leading-[1.9]" zh={d.descZh} en={d.descEn} />
+          </div>
+          <div class="px-6 py-3 border-t flex items-center justify-between text-[.8rem]" style="border-color:var(--rule);color:var(--cinnabar)">
+            <span><I18nText k="readMore" /></span><span aria-hidden="true">→</span>
+          </div>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <!-- Eight axioms preview -->
+  <section class="archive-shell py-14 border-t" style="border-color:var(--rule)">
+    <div class="eyebrow mb-2"><I18nText k="axiomsLabel" /></div>
+    <I18nBlock as="div" class="section-title mb-3" zh="交叉图谱" en="Cross Atlas" />
+    <I18nBlock class="body-text text-[.9rem] max-w-3xl mb-8"
+      zh="8 大跨库串联公理 · 25 × 3 层认知交叉矩阵"
+      en="8 cross-library axioms · a 25 × 3-layer cognitive matrix" />
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-3">
+      {axioms.map((a, i) => (
+        <a href={`/atlas#axiom-${a.key}`} class="leaf-card p-4 hover:border-cinnabar transition-colors">
+          <div class="flex items-center gap-2 mb-2">
+            <span class="font-serif text-[1.4rem] font-bold" style="color:var(--cinnabar)">{String(i + 1).padStart(2, '0')}</span>
+            <I18nBlock class="text-[.88rem] font-bold" zh={a.name} en={a.nameEn} />
+          </div>
+          <SourceText html={a.html} text={a.text} class="text-[.78rem] leading-relaxed line-clamp-3" />
+        </a>
+      ))}
+    </div>
+  </section>
+</BaseLayout>

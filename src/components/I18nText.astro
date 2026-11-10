@@ -1,0 +1,21 @@
+---
+import type { LocalizedText } from '../types/schema';
+import { dict, type DictKey } from '../data/uiDictionary';
+
+/**
+ * Short label / navigation / filter / table header.
+ * ZH -> 中文 | EN -> English | BI -> 中文 / English (inline).
+ */
+interface Props {
+  t?: LocalizedText;
+  k?: DictKey;
+  zh?: string;
+  en?: string;
+  class?: string;
+}
+const { t, k, zh, en, class: cls = '' } = Astro.props;
+const value: LocalizedText = t ?? (k ? (dict[k] as unknown as LocalizedText) : { zh: zh ?? '', en: en ?? '' });
+---
+<span class:list={['i18n', 'i18n-short', cls]}>
+  <span class="lang-zh">{value.zh}</span><span class="lang-sep" aria-hidden="true"> / </span><span class="lang-en">{value.en}</span>
+</span>
