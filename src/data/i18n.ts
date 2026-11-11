@@ -4,13 +4,13 @@ export const ui = {
   siteSubtitle: { zh: 'Rayman 的认知·哲学·现实透镜', en: 'Rayman on Cognition, Philosophy & the Real' },
   siteLatin: { zh: 'RAYMANLIM · US · CI', en: 'RAYMANLIM · US · CI' },
 
-  navPhilosophy: { zh: '壱 · 哲学源流', en: 'I · Philosophy' },
-  navCognition: { zh: '弐 · 思想认知', en: 'II · Cognition' },
+  navPhilosophy: { zh: '壹 · 哲学源流', en: 'I · Philosophy' },
+  navCognition: { zh: '贰 · 思想认知', en: 'II · Cognition' },
   navReality: { zh: '叁 · 现实透镜', en: 'III · Reality Lens' },
   navAtlas: { zh: '肆 · 交叉图谱', en: 'IV · Cross Atlas' },
   navHome: { zh: '总览', en: 'Overview' },
-  mobilePhilosophy: { zh: '壱·哲学', en: 'I · Phil.' },
-  mobileCognition: { zh: '弐·认知', en: 'II · Cog.' },
+  mobilePhilosophy: { zh: '壹·哲学', en: 'I · Phil.' },
+  mobileCognition: { zh: '贰·认知', en: 'II · Cog.' },
   mobileReality: { zh: '叁·透镜', en: 'III · Lens' },
   mobileAtlas: { zh: '肆·图谱', en: 'IV · Atlas' },
 

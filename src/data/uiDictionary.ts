@@ -9,12 +9,12 @@ export const dict = {
   /* ---- Site chrome ---- */
   siteTitle: { zh: '思想文库', en: 'The Editorial Archive' },
   siteLatin: { zh: 'RAYMANLIM · US · CI', en: 'RAYMANLIM · US · CI' },
-  navPhilosophy: { zh: '壱 · 哲学源流', en: 'I · Philosophy' },
-  navCognition: { zh: '弐 · 思想认知', en: 'II · Cognition' },
+  navPhilosophy: { zh: '壹 · 哲学源流', en: 'I · Philosophy' },
+  navCognition: { zh: '贰 · 思想认知', en: 'II · Cognition' },
   navReality: { zh: '叁 · 现实透镜', en: 'III · Reality Lens' },
   navAtlas: { zh: '肆 · 交叉图谱', en: 'IV · Cross Atlas' },
-  mobilePhilosophy: { zh: '壱·哲学', en: 'I · Phil.' },
-  mobileCognition: { zh: '弐·认知', en: 'II · Cog.' },
+  mobilePhilosophy: { zh: '壹·哲学', en: 'I · Phil.' },
+  mobileCognition: { zh: '贰·认知', en: 'II · Cog.' },
   mobileReality: { zh: '叁·透镜', en: 'III · Lens' },
   mobileAtlas: { zh: '肆·图谱', en: 'IV · Atlas' },
   langLabel: { zh: '语言', en: 'Language' },
@@ -39,8 +39,8 @@ export const dict = {
 
   /* ---- Part 3 §2: Division II tabs + table headers ---- */
   cognitionTabs: {
-    cpv: { zh: '壱 · CPV 原理全书问题链', en: 'I · CPV Principles Chain' },
-    cards: { zh: '弐 · 思想认知 23 卡片', en: 'II · 23 Cognitive Cards' },
+    cpv: { zh: '壹 · CPV 原理全书问题链', en: 'I · CPV Principles Chain' },
+    cards: { zh: '贰 · 思想认知 23 卡片', en: 'II · 23 Cognitive Cards' },
     munger: { zh: '叁 · 芒格 52 模型格栅', en: 'III · Munger 52-Model Latticework' },
   },
   interpretationHeaders: {

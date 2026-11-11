@@ -750,7 +750,7 @@ export interface PhilosopherCard {
   - `epistemology`: `{ zh: "西方认识论与语言科学 (11)", en: "Epistemology & Language (11)" }`
   - `critique`: `{ zh: "存在、伦理与社会批判 (12)", en: "Existence, Ethics & Critique (12)" }`
 - **版块 II 子视图与表格列头**：
-  - 子视图 Tab：`cpv` (`{ zh: "壱 · CPV 原理全书问题链", en: "I · CPV Principles Chain" }`) | `cards` (`{ zh: "弐 · 思想认知 23 卡片", en: "II · 23 Cognitive Cards" }`) | `munger` (`{ zh: "叁 · 芒格 52 模型格栅", en: "III · Munger 52-Model Latticework" }`)
+  - 子视图 Tab：`cpv` (`{ zh: "壹 · CPV 原理全书问题链", en: "I · CPV Principles Chain" }`) | `cards` (`{ zh: "贰 · 思想认知 23 卡片", en: "II · 23 Cognitive Cards" }`) | `munger` (`{ zh: "叁 · 芒格 52 模型格栅", en: "III · Munger 52-Model Latticework" }`)
   - 多元模型解读表列头：`dimension` (`{ zh: "分析维度", en: "Dimension" }`) | `corePoint` (`{ zh: "核心结构要点", en: "Structural Core Point" }`) | `theory` (`{ zh: "关联理论与学科", en: "Associated Theory" }`)
   - 芒格模型清单表列头：`modelName` (`{ zh: "模型名称", en: "Mental Model" }`) | `definition` (`{ zh: "一句话定义", en: "One-Line Definition" }`) | `application` (`{ zh: "结构视角与现实应用", en: "Structural View & Application" }`)
 - **版块 III 作者与 8 大跨库串联主题筛选器**：
