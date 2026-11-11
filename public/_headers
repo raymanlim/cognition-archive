@@ -9,3 +9,7 @@
 
 /favicon.svg
   Cache-Control: public, max-age=604800
+
+/seal-logo.png
+/favicon.png
+  Cache-Control: public, max-age=604800

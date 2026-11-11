@@ -3,15 +3,5 @@ interface Props { title?: string }
 const { title = '通平神和' } = Astro.props;
 ---
 <span class="seal-logo" title={title} aria-label={title}>
-  <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true">
-    <rect x="0" y="0" width="64" height="64" rx="5" fill="#f1e9d6"/>
-    <rect x="2.5" y="2.5" width="59" height="59" rx="4" fill="none" stroke="#9e2a2b" stroke-width="4"/>
-    <rect x="7.5" y="7.5" width="49" height="49" rx="2" fill="none" stroke="#9e2a2b" stroke-width="1.2"/>
-    <g fill="#f3ead2" font-family="'KaiTi','STKaiti','Kaiti SC','SimSun',serif" font-weight="700" text-anchor="middle" font-size="15.5">
-      <text x="24" y="26.5">通</text>
-      <text x="40" y="26.5">平</text>
-      <text x="24" y="44.5">神</text>
-      <text x="40" y="44.5">和</text>
-    </g>
-  </svg>
+  <img src="/seal-logo.png" alt="通平神和印章" width="64" height="64" />
 </span>
