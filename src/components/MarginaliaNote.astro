@@ -19,7 +19,7 @@ const layers = [
     <span class="text-[.68rem] font-sans" style="color:var(--ink-faint)">{matrix.cardId}</span>
   </div>
 
-  <p class="text-[.75rem] leading-relaxed mb-4" style="color:var(--ink-faint)"><I18nText k="marginaliaHint" /></p>
+  <p class="text-[.8rem] leading-relaxed mb-4" style="color:var(--ink-faint)"><I18nText k="marginaliaHint" /></p>
 
   <div class="space-y-4">
     {layers.map((layer) => (
@@ -34,7 +34,7 @@ const layers = [
             {layer.links.map((l: CrossLink) => (
               <li>
                 <a href={l.href}
-                   class="block text-[.78rem] leading-snug px-2.5 py-2 border-l-2 hover:translate-x-0.5 transition-transform"
+                   class="block text-[.82rem] leading-snug px-2.5 py-2 border-l-2 hover:translate-x-0.5 transition-transform"
                    style="border-color:var(--rule-strong);background:var(--card-2)"
                    title={l.labelEn}>
                   <I18nBlock zh={l.label} en={l.labelEn} />
@@ -68,10 +68,10 @@ const layers = [
     </button>
     <div class="collapsible-body pt-3 space-y-4">
       <div>
-        <div class="text-[.7rem] font-bold mb-1.5" style="color:var(--pine)"><I18nText k="checklistPre" /></div>
+        <div class="text-[.74rem] font-bold mb-1.5" style="color:var(--pine)"><I18nText k="checklistPre" /></div>
         <ol class="space-y-1.5">
           {matrix.preQuestions.map((q, i) => (
-            <li class="flex gap-2 text-[.74rem] leading-snug">
+            <li class="flex gap-2 text-[.78rem] leading-snug">
               <span class="shrink-0 font-sans" style="color:var(--cinnabar)">{i + 1}.</span>
               <I18nBlock t={q} />
             </li>
@@ -79,10 +79,10 @@ const layers = [
         </ol>
       </div>
       <div>
-        <div class="text-[.7rem] font-bold mb-1.5" style="color:var(--pine)"><I18nText k="checklistPost" /></div>
+        <div class="text-[.74rem] font-bold mb-1.5" style="color:var(--pine)"><I18nText k="checklistPost" /></div>
         <ol class="space-y-1.5">
           {matrix.postQuestions.map((q, i) => (
-            <li class="flex gap-2 text-[.74rem] leading-snug">
+            <li class="flex gap-2 text-[.78rem] leading-snug">
               <span class="shrink-0 font-sans" style="color:var(--cinnabar)">{i + 1}.</span>
               <I18nBlock t={q} />
             </li>
