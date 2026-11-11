@@ -1,5 +1,11 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <rect x="2" y="2" width="60" height="60" rx="3" fill="#9E2A2B"/>
-  <rect x="7" y="7" width="50" height="50" rx="1" fill="none" stroke="#FBF9F5" stroke-width="2" opacity=".75"/>
-  <text x="32" y="44" text-anchor="middle" font-family="SimSun, Songti SC, serif" font-size="38" font-weight="700" fill="#FBF9F5">思</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="通平神和 印章">
+  <rect x="0" y="0" width="64" height="64" rx="5" fill="#f1e9d6"/>
+  <rect x="2.5" y="2.5" width="59" height="59" rx="4" fill="none" stroke="#9e2a2b" stroke-width="4"/>
+  <rect x="7.5" y="7.5" width="49" height="49" rx="2" fill="none" stroke="#9e2a2b" stroke-width="1.2"/>
+  <g fill="#f3ead2" font-family="'KaiTi','STKaiti','Kaiti SC','SimSun',serif" font-weight="700" text-anchor="middle" font-size="15.5">
+    <text x="24" y="26.5">通</text>
+    <text x="40" y="26.5">平</text>
+    <text x="24" y="44.5">神</text>
+    <text x="40" y="44.5">和</text>
+  </g>
 </svg>

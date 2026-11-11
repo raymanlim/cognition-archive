@@ -3,7 +3,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import I18nText from '../components/I18nText.astro';
 import I18nBlock from '../components/I18nBlock.astro';
 import ObiStrip from '../components/ObiStrip.astro';
-import ExLibrisStamp from '../components/ExLibrisStamp.astro';
 import SectionNumeral from '../components/SectionNumeral.astro';
 import SourceText from '../components/SourceText.astro';
 import { mungerAxiom } from '../data/munger';
@@ -45,9 +44,9 @@ const divisions = [
 ---
 <BaseLayout active="home">
   <section class="archive-shell pt-14 sm:pt-20 pb-12 sm:pb-16">
-    <div class="flex items-center gap-3 mb-7">
-      <ExLibrisStamp text="思" />
-      <div class="eyebrow"><I18nText k="heroKicker" /></div>
+    <div class="eyebrow mb-7 flex items-center gap-3">
+      <I18nText k="heroKicker" />
+      <span class="rule-dot" aria-hidden="true"></span>
     </div>
 
     <div class="grid lg:grid-cols-[minmax(0,1.25fr)_minmax(0,.75fr)] gap-10 lg:gap-16 items-start">

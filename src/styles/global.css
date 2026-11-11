@@ -182,7 +182,7 @@ html[data-lang='en'] .source-note-zh { display: none; }
   .numeral-hang { display: flex; gap: 1.1rem; align-items: flex-start; }
   .numeral-hang > .section-numeral { min-width: 3.4rem; }
 
-  /* Ex-libris cinnabar seal */
+  /* Ex-libris cinnabar seal (footer "藏" mark — kept as-is) */
   .ex-libris {
     display: inline-flex; align-items: center; justify-content: center;
     width: 2.15rem; height: 2.15rem;
@@ -192,6 +192,16 @@ html[data-lang='en'] .source-note-zh { display: none; }
     box-shadow: inset 0 0 0 2px rgba(255,255,255,.35);
     letter-spacing: 0;
   }
+
+  /* Brand seal logo (通平神和) — used in the site header. */
+  .seal-logo {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 2.5rem; height: 2.5rem; border-radius: 3px;
+    overflow: hidden; transform: rotate(-2deg);
+    box-shadow: 0 1px 3px rgba(46, 38, 26, .18);
+    flex-shrink: 0;
+  }
+  .seal-logo svg { width: 100%; height: 100%; display: block; }
 
   .archive-table { width: 100%; border-collapse: collapse; font-size: .88rem; }
   .archive-table th {

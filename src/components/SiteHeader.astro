@@ -1,6 +1,6 @@
 ---
 import I18nText from './I18nText.astro';
-import ExLibrisStamp from './ExLibrisStamp.astro';
+import SealLogo from './SealLogo.astro';
 import LanguageSwitcher from './LanguageSwitcher.astro';
 import ThemeSwitcher from './ThemeSwitcher.astro';
 import type { DictKey } from '../data/uiDictionary';
@@ -18,14 +18,14 @@ const nav: { key: string; href: string; k: DictKey }[] = [
   <div class="archive-shell flex items-center justify-between gap-3 h-[4.25rem]">
     <!-- Logo: must be allowed to shrink on narrow viewports (320px). -->
     <a href="/" class="site-logo flex items-center gap-2 min-w-0 shrink" aria-label="Home">
-      <ExLibrisStamp text="思" enText="R" />
+      <SealLogo />
       <span class="site-title-wrap leading-tight min-w-0">
         <span class="site-title-main block text-[.98rem] font-bold tracking-[.08em] truncate"><I18nText k="siteTitle" /></span>
         <span class="site-title-sub block text-[.6rem] tracking-[.22em] font-sans truncate" style="color:var(--ink-faint)"><I18nText k="siteLatin" /></span>
       </span>
     </a>
 
-    <nav class="hidden md:flex items-center gap-4 lg:gap-6 text-[.82rem]" aria-label="Main navigation">
+    <nav class="hidden md:flex items-center gap-4 lg:gap-6 text-[.95rem] font-medium" aria-label="Main navigation">
       {nav.map((n) => (
         <a href={n.href}
            class="pb-1 border-b-2 transition-colors whitespace-nowrap"
