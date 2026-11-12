@@ -61,11 +61,32 @@ function activateTab(group: string, id: string): void {
     const on = b.dataset.tabSet === id;
     b.setAttribute('aria-selected', String(on));
     b.classList.toggle('is-active', on);
+    b.tabIndex = on ? 0 : -1; // roving tabindex: only the active tab is tabbable
   });
   document.querySelectorAll<HTMLElement>(`[data-tab-panel][data-tab-group="${group}"]`).forEach((p) => {
     p.hidden = p.dataset.tabPanel !== id;
   });
 }
+
+/** WAI-ARIA tabs keyboard support: ←/→ cycle, Home/End jump. */
+document.addEventListener('keydown', (ev) => {
+  const tab = (ev.target as HTMLElement | null)?.closest?.<HTMLElement>('[role="tab"][data-tab-set]');
+  if (!tab) return;
+  const group = tab.dataset.tabGroup ?? 'default';
+  const all = Array.from(document.querySelectorAll<HTMLElement>(`[role="tab"][data-tab-group="${group}"]`));
+  const i = all.indexOf(tab);
+  if (i < 0) return;
+  let next = -1;
+  if (ev.key === 'ArrowRight') next = (i + 1) % all.length;
+  else if (ev.key === 'ArrowLeft') next = (i - 1 + all.length) % all.length;
+  else if (ev.key === 'Home') next = 0;
+  else if (ev.key === 'End') next = all.length - 1;
+  if (next < 0) return;
+  ev.preventDefault();
+  const target = all[next];
+  activateTab(group, target.dataset.tabSet ?? '');
+  target.focus();
+});
 
 /* -------------------------------------------------------------------------- */
 /* Filters (multi-group AND)                                                  */
@@ -115,6 +136,25 @@ function applySort(mode: 'number' | 'year'): void {
 }
 
 /* -------------------------------------------------------------------------- */
+/* Collapsible accessibility (WAI-ARIA)                                       */
+/* -------------------------------------------------------------------------- */
+/** Give every collapsible toggle an aria-expanded state and an aria-controls
+ *  pointer to its body. Done in JS so the 10+ markup sites need no edits. */
+let collapsibleUid = 0;
+function syncCollapsibles(): void {
+  document.querySelectorAll<HTMLElement>('[data-collapsible]').forEach((box) => {
+    const toggle = box.querySelector<HTMLElement>('[data-collapsible-toggle]');
+    if (!toggle) return;
+    const body = box.querySelector<HTMLElement>('.collapsible-body');
+    if (body) {
+      if (!body.id) body.id = `collapsible-${++collapsibleUid}`;
+      toggle.setAttribute('aria-controls', body.id);
+    }
+    toggle.setAttribute('aria-expanded', String(box.dataset.open === 'true'));
+  });
+}
+
+/* -------------------------------------------------------------------------- */
 /* Checklist                                                                  */
 /* -------------------------------------------------------------------------- */
 function checklist(): Set<string> {
@@ -134,7 +174,11 @@ restoreChecklist();
 function openAncestorCollapsibles(el: HTMLElement): void {
   let node: HTMLElement | null = el.parentElement;
   while (node && node !== document.body) {
-    if (node.hasAttribute('data-collapsible')) node.dataset.open = 'true';
+    if (node.hasAttribute('data-collapsible')) {
+      node.dataset.open = 'true';
+      const t = node.querySelector<HTMLElement>('[data-collapsible-toggle]');
+      if (t) t.setAttribute('aria-expanded', 'true');
+    }
     node = node.parentElement;
   }
 }
@@ -225,7 +269,11 @@ document.addEventListener('click', (ev) => {
   const toggle = target.closest<HTMLElement>('[data-collapsible-toggle]');
   if (toggle) {
     const box = toggle.closest<HTMLElement>('[data-collapsible]');
-    if (box) box.dataset.open = box.dataset.open === 'true' ? 'false' : 'true';
+    if (box) {
+      box.dataset.open = box.dataset.open === 'true' ? 'false' : 'true';
+      // Keep the accessible state in step with the visual state (WAI-ARIA).
+      toggle.setAttribute('aria-expanded', String(box.dataset.open === 'true'));
+    }
     return;
   }
 
@@ -255,8 +303,8 @@ document.addEventListener('click', (ev) => {
 });
 
 window.addEventListener('hashchange', handleHashRoute);
-window.addEventListener('DOMContentLoaded', () => { handleHashRoute(); runFilters(); });
-if (document.readyState !== 'loading') { handleHashRoute(); runFilters(); }
+window.addEventListener('DOMContentLoaded', () => { syncCollapsibles(); handleHashRoute(); runFilters(); });
+if (document.readyState !== 'loading') { syncCollapsibles(); handleHashRoute(); runFilters(); }
 
 declare global { interface Window { __archive?: Record<string, unknown> } }
 window.__archive = { applyLang, applyTheme, activateTab, runFilters, resetFilters, applySort, handleHashRoute };

@@ -19,7 +19,7 @@ html[data-theme='paper'] {
   --obi-ink: #f7f5ef;
   --ink: #24211c;
   --ink-soft: #4d4940;
-  --ink-faint: #7d7769;
+  --ink-faint: #767063; /* was #7d7769 (4.24:1) → 4.68:1, WCAG AA on paper */
   --cinnabar: #9e2a2b;
   --pine: #2d5a4c;
   --rule: #ddd6c7;
@@ -40,7 +40,7 @@ html[data-theme='dark'] {
   --ink: #e9e5dc;
   --ink-soft: #c0bbaf;
   --ink-faint: #8d887e;
-  --cinnabar: #c9564d;
+  --cinnabar: #cf594f; /* was #c9564d (4.35:1) → 4.60:1, WCAG AA on dark */
   --pine: #72ac96;
   --rule: #303338;
   --rule-strong: #44484e;
@@ -59,7 +59,7 @@ html[data-theme='crisp'] {
   --obi-ink: #ffffff;
   --ink: #1b1b1b;
   --ink-soft: #4c4c4c;
-  --ink-faint: #8c8c8c;
+  --ink-faint: #737373; /* was #8c8c8c (3.36:1) → 4.74:1, WCAG AA on white */
   --cinnabar: #9e2a2b;
   --pine: #2d5a4c;
   --rule: #e3e3e1;

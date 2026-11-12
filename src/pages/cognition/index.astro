@@ -28,18 +28,21 @@ const tabs = [
     <div class="flex flex-wrap gap-2 pb-4 border-b no-print" style="border-color:var(--rule)" role="tablist" aria-label="Cognition views">
       {tabs.map((tab) => (
         <button type="button" role="tab"
+                id={`tab-${tab.id}`}
+                aria-controls={`panel-${tab.id}`}
                 class:list={['chip px-4 py-2 text-[.86rem]', { 'is-active': tab.id === 'cpv' }]}
                 data-tab-group="cognition" data-tab-set={tab.id}
-                aria-selected={tab.id === 'cpv' ? 'true' : 'false'}>
+                aria-selected={tab.id === 'cpv' ? 'true' : 'false'}
+                tabindex={tab.id === 'cpv' ? 0 : -1}>
           <I18nText t={tab.t} />
         </button>
       ))}
     </div>
 
     <div class="pt-8">
-      <div data-tab-panel="cpv" data-tab-group="cognition" role="tabpanel"><CpvExplorer /></div>
-      <div data-tab-panel="cards" data-tab-group="cognition" role="tabpanel" hidden><CognitionCards /></div>
-      <div data-tab-panel="munger" data-tab-group="cognition" role="tabpanel" hidden><MungerLattice /></div>
+      <div data-tab-panel="cpv" data-tab-group="cognition" id="panel-cpv" role="tabpanel" aria-labelledby="tab-cpv"><CpvExplorer /></div>
+      <div data-tab-panel="cards" data-tab-group="cognition" id="panel-cards" role="tabpanel" aria-labelledby="tab-cards" hidden><CognitionCards /></div>
+      <div data-tab-panel="munger" data-tab-group="cognition" id="panel-munger" role="tabpanel" aria-labelledby="tab-munger" hidden><MungerLattice /></div>
     </div>
 
     <p class="source-note mt-10 text-[.8rem]"><I18nText k="sourceNoteZh" /></p>

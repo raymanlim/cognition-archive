@@ -27,8 +27,18 @@ const FILES = {
 
 const read = (name) => {
   const p = path.join(ROOT, name);
-  if (!fs.existsSync(p)) throw new Error(`[parse] missing source: ${p}`);
-  return fs.readFileSync(p, 'utf8').replace(/^\uFEFF/, '').replace(/\r\n/g, '\n');
+  if (!fs.existsSync(p)) {
+    throw new Error(
+      `[parse] missing source: ${p}\n` +
+      `  This file is expected at the project root. If it lives in the Obsidian vault,\n` +
+      `  run: COGNITION_VAULT_DIR=<vault>/pinghe/Cognition node scripts/sync-from-vault.mjs --apply`
+    );
+  }
+  try {
+    return fs.readFileSync(p, 'utf8').replace(/^\uFEFF/, '').replace(/\r\n/g, '\n');
+  } catch (err) {
+    throw new Error(`[parse] cannot read ${p}: ${err.message}`);
+  }
 };
 
 /* -------------------------------------------------------------------------- */
@@ -445,9 +455,13 @@ console.log(`  cpv chapters    : ${cpv.length}`);
 console.log(`  cross axioms    : ${meta.axioms.length}`);
 
 const missing = [];
-cognition.forEach((c) => { if (!c.conclusionText || !c.interpretations.length) missing.push(`${c.id} conclusion/table`); });
-realityLens.forEach((c) => { if (!c.conclusionText || !c.interpretations.length) missing.push(`${c.id} conclusion/table`); });
+cognition.forEach((c) => { if (!c.id || !c.title || !c.conclusionText || !c.interpretations.length) missing.push(`${c.id || '?'} id/title/conclusion/table`); });
+realityLens.forEach((c) => { if (!c.id || !c.title || !c.conclusionText || !c.interpretations.length) missing.push(`${c.id || '?'} id/title/conclusion/table`); });
 if (missing.length) console.warn('[parse] WARN incomplete cards:', missing.join(', '));
 if (cognition.length !== 23 || realityLens.length !== 25 || munger.cards.length !== 6) {
-  throw new Error('[parse] card count mismatch — aborting build');
+  throw new Error(
+    `[parse] card count mismatch — aborting build\n` +
+    `  cognition ${cognition.length}/23 · reality ${realityLens.length}/25 · munger ${munger.cards.length}/6\n` +
+    `  Check the source Markdown headings: every card must start with a '## ' heading.`
+  );
 }
