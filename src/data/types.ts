@@ -48,6 +48,21 @@ export interface BaseCard {
 export interface CognitionCard extends BaseCard {
   titleEn: string;
   obiEn: string;
+  /** Optional Division-II sub-group (e.g. 'deepread'). */
+  group?: string;
+  /** Source year, for deep-read cards grouped by date. */
+  year?: number;
+  /** Topical tags from the source frontmatter. */
+  tags?: string[];
+  /** One-line core insight (deep-read cards). */
+  coreInsight?: string;
+  /** R/W/C triad, same shape as the Division-V Tier-1 deep dive. */
+  rwc?: { key: 'R' | 'W' | 'C'; labelZh: string; labelEn: string; pointsZh: string[]; pointsEn: string[] }[];
+  /** Explicit "your deep-read note" attribution. */
+  noteZh?: string;
+  noteEn?: string;
+  /** Axiom keys (8 cross-library axioms) for atlas relevance + auto-fill. */
+  topics?: string[];
 }
 
 export interface RealityCard extends BaseCard {

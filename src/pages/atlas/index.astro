@@ -8,17 +8,20 @@ import { dict } from '../../data/uiDictionary';
 import { axioms, buildFullMatrix, relevance, crossStats } from '../../utils/cognitiveEngine';
 import { realityById } from '../../data/reality-lens';
 import { reflectionById } from '../../data/reflections';
-import { lensCardAnchor, refCardAnchor } from '../../utils/anchors';
+import { deepReadById } from '../../data/deepread';
+import { lensCardAnchor, refCardAnchor, cogCardAnchor } from '../../utils/anchors';
 
 const matrix = buildFullMatrix();
-// Unified lookup (trap #1): reflection cards live in their own namespace, not
-// in realityById. Also derive the correct jump-back href per card (trap #3).
+// Unified lookup: reflection, deep-read and reality cards each own a namespace.
 const cards = matrix.map((m) => {
   const ref = reflectionById.get(m.cardId);
-  const card = ref ?? realityById.get(m.cardId)!;
+  const deep = deepReadById.get(m.cardId);
+  const card = ref ?? deep ?? realityById.get(m.cardId)!;
   const href = ref
     ? `/reflections#${refCardAnchor(ref.num)}`
-    : `/reality-lens#${lensCardAnchor(card.num)}`;
+    : deep
+      ? `/cognition#${cogCardAnchor(deep.num)}`
+      : `/reality-lens#${lensCardAnchor(card.num)}`;
   return { m, card, href, isRef: Boolean(ref) };
 });
 ---
@@ -44,7 +47,7 @@ const cards = matrix.map((m) => {
     <div class="eyebrow mb-5"><I18nText k="axiomsLabel" /></div>
     <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
       {axioms.map((a, i) => {
-        const count = cards.filter(({ card }) => card.topics.includes(a.key)).length;
+        const count = cards.filter(({ card }) => (card.topics ?? []).includes(a.key)).length;
         return (
           <div class="paper-card p-5" id={`axiom-${a.key}`}>
             <div class="flex items-start justify-between gap-2">

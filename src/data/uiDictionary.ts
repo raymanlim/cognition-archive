@@ -45,6 +45,18 @@ export const dict = {
     cards: { zh: '贰 · 思想认知 23 卡片', en: 'II · 23 Cognitive Cards' },
     munger: { zh: '叁 · 芒格 52 模型格栅', en: 'III · Munger 52-Model Latticework' },
   },
+  /** Division II「知识卡片」TAB 的筛选组：作者 + 深读笔记。 */
+  cogFilterGroup: {
+    all: { zh: '全部', en: 'All' },
+    nagi: { zh: 'Nagi Yan', en: 'Nagi Yan' },
+    morris: { zh: 'Morris', en: 'Morris' },
+    lifesinger: { zh: '玉伯', en: 'Yu Bo' },
+    anon: { zh: '匿名', en: 'Anonymous' },
+    deepread: { zh: '深读笔记 18', en: 'Deep Read 18' },
+  },
+  cogFilterDeepRead: { zh: '深读笔记 18', en: 'Deep Read 18' },
+  cogDeepReadNote: { zh: '你的深读笔记', en: 'Your deep-read note' },
+  cogRwcLabel: { zh: 'R/W/C 三维', en: 'R/W/C Triad' },
   interpretationHeaders: {
     dimension: { zh: '分析维度', en: 'Dimension' },
     corePoint: { zh: '核心结构要点', en: 'Structural Core Point' },

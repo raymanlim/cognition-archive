@@ -2,31 +2,64 @@
 import I18nText from '../I18nText.astro';
 import I18nBlock from '../I18nBlock.astro';
 import CognitiveCard from '../CognitiveCard.astro';
-import { cognitionCards, cognitionAuthors } from '../../data/cognition';
+import { cognitionCards } from '../../data/cognition';
+import { deepReadCards } from '../../data/deepread';
+import { dict } from '../../data/uiDictionary';
 import { cogCardAnchor } from '../../utils/anchors';
+
+/** 23 structure cards + 18 deep-read notes, rendered in one filtered list. */
+const allCards = [...cognitionCards, ...deepReadCards];
+const filterGroups = Object.entries(dict.cogFilterGroup);
+const tagOf = (c: (typeof allCards)[number]) => (c.group === 'deepread' ? 'deepread' : c.author.id);
+const numeralOf = (c: (typeof allCards)[number]) => (c.group === 'deepread' ? c.id : String(c.num).padStart(2, '0'));
 ---
 <div>
   <div class="flex flex-wrap items-center gap-2 mb-6">
     <span class="eyebrow mr-2"><I18nText k="cardLibrary" /></span>
-    <button type="button" class="chip" data-filter-group="author" data-filter-value="all" aria-pressed="true">
-      <I18nText k="all" />
-    </button>
-    {cognitionAuthors.map((a) => (
-      <button type="button" class="chip" data-filter-group="author" data-filter-value={a.id} aria-pressed="false">
-        <I18nBlock zh={a.zh} en={a.en} />
+    {filterGroups.map(([key, label]) => (
+      <button type="button" class="chip" data-filter-group="author" data-filter-value={key}
+              aria-pressed={key === 'all' ? 'true' : 'false'}>
+        <I18nText t={label} />
       </button>
     ))}
-    <span class="ml-auto text-[.78rem]" style="color:var(--ink-faint)"><span data-filter-count>23</span> / 23</span>
+    <span class="ml-auto text-[.78rem]" style="color:var(--ink-faint)">
+      <span data-filter-count>{allCards.length}</span> / {allCards.length}
+    </span>
   </div>
 
   <div data-filter-scope class="space-y-6">
-    {cognitionCards.map((c) => (
+    {allCards.map((c) => (
       <CognitiveCard
         card={c}
         anchor={cogCardAnchor(c.num)}
-        numeral={String(c.num).padStart(2, '0')}
-        extraTags={c.author.id}
-      />
+        numeral={numeralOf(c)}
+        extraTags={tagOf(c)}
+      >
+        {c.rwc && (
+          <div slot="extra" class="leaf-card p-4 sm:p-5 mt-2" style="border-left:3px solid var(--cinnabar)">
+            <div class="flex flex-wrap items-center gap-2 mb-3">
+              <span class="badge badge-cinnabar"><I18nText k="cogDeepReadNote" /></span>
+              <span class="eyebrow"><I18nText k="cogRwcLabel" /></span>
+            </div>
+            <div class="space-y-4">
+              {c.rwc.map((g) => (
+                <div>
+                  <div class="text-[.86rem] font-bold mb-1.5" style="color:var(--cinnabar)">
+                    {g.key} · <I18nBlock zh={g.labelZh} en={g.labelEn} />
+                  </div>
+                  <ul class="space-y-1.5">
+                    {g.pointsZh.map((p, pi) => (
+                      <li class="text-[.82rem] leading-relaxed">
+                        <I18nBlock zh={p} en={g.pointsEn[pi] ?? ''} />
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </CognitiveCard>
     ))}
   </div>
 </div>

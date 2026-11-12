@@ -19,6 +19,7 @@ import { cogCardAnchor, mungerModelAnchor } from './anchors';
 import { cognitionById } from '../data/cognition';
 import { realityById } from '../data/reality-lens';
 import { reflectionById } from '../data/reflections';
+import { deepReadById } from '../data/deepread';
 import { allModels, postMortemQuestions, preDecisionQuestions } from '../data/munger';
 import { cpvChain } from '../data/cpv';
 import metaRaw from '../data/generated/meta.json';
@@ -118,6 +119,31 @@ const M_REFLECTIONS: Record<string, Mapping> = {
 };
 
 /* -------------------------------------------------------------------------- */
+/* 2c. Curated mapping for the 18 deep-read notes (Division II sub-group)      */
+/*     Keyed by deep-read id ('d01'…'d18'); mirrors the cognition mapping.     */
+/* -------------------------------------------------------------------------- */
+const M_DEEPREAD: Record<string, Mapping> = {
+  d01: { philosophers: ['socrates', 'popper', 'wittgenstein'], cognition: ['C22', 'C19'], cpv: ['ch3', 'ch9'], models: ['社会认同', '确认偏误', '对比误判'] },
+  d02: { philosophers: ['dewey', 'wangyangming', 'hume'], cognition: ['C11', 'C15'], cpv: ['ch1', 'ch5'], models: ['用进废退', '能力圈', '复利'] },
+  d03: { philosophers: ['hegel', 'marx', 'wittgenstein'], cognition: ['C03', 'C09'], cpv: ['ch4', 'ch5'], models: ['二阶思维', '安全边际', '帕累托'] },
+  d04: { philosophers: ['marcuse', 'han', 'saussure'], cognition: ['C02', 'C17'], cpv: ['ch1', 'ch8'], models: ['网络效应', '创造性破坏', '用进废退'] },
+  d05: { philosophers: ['bacon', 'popper', 'hume'], cognition: ['C19', 'C22'], cpv: ['ch2', 'ch9'], models: ['激励超级反应', '确认偏误', '奥卡姆剃刀'] },
+  d06: { philosophers: ['hegel', 'marx', 'hume'], cognition: ['C14', 'C03'], cpv: ['ch7', 'ch6'], models: ['激励超级反应', '互惠', '嫉妒'] },
+  d07: { philosophers: ['epicurus', 'spinoza', 'zhuangzi'], cognition: ['C08', 'C16'], cpv: ['ch5', 'ch6'], models: ['简单心理否认', '剥夺超级反应', '机会成本'] },
+  d08: { philosophers: ['marx', 'dewey', 'hegel'], cognition: ['C15', 'C03'], cpv: ['ch3', 'ch5'], models: ['能力圈', '用进废退', '复利'] },
+  d09: { philosophers: ['popper', 'bacon', 'hume'], cognition: ['C19', 'C22'], cpv: ['ch4', 'ch5'], models: ['均值回归', '复利', '机会成本'] },
+  d10: { philosophers: ['descartes', 'hume', 'wittgenstein'], cognition: ['C18', 'C19'], cpv: ['ch1', 'ch2'], models: ['社会认同', '易得性偏差', '权威误导'] },
+  d11: { philosophers: ['hume', 'kant', 'popper'], cognition: ['C19', 'C22'], cpv: ['ch2', 'ch9'], models: ['不一致回避', '对比误判', '确认偏误'] },
+  d12: { philosophers: ['bacon', 'popper', 'saussure'], cognition: ['C06', 'C19'], cpv: ['ch1', 'ch9'], models: ['易得性偏差', '单纯关联', '确认偏误'] },
+  d13: { philosophers: ['rousseau', 'rawls', 'foucault'], cognition: ['C14', 'C03'], cpv: ['ch3', 'ch7'], models: ['激励超级反应', '社会认同', '对比误判'] },
+  d14: { philosophers: ['kant', 'rawls', 'foucault'], cognition: ['C03', 'C14'], cpv: ['ch3', 'ch9'], models: ['不一致回避', '权威误导', '激励超级反应'] },
+  d15: { philosophers: ['dewey', 'wangyangming', 'descartes'], cognition: ['C11', 'C15'], cpv: ['ch1', 'ch5'], models: ['用进废退', '能力圈', '复利'] },
+  d16: { philosophers: ['hegel', 'marx', 'wittgenstein'], cognition: ['C03', 'C09'], cpv: ['ch4', 'ch5'], models: ['二阶思维', '帕累托', '安全边际'] },
+  d17: { philosophers: ['marx', 'hume', 'rawls'], cognition: ['C15', 'C03'], cpv: ['ch6', 'ch7'], models: ['机会成本', '激励超级反应', '帕累托'] },
+  d18: { philosophers: ['rousseau', 'kant', 'hegel'], cognition: ['C21', 'C16'], cpv: ['ch7', 'ch9'], models: ['互惠', '沉没成本', '社会认同'] },
+};
+
+/* -------------------------------------------------------------------------- */
 /* 3. Fuzzy model resolver                                                    */
 /* -------------------------------------------------------------------------- */
 function resolveModel(query: string) {
@@ -144,28 +170,30 @@ function keywordsFor(cardTopics: string[]): string[] {
 /* -------------------------------------------------------------------------- */
 /* 5. Public API                                                              */
 /* -------------------------------------------------------------------------- */
-/** Accept 'R25', 25 or '25'. Division-V ids ('ref-01'…) pass through unchanged. */
+/** Accept 'R25', 25 or '25'. Division-V ('ref-01') and deep-read ('d01') ids pass through. */
 export function normaliseCardId(input: string | number): string {
   if (typeof input === 'number') return `R${String(input).padStart(2, '0')}`;
   const s = String(input).trim().toUpperCase();
   if (s.startsWith('REF-')) return String(input).trim().toLowerCase();
+  if (/^D\d{2}$/.test(s)) return String(input).trim().toLowerCase();
   if (/^R\d{2}$/.test(s)) return s;
   if (/^\d{1,2}$/.test(s)) return `R${s.padStart(2, '0')}`;
   return s;
 }
 
-/** Unified lookup across both card libraries — the single fix for all three
- *  "ref- rows break the atlas" traps. Reflection cards are checked first. */
+/** Unified lookup across all card libraries — the single fix for the
+ *  "ref-/d- rows break the atlas" traps. Reflection, deep-read, then reality. */
 type MatrixCard = { topics: string[]; title: string; conclusionText: string; relationText: string };
 function lookupCard(cardId: string): MatrixCard | undefined {
   return (reflectionById.get(cardId) as unknown as MatrixCard | undefined)
+    ?? (deepReadById.get(cardId) as unknown as MatrixCard | undefined)
     ?? (realityById.get(normaliseCardId(cardId)) as unknown as MatrixCard | undefined);
 }
 
 export function buildCrossLibraryMatrix(realityCardId: string | number): CrossMatrix {
   const cardId = normaliseCardId(realityCardId);
   const card = lookupCard(cardId);
-  const mapping = M_REFLECTIONS[cardId] ?? M[cardId] ?? { philosophers: [], cognition: [], cpv: [], models: [] };
+  const mapping = M_REFLECTIONS[cardId] ?? M_DEEPREAD[cardId] ?? M[cardId] ?? { philosophers: [], cognition: [], cpv: [], models: [] };
   const keywords = keywordsFor(card?.topics ?? []);
   const combined = [...new Set([...keywords, ...(card?.topics ?? [])])];
 
@@ -258,11 +286,12 @@ export function buildReflectionMatrix(id: string): CrossMatrix {
   return buildCrossLibraryMatrix(id);
 }
 
-/** Full 25 reality + 10 reflection rows for the Cross Atlas page. */
+/** Full 25 reality + 10 reflection + 18 deep-read rows for the Cross Atlas. */
 export function buildFullMatrix(): CrossMatrix[] {
   return [
     ...Array.from({ length: 25 }, (_, i) => buildCrossLibraryMatrix(i + 1)),
     ...Array.from(reflectionById.keys(), (id) => buildCrossLibraryMatrix(id)),
+    ...Array.from(deepReadById.keys(), (id) => buildCrossLibraryMatrix(id)),
   ];
 }
 
@@ -279,6 +308,7 @@ export function relevance(cardId: string, axiomKey: string): number {
 export const crossStats = {
   cards: realityById.size,
   reflections: reflectionById.size,
+  deepreads: deepReadById.size,
   philosophers: philosopherById.size,
   cognition: cognitionById.size,
   models: allModels.length,

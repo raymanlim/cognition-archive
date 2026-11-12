@@ -17,6 +17,8 @@ export const ui = {
   mobileReflections: { zh: '伍·省思', en: 'V · Refl.' },
 
   langLabel: { zh: '语言', en: 'Language' },
+  /** Division II「知识卡片」TAB 的深读筛选（扁平项；嵌套组见 uiDictionary.cogFilterGroup）。 */
+  cogFilterDeepRead: { zh: '深读笔记 18', en: 'Deep Read 18' },
   themeLabel: { zh: '外观', en: 'Appearance' },
   themePaper: { zh: '宣纸典藏', en: 'Paper' },
   themeDark: { zh: '暗夜书斋', en: 'Dark' },
