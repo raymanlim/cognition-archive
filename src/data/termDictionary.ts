@@ -70,6 +70,7 @@ const TERMS: Record<string, string> = {
   '@Morris_LT': '@Morris_LT',
   '@zuoyi153917761': '@zuoyi153917761',
   '@thedankoe': '@thedankoe',
+  '@lijigang': '@lijigang',
   'x/02 归档': 'x/02 Archive',
   '《穷查理宝典》': 'Poor Charlie’s Almanack',
   // 常见短标签

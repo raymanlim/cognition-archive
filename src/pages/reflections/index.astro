@@ -1,0 +1,279 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import I18nText from '../../components/I18nText.astro';
+import I18nBlock from '../../components/I18nBlock.astro';
+import CognitiveCard from '../../components/CognitiveCard.astro';
+import MarginaliaNote from '../../components/MarginaliaNote.astro';
+import { reflectionCards, reflectionIndex, reflectionSegments, thoughtMap } from '../../data/reflections';
+import { dict } from '../../data/uiDictionary';
+import { axiomTopics, buildReflectionMatrix } from '../../utils/cognitiveEngine';
+import { refCardAnchor, refItemAnchor } from '../../utils/anchors';
+
+const topicFilters = axiomTopics;
+---
+<BaseLayout title="伍 · AI时代省思录 / V · Reflections from the AI Age" active="reflections"
+  description="AI 时代高认知人群的反思辑录，精选导师级思想者那些常人难以触达的思考角度，以卡片写作、提示词理念与人机协作实践抛砖引玉，附导读与跨库关联。">
+
+  <section class="archive-shell page-head">
+    <div class="eyebrow mb-3">DIVISION V</div>
+    <I18nBlock as="div" class="display-title" zh="伍 · AI时代省思录" en="V · Reflections from the AI Age" />
+    <I18nBlock as="div" class="mt-4 body-text text-[.95rem] max-w-3xl"
+      zh={dict.refLead.zh} en={dict.refLead.en} />
+    <div class="mt-5">
+      <I18nBlock as="div" class="text-[.97rem] leading-[1.9] body-text"
+        zh={dict.refLeadExtra.zh} en={dict.refLeadExtra.en} />
+      <div class="mt-2 text-[.78rem]" style="color:var(--ink-faint)">
+        <I18nBlock as="div" class="text-[.78rem] leading-[1.7]"
+          zh={dict.refProvenance.zh} en={dict.refProvenance.en} />
+        <a href="#ref-index" class="hover:underline" style="color:var(--cinnabar)" data-back-link>
+          <I18nText k="refIndexLabel" />
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Thought map (A.5) -->
+  <section class="archive-shell py-10" id="ref-map">
+    <div class="eyebrow mb-5 flex items-center gap-2">
+      <I18nText k="thoughtMapLabel" /> <span class="eyebrow text-[.62rem]" style="color:var(--ink-faint)"><I18nText k="thoughtMapNote" /></span>
+    </div>
+    <div class="leaf-card p-5 sm:p-6 space-y-8">
+      <div>
+        <div class="eyebrow mb-3"><I18nText k="segmentsLabel" /></div>
+        <div class="overflow-x-auto">
+          <table class="archive-table">
+            <thead>
+              <tr>
+                <th style="width:52px"><I18nText t={dict.realityCardCol} /></th>
+                <th><I18nText k="segmentsLabel" /></th>
+              </tr>
+            </thead>
+            <tbody>
+              {reflectionSegments.map((s) => (
+                <tr>
+                  <td style="color:var(--cinnabar);text-align:center">
+                    <span class="font-serif text-[1.05rem] font-bold">{s.key}</span>
+                  </td>
+                  <td>
+                    <div class="flex flex-wrap sm:flex-nowrap items-baseline gap-3">
+                      <I18nBlock as="div" class="text-[.9rem] font-bold" zh={`${s.zh} (${s.range})`} en={`${s.en} (${s.range})`} />
+                      <span class="text-[.78rem]" style="color:var(--ink-faint)">
+                        <I18nBlock class="text-[.78rem]"
+                          zh={`"${s.questionZh}"`} en={`"${s.questionEn}"`} />
+                      </span>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div>
+        <div class="eyebrow mb-3"><I18nText k="mainlineLabel" /></div>
+        <div class="chain-flow">
+          {thoughtMap.mainline.stepsZh.map((step, i) => (
+            <div class="chain-node paper-card p-3">
+              <I18nBlock class="text-[.88rem] font-bold" zh={step} en={thoughtMap.mainline.stepsEn[i]} />
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div>
+        <div class="eyebrow mb-3"><I18nText k="declarationsLabel" /></div>
+        <div class="space-y-4">
+          {thoughtMap.declarations.map((d) => (
+            <div class="quote-block">
+              <div class="eyebrow mb-2"><I18nBlock as="div" class="text-[.78rem] font-bold" zh={d.labelZh} en={d.labelEn} /></div>
+              <I18nBlock as="div" class="body-text text-[.88rem] leading-relaxed" zh={d.zh} en={d.en} />
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div class="pt-3 border-t text-[.72rem] leading-relaxed" style="border-color:var(--rule);color:var(--ink-faint)">
+        <I18nBlock as="div" zh={thoughtMap.note.zh} en={thoughtMap.note.en} />
+      </div>
+    </div>
+  </section>
+
+  <!-- Filters -->
+  <section class="archive-shell pt-8 space-y-4 no-print">
+    <div class="flex flex-wrap items-center gap-2">
+      <span class="eyebrow w-28 shrink-0"><I18nText k="filterTopic" /></span>
+      <button type="button" class="chip" data-filter-group="topic" data-filter-value="all" aria-pressed="true">
+        <I18nText k="filterAllTopics" />
+      </button>
+      {topicFilters.map((a) => (
+        <button type="button" class="chip" data-filter-group="topic" data-filter-value={a.key} aria-pressed="false">
+          <I18nText zh={a.zh} en={a.en} />
+        </button>
+      ))}
+    </div>
+    <div class="flex items-center justify-between pt-2 border-b pb-3" style="border-color:var(--rule)">
+      <span class="text-[.8rem]" style="color:var(--ink-faint)">
+        <span data-filter-count>{reflectionCards.length}</span> / {reflectionCards.length} <I18nText k="refResultCount" />
+      </span>
+      <span class="text-[.76rem]" style="color:var(--ink-faint)">
+        <I18nText k="refFiltersLabel" />
+      </span>
+      <span class="text-[.78rem] leading-[1.7]" style="color:var(--ink-faint)">
+        <I18nBlock as="div" class="text-[.78rem] leading-[1.7]"
+          zh={dict.refIndexHint.zh} en={dict.refIndexHint.en} />
+      </span>
+    </div>
+  </section>
+
+  <!-- Cards: 65% main / 35% marginalia, collapsing to an inline drawer on mobile -->
+  <section class="archive-shell py-8" data-filter-scope>
+    <div class="space-y-9">
+      {reflectionCards.map((c) => {
+        const matrix = buildReflectionMatrix(c.id);
+        return (
+          <div data-filter-item data-tags={`${c.group} ${c.topics.join(' ')}`} id={refItemAnchor(c.num)}>
+            <div class="split-layout">
+              <div class="min-w-0">
+                <CognitiveCard
+                  card={c}
+                  anchor={refCardAnchor(c.num)}
+                  numeral={String(c.num).padStart(2, '0')}
+                  extraTags={c.group}
+                  asFilterItem={false}
+                >
+                  <!-- Editorial annotation: explicitly marked as site-side reading,
+                       never presented as the source author's own analysis. -->
+                  <div slot="extra" class="leaf-card p-4 mt-2" style="border-left:3px solid var(--cinnabar)">
+                    <div class="flex flex-wrap items-center gap-2 mb-2">
+                      <span class="badge badge-cinnabar"><I18nText k="editorialBadge" /></span>
+                      <span class="badge"><I18nText k={c.tier === 'tier1' ? 'tier1Label' : 'tier2Label'} /></span>
+                      <span class="text-[.72rem]" style="color:var(--ink-faint)">
+                        <I18nText k="refSourceItem" /> {c.sourceNum}
+                      </span>
+                    </div>
+                    <I18nBlock as="div" class="text-[.9rem] leading-[1.85] body-text"
+                      zh={c.editorial.zh} en={c.editorial.en} />
+                  </div>
+
+                  <!-- Tier 1 only: full R/W/C + Steelman + lenses + micro-actions,
+                       following the L2 model card verbatim in structure. -->
+                  {c.tier === 'tier1' && c.deepDive && (
+                    <div slot="extra" class="leaf-card p-4 sm:p-5 mt-3 space-y-5" style="border-color:var(--rule-strong)">
+                      <div class="eyebrow"><I18nText k="deepRwcLabel" /></div>
+                      <div class="grid sm:grid-cols-3 gap-4">
+                        {c.deepDive.rwc.map((g) => (
+                          <div class="paper-card p-3">
+                            <div class="text-[.86rem] font-bold mb-2" style="color:var(--cinnabar)">
+                              <I18nBlock zh={g.labelZh} en={g.labelEn} />
+                            </div>
+                            <ul class="space-y-1.5">
+                              {g.pointsZh.map((p, pi) => (
+                                <li class="text-[.8rem] leading-relaxed">
+                                  <I18nBlock zh={p} en={g.pointsEn[pi] ?? ''} />
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        ))}
+                      </div>
+                      <div class="grid sm:grid-cols-2 gap-4">
+                        <div>
+                          <div class="eyebrow mb-2"><I18nText k="deepSteelmanLabel" /></div>
+                          <ul class="space-y-1.5">
+                            {c.deepDive.steelmanZh.map((p, pi) => (
+                              <li class="text-[.8rem] leading-relaxed"><I18nBlock zh={p} en={c.deepDive!.steelmanEn[pi] ?? ''} /></li>
+                            ))}
+                          </ul>
+                        </div>
+                        <div>
+                          <div class="eyebrow mb-2"><I18nText k="deepLensesLabel" /></div>
+                          <ul class="space-y-1.5">
+                            {c.deepDive.lensesZh.map((p, pi) => (
+                              <li class="text-[.8rem] leading-relaxed"><I18nBlock zh={p} en={c.deepDive!.lensesEn[pi] ?? ''} /></li>
+                            ))}
+                          </ul>
+                        </div>
+                      </div>
+                      <div>
+                        <div class="eyebrow mb-2"><I18nText k="deepActionsLabel" /></div>
+                        <ul class="space-y-1.5">
+                          {c.deepDive.actionsZh.map((p, pi) => (
+                            <li class="text-[.8rem] leading-relaxed"><I18nBlock zh={p} en={c.deepDive!.actionsEn[pi] ?? ''} /></li>
+                          ))}
+                        </ul>
+                      </div>
+                      <p class="source-note text-[.75rem]"><I18nText k="deepSourceNote" /></p>
+                    </div>
+                  )}
+
+                  <div slot="extra" class="marginalia-drawer collapsible" data-collapsible data-open="false">
+                    <button type="button" class="collapsible-toggle w-full flex items-center justify-between gap-2 px-3 py-2.5 text-[.82rem] font-bold"
+                            style="background:var(--card-2);border:1px solid var(--cinnabar);color:var(--cinnabar)"
+                            data-collapsible-toggle>
+                      <span><I18nText k="openMarginalia" /> · {matrix.cardId}</span>
+                      <span class="chev">›</span>
+                    </button>
+                    <div class="collapsible-body">
+                      <MarginaliaNote matrix={matrix} inDrawer={true} />
+                    </div>
+                  </div>
+                </CognitiveCard>
+              </div>
+
+              <aside class="marginalia no-print">
+                <div class="border-l-2 pl-4" style="border-color:var(--cinnabar)">
+                  <MarginaliaNote matrix={matrix} />
+                </div>
+              </aside>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  </section>
+
+  <!-- Full 100-item index -->
+  <section class="archive-shell py-10 border-t" id="ref-index" style="border-color:var(--rule)">
+    <div class="eyebrow mb-3"><I18nText k="refIndexLabel" /></div>
+    <p class="text-[.78rem] mb-5" style="color:var(--ink-faint)"><I18nText k="refIndexHint" /></p>
+    <div class="space-y-2">
+      {reflectionSegments.map((s) => {
+        const seg = reflectionIndex.filter((i) => i.segment === s.key);
+        return (
+          <div class="paper-card collapsible" data-collapsible data-open="true">
+            <button type="button" class="collapsible-toggle w-full text-left p-4 flex items-center gap-4" data-collapsible-toggle>
+              <span class="font-serif text-[1.25rem] font-bold shrink-0" style="color:var(--cinnabar)">{s.key}</span>
+              <span class="flex-1 min-w-0 text-[.88rem] font-bold">
+                <I18nBlock zh={`${s.zh} (${s.range})`} en={`${s.en} (${s.range})`} />
+              </span>
+              <span class="chev shrink-0" style="color:var(--cinnabar)">›</span>
+            </button>
+            <div class="collapsible-body px-4 pb-4">
+              {seg.map((i) => (
+                <div class="flex items-start gap-3 py-2 border-b text-[.8rem]" style="border-color:var(--rule)">
+                  <span class="shrink-0 w-8 font-mono" style="color:var(--cinnabar)">{String(i.num).padStart(2, '0')}</span>
+                  <div class="flex-1 min-w-0">
+                    <I18nBlock class="text-[.82rem] leading-snug" zh={i.title} en={i.title} />
+                    <div class="mt-1 flex flex-wrap items-center gap-3 text-[.72rem]" style="color:var(--ink-faint)">
+                      <span>{i.date}</span>
+                      <span>·</span>
+                      <a href={i.url} target="_blank" rel="noopener noreferrer" class="hover:underline break-all">
+                        <I18nText k="refSourceLink" /> ↗
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  </section>
+
+  <section class="archive-shell pb-6">
+    <I18nBlock as="p" class="source-note text-[.78rem] leading-relaxed mt-6"
+      zh={dict.editorialNote.zh} en={dict.editorialNote.en} />
+  </section>
+</BaseLayout>

@@ -18,6 +18,7 @@ import { philosopherById, canonicalPhilId } from '../data/philosophers';
 import { cogCardAnchor, mungerModelAnchor } from './anchors';
 import { cognitionById } from '../data/cognition';
 import { realityById } from '../data/reality-lens';
+import { reflectionById } from '../data/reflections';
 import { allModels, postMortemQuestions, preDecisionQuestions } from '../data/munger';
 import { cpvChain } from '../data/cpv';
 import metaRaw from '../data/generated/meta.json';
@@ -100,6 +101,23 @@ const M: Record<string, Mapping> = {
 };
 
 /* -------------------------------------------------------------------------- */
+/* 2b. Curated mapping for the 10 Division-V reflection cards                 */
+/*     CPV: ch1/ch8/ch9 preferred; Munger: AI-adjacent models.                */
+/* -------------------------------------------------------------------------- */
+const M_REFLECTIONS: Record<string, Mapping> = {
+  'ref-01': { philosophers: ['wittgenstein', 'kant', 'popper'], cognition: ['C22', 'C19'], cpv: ['ch1', 'ch9'], models: ['能力圈', '二阶思维', '好奇倾向'] },
+  'ref-02': { philosophers: ['nietzsche', 'hegel', 'wittgenstein'], cognition: ['C18', 'C21'], cpv: ['ch1', 'ch8'], models: ['能力圈', '逆向思维', '用进废退'] },
+  'ref-03': { philosophers: ['dewey', 'wittgenstein', 'socrates'], cognition: ['C11', 'C15'], cpv: ['ch7', 'ch8'], models: ['二阶思维', '好奇倾向', '网络效应'] },
+  'ref-04': { philosophers: ['wittgenstein', 'bacon', 'popper'], cognition: ['C09', 'C19'], cpv: ['ch2', 'ch8'], models: ['奥卡姆剃刀', '复利', '能力圈'] },
+  'ref-05': { philosophers: ['marcuse', 'saussure', 'han'], cognition: ['C06', 'C17'], cpv: ['ch1', 'ch9'], models: ['网络效应', '创造性破坏', '废话倾向'] },
+  'ref-06': { philosophers: ['wittgenstein', 'saussure', 'socrates'], cognition: ['C22', 'C06'], cpv: ['ch1', 'ch9'], models: ['废话倾向', '对比误判', '社会认同'] },
+  'ref-07': { philosophers: ['nietzsche', 'hegel', 'wittgenstein'], cognition: ['C16', 'C21'], cpv: ['ch6', 'ch9'], models: ['用进废退', '剥夺超级反应', '不一致回避'] },
+  'ref-08': { philosophers: ['nietzsche', 'kant', 'zhuangzi'], cognition: ['C18', 'C21'], cpv: ['ch7', 'ch1'], models: ['逆向思维', '激励超级反应', '二阶思维'] },
+  'ref-09': { philosophers: ['nietzsche', 'marcuse', 'hegel'], cognition: ['C16', 'C08'], cpv: ['ch5', 'ch9'], models: ['社会认同', '压力影响', '简单心理否认'] },
+  'ref-10': { philosophers: ['nietzsche', 'hume', 'marcuse'], cognition: ['C15', 'C11'], cpv: ['ch7', 'ch5'], models: ['创造性破坏', '好奇倾向', '逆向思维'] },
+};
+
+/* -------------------------------------------------------------------------- */
 /* 3. Fuzzy model resolver                                                    */
 /* -------------------------------------------------------------------------- */
 function resolveModel(query: string) {
@@ -126,19 +144,28 @@ function keywordsFor(cardTopics: string[]): string[] {
 /* -------------------------------------------------------------------------- */
 /* 5. Public API                                                              */
 /* -------------------------------------------------------------------------- */
-/** Accept 'R25', 25 or '25'. */
+/** Accept 'R25', 25 or '25'. Division-V ids ('ref-01'…) pass through unchanged. */
 export function normaliseCardId(input: string | number): string {
   if (typeof input === 'number') return `R${String(input).padStart(2, '0')}`;
   const s = String(input).trim().toUpperCase();
+  if (s.startsWith('REF-')) return String(input).trim().toLowerCase();
   if (/^R\d{2}$/.test(s)) return s;
   if (/^\d{1,2}$/.test(s)) return `R${s.padStart(2, '0')}`;
   return s;
 }
 
+/** Unified lookup across both card libraries — the single fix for all three
+ *  "ref- rows break the atlas" traps. Reflection cards are checked first. */
+type MatrixCard = { topics: string[]; title: string; conclusionText: string; relationText: string };
+function lookupCard(cardId: string): MatrixCard | undefined {
+  return (reflectionById.get(cardId) as unknown as MatrixCard | undefined)
+    ?? (realityById.get(normaliseCardId(cardId)) as unknown as MatrixCard | undefined);
+}
+
 export function buildCrossLibraryMatrix(realityCardId: string | number): CrossMatrix {
   const cardId = normaliseCardId(realityCardId);
-  const card = realityById.get(cardId);
-  const mapping = M[cardId] ?? { philosophers: [], cognition: [], cpv: [], models: [] };
+  const card = lookupCard(cardId);
+  const mapping = M_REFLECTIONS[cardId] ?? M[cardId] ?? { philosophers: [], cognition: [], cpv: [], models: [] };
   const keywords = keywordsFor(card?.topics ?? []);
   const combined = [...new Set([...keywords, ...(card?.topics ?? [])])];
 
@@ -208,26 +235,40 @@ export function buildCrossLibraryMatrix(realityCardId: string | number): CrossMa
     .map((k) => axiomByKey.get(k))
     .filter((a): a is Axiom => Boolean(a));
 
+  // Division-V marginalia carry an explicit high-cognition framing (§5).
+  const isReflection = cardId.startsWith('ref-');
+  const frame = (xs: CrossLink[]): CrossLink[] => isReflection
+    ? xs.map((x) => ({ ...x, reason: `高认知视角：${x.reason}` }))
+    : xs;
+
   return {
     cardId,
-    philosophers,
-    cpv,
-    cognition,
-    models,
+    philosophers: frame(philosophers),
+    cpv: frame(cpv),
+    cognition: frame(cognition),
+    models: frame(models),
     axioms: cardAxioms,
     preQuestions: preDecisionQuestions,
     postQuestions: postMortemQuestions,
   };
 }
 
-/** Full 25 × 3 matrix for the Cross Atlas page. */
-export function buildFullMatrix(): CrossMatrix[] {
-  return Array.from({ length: 25 }, (_, i) => buildCrossLibraryMatrix(i + 1));
+/** Public alias used by the reflections page. */
+export function buildReflectionMatrix(id: string): CrossMatrix {
+  return buildCrossLibraryMatrix(id);
 }
 
-/** Keyword relevance used by the atlas heat cells. */
+/** Full 25 reality + 10 reflection rows for the Cross Atlas page. */
+export function buildFullMatrix(): CrossMatrix[] {
+  return [
+    ...Array.from({ length: 25 }, (_, i) => buildCrossLibraryMatrix(i + 1)),
+    ...Array.from(reflectionById.keys(), (id) => buildCrossLibraryMatrix(id)),
+  ];
+}
+
+/** Keyword relevance used by the atlas heat cells — unified lookup (trap #2). */
 export function relevance(cardId: string, axiomKey: string): number {
-  const card = realityById.get(normaliseCardId(cardId));
+  const card = lookupCard(cardId);
   if (!card) return 0;
   const a = axiomByKey.get(axiomKey);
   if (!a) return 0;
@@ -237,6 +278,7 @@ export function relevance(cardId: string, axiomKey: string): number {
 
 export const crossStats = {
   cards: realityById.size,
+  reflections: reflectionById.size,
   philosophers: philosopherById.size,
   cognition: cognitionById.size,
   models: allModels.length,

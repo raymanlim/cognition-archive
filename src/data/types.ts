@@ -3,7 +3,7 @@
 export type Lang = 'zh' | 'en' | 'bi';
 export type Theme = 'paper' | 'dark' | 'crisp';
 export type PhilosopherTheme = 'chinese' | 'epistemology' | 'critique';
-export type AuthorId = 'nagi' | 'zuoyi' | 'dankoe' | 'morris' | 'lifesinger' | 'anon' | 'munger';
+export type AuthorId = 'nagi' | 'zuoyi' | 'dankoe' | 'morris' | 'lifesinger' | 'anon' | 'munger' | 'lijigang';
 
 export interface Author {
   id: string;
@@ -55,6 +55,49 @@ export interface RealityCard extends BaseCard {
   obiEn: string;
   group: 'zuoyi' | 'dankoe' | 'morris';
   topics: string[];
+}
+
+/** Division V — AI-age reflections. Editorial annotations are explicitly
+ *  marked as site-side structured reading, never as source-author analysis. */
+export interface ReflectionCard extends BaseCard {
+  titleEn: string;
+  obiEn: string;
+  group: 'ai-age';
+  topics: string[];
+  /** Tier 1 = full L2 model card; Tier 2 = verbatim L1 quote + editorial note. */
+  tier: 'tier1' | 'tier2';
+  /** Original L1 item number (1..100) for provenance; `num` is the card sequence 1..10. */
+  sourceNum: number;
+  /** L1 segment id (S1..S5) this card's source belongs to. */
+  segment: string;
+  /** Site-side editorial annotation (ZH/EN), shown as "本站结构化整理". */
+  editorial: { zh: string; en: string };
+  /** Tier 1 only: R/W/C + Steelman + lenses + micro-actions from the L2 model card. */
+  deepDive?: {
+    rwc: { key: 'R' | 'W' | 'C'; labelZh: string; labelEn: string; pointsZh: string[]; pointsEn: string[] }[];
+    steelmanZh: string[]; steelmanEn: string[];
+    lensesZh: string[]; lensesEn: string[];
+    actionsZh: string[]; actionsEn: string[];
+  };
+}
+
+/** A single L1 item in the full 100-entry index. */
+export interface ReflectionIndexItem {
+  num: number;
+  title: string;
+  date: string;
+  url: string;
+  segment: string;
+}
+
+/** Thought-map segment (5 L1 segments) + L2 analytic framework. */
+export interface ReflectionSegment {
+  key: string;
+  range: string;
+  zh: string;
+  en: string;
+  questionZh: string;
+  questionEn: string;
 }
 
 export interface MungerModel {

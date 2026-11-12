@@ -284,7 +284,7 @@ html[data-lang='en'] .source-note-zh { display: none; }
   .lang-btn { padding-left: .3rem; padding-right: .3rem; font-size: .62rem; }
   .theme-btn { width: 1.5rem; height: 1.5rem; font-size: .68rem; }
   .mobile-bottom-nav {
-    display: grid; grid-template-columns: repeat(4, 1fr);
+    display: grid; grid-template-columns: repeat(5, minmax(0, 1fr));
     position: fixed; bottom: 0; left: 0; right: 0; z-index: 60;
     background: var(--leaf); border-top: 1px solid var(--rule-strong);
     box-shadow: 0 -4px 20px rgba(0,0,0,.08);
@@ -292,9 +292,9 @@ html[data-lang='en'] .source-note-zh { display: none; }
   }
   .mobile-bottom-nav a {
     display: flex; flex-direction: column; align-items: center; justify-content: center;
-    gap: .15rem; padding: .55rem .2rem; font-size: .72rem;
+    gap: .15rem; padding: .55rem .1rem; font-size: .68rem;
     color: var(--ink-faint); font-family: ui-sans-serif, system-ui, sans-serif;
-    /* Hard guarantee: four tabs never wrap or squeeze at any narrow width. */
+    /* Hard guarantee: five tabs never wrap or squeeze at any narrow width. */
     white-space: nowrap; min-width: 0; overflow: hidden;
   }
   .mobile-bottom-nav a[aria-current='page'] { color: var(--cinnabar); font-weight: 700; }
@@ -485,8 +485,9 @@ html[data-lang='en'] svg text.lang-en { display: inline; }
 html[data-lang='bi'] svg text.lang-en { display: none; }
 
 @media (max-width: 360px) {
-  .mobile-bottom-nav a { font-size: .65rem; padding: .5rem .1rem; }
-  .mobile-bottom-nav .nav-mark { font-size: .95rem; }
+  /* 5 tabs on a 320px viewport: 64px each. Keep EN short labels on one line. */
+  .mobile-bottom-nav a { font-size: .6rem; padding: .5rem .05rem; letter-spacing: -.02em; }
+  .mobile-bottom-nav .nav-mark { font-size: .9rem; }
   /* iPhone SE (320px): one more notch down for the header. */
   header .archive-shell { padding-left: .45rem; padding-right: .45rem; gap: .2rem; }
   .site-title-main { font-size: .75rem; }

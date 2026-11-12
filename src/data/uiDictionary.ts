@@ -13,10 +13,12 @@ export const dict = {
   navCognition: { zh: '贰 · 思想认知', en: 'II · Cognition' },
   navReality: { zh: '叁 · 现实透镜', en: 'III · Reality Lens' },
   navAtlas: { zh: '肆 · 交叉图谱', en: 'IV · Cross Atlas' },
+  navReflections: { zh: '伍 · 省思录', en: 'V · AI-Age Reflections' },
   mobilePhilosophy: { zh: '壹·哲学', en: 'I · Phil.' },
   mobileCognition: { zh: '贰·认知', en: 'II · Cog.' },
   mobileReality: { zh: '叁·透镜', en: 'III · Lens' },
   mobileAtlas: { zh: '肆·图谱', en: 'IV · Atlas' },
+  mobileReflections: { zh: '伍·省思', en: 'V · Refl.' },
   langLabel: { zh: '语言', en: 'Language' },
   themeLabel: { zh: '外观', en: 'Appearance' },
   themePaper: { zh: '宣纸典藏', en: 'Paper' },
@@ -174,6 +176,55 @@ export const dict = {
   realityCardCol: { zh: '现实透镜卡片', en: 'Reality Card' },
   fullIndex: { zh: '三层认知交叉解剖 · 全量索引', en: 'THREE-LAYER DISSECTION · FULL INDEX' },
   openFullCard: { zh: '查看该卡片全文与眉批', en: 'Open full card & marginalia' },
+
+  /* ---- Division V: AI-Age Reflections ---- */
+  refEyebrow: { zh: 'AI 时代 · 高认知省思', en: 'AI AGE · HIGH-COGNITION REFLECTIONS' },
+  refTitle: { zh: '伍 · AI时代省思录', en: 'V · Reflections from the AI Age' },
+  refLead: {
+    zh: 'AI 时代高认知人群的反思辑录——精选导师级思想者那些常人难以触达的思考角度，以卡片写作、提示词理念与人机协作实践抛砖引玉，附导读与跨库关联。',
+    en: 'Reflections from high-cognition minds of the AI age — selected angles most people rarely reach, offered as a brick to draw jade: card-writing, prompt-as-philosophy and human–AI workflows, with annotations and cross-links.',
+  },
+  refLeadExtra: {
+    zh: '他的思考不是答案，而是把你带到一个你独自到不了的认知位置。',
+    en: 'His thinking is not an answer but a place you could not have reached alone.',
+  },
+  thoughtMapLabel: { zh: '思想地图', en: 'THOUGHT MAP' },
+  thoughtMapNote: { zh: '结构化整理视角', en: 'A structured-reading lens' },
+  mainlineLabel: { zh: '核心主线逻辑链', en: 'CORE THREAD' },
+  declarationsLabel: { zh: '核心哲学宣言', en: 'CORE PHILOSOPHICAL DECLARATIONS' },
+  segmentsLabel: { zh: '五段分区概览（依原文索引）', en: 'FIVE SEGMENTS (AS INDEXED IN THE SOURCE)' },
+  segmentCount: { zh: '篇', en: 'items' },
+  refFiltersLabel: { zh: '按主题筛选', en: 'By Axiom' },
+  refAll: { zh: '全部省思 (10)', en: 'All Reflections (10)' },
+  refResultCount: { zh: '张省思卡', en: 'reflection cards' },
+  tier1Label: { zh: '完整范本卡 · R/W/C 深度解读', en: 'Full model card · R/W/C deep dive' },
+  tier2Label: { zh: '原文 + 本站导读', en: 'Verbatim source + editorial annotation' },
+  editorialBadge: { zh: '本站结构化整理', en: 'Editorial annotation' },
+  editorialNote: {
+    zh: '导读、认知关联与思想地图均为本站结构化整理，非原作者观点；原文节选逐字保留。',
+    en: 'Guides, cognitive relations and the thought map are site-side editorial annotations, not the author’s own analysis; all excerpts are verbatim.',
+  },
+  deepRwcLabel: { zh: 'R/W/C 三维', en: 'R/W/C Triad' },
+  deepSteelmanLabel: { zh: '深层追问（Steelman）', en: 'Steelman & Deep Questions' },
+  deepLensesLabel: { zh: '思想透镜', en: 'Cognitive Lenses' },
+  deepActionsLabel: { zh: '微小行动', en: 'Micro-Actions' },
+  deepSourceNote: {
+    zh: '本区块依 L2 思想卡片范本（R/W/C · Steelman · 思想透镜 · 微小行动）整理，属结构化导读。',
+    en: 'This block follows the L2 model-card template (R/W/C · Steelman · lenses · micro-actions) as structured editorial reading.',
+  },
+  refIndexLabel: { zh: '全量索引 · 100 篇', en: 'FULL INDEX · 100 ITEMS' },
+  refIndexHint: {
+    zh: '按原文五段分组，编号 / 标题 / 日期 / 原文链接可折叠展开，一条不丢。',
+    en: 'Grouped by the five source segments; number / title / date / source link, collapsible, with nothing omitted.',
+  },
+  refIndexExpand: { zh: '展开该段', en: 'Expand segment' },
+  refIndexCollapse: { zh: '收起该段', en: 'Collapse segment' },
+  refSourceLink: { zh: 'X 原文', en: 'Original on X' },
+  refProvenance: {
+    zh: '栏目为策展式导读：10 张深度卡（1 张完整范本 + 9 张原文与本站导读）与 100 条全量索引，均溯源自同一原文层。',
+    en: 'A curated reading: 10 in-depth cards (one full model card plus nine verbatim-source cards with editorial notes) and a complete 100-item index, all traced to the same source layer.',
+  },
+  refSourceItem: { zh: '源自原文第', en: 'Source item' },
 } satisfies Record<string, LocalizedText | Record<string, LocalizedText>>;
 
 export type DictKey = keyof typeof dict;

@@ -8,11 +8,13 @@ export const ui = {
   navCognition: { zh: '贰 · 思想认知', en: 'II · Cognition' },
   navReality: { zh: '叁 · 现实透镜', en: 'III · Reality Lens' },
   navAtlas: { zh: '肆 · 交叉图谱', en: 'IV · Cross Atlas' },
+  navReflections: { zh: '伍 · 省思录', en: 'V · AI-Age Reflections' },
   navHome: { zh: '总览', en: 'Overview' },
   mobilePhilosophy: { zh: '壹·哲学', en: 'I · Phil.' },
   mobileCognition: { zh: '贰·认知', en: 'II · Cog.' },
   mobileReality: { zh: '叁·透镜', en: 'III · Lens' },
   mobileAtlas: { zh: '肆·图谱', en: 'IV · Atlas' },
+  mobileReflections: { zh: '伍·省思', en: 'V · Refl.' },
 
   langLabel: { zh: '语言', en: 'Language' },
   themeLabel: { zh: '外观', en: 'Appearance' },

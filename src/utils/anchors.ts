@@ -25,9 +25,15 @@ export const lensCardAnchor = (n: number | string): string => `lens-card-${pad2(
 
 export const lensItemAnchor = (n: number | string): string => `lens-item-${pad2(n)}`;
 
+/** Division V: /reflections#ref-card-{NN} */
+export const refCardAnchor = (n: number | string): string => `ref-card-${pad2(n)}`;
+
+/** Division V: /reflections#ref-item-{NN} (index rows) */
+export const refItemAnchor = (n: number | string): string => `ref-item-${pad2(n)}`;
+
 /** Route any canonical anchor to its owning page + tab. */
 export interface AnchorRoute {
-  page: 'philosophy' | 'cognition' | 'reality-lens' | 'atlas';
+  page: 'philosophy' | 'cognition' | 'reality-lens' | 'atlas' | 'reflections';
   tab?: 'cpv' | 'cards' | 'munger';
   needsFilterReset?: boolean;
 }
@@ -38,6 +44,7 @@ export function routeForAnchor(hash: string): AnchorRoute | null {
   if (hash.startsWith('munger-cat-') || hash.startsWith('munger-model-') ||
       hash.startsWith('six-') || hash.startsWith('tool-')) return { page: 'cognition', tab: 'munger' };
   if (hash.startsWith('lens-card-')) return { page: 'reality-lens', needsFilterReset: true };
+  if (hash.startsWith('ref-card-') || hash.startsWith('ref-item-')) return { page: 'reflections', needsFilterReset: true };
   if (hash.startsWith('axiom-') || hash.startsWith('atlas-')) return { page: 'atlas' };
   if (hash.startsWith('level-') || hash.startsWith('system-') || hash.startsWith('axis-') ||
       hash.startsWith('chain-')) return { page: 'cognition', tab: 'cpv' };

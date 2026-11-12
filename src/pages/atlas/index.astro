@@ -7,10 +7,20 @@ import SourceText from '../../components/SourceText.astro';
 import { dict } from '../../data/uiDictionary';
 import { axioms, buildFullMatrix, relevance, crossStats } from '../../utils/cognitiveEngine';
 import { realityById } from '../../data/reality-lens';
-import { lensCardAnchor } from '../../utils/anchors';
+import { reflectionById } from '../../data/reflections';
+import { lensCardAnchor, refCardAnchor } from '../../utils/anchors';
 
 const matrix = buildFullMatrix();
-const cards = matrix.map((m) => ({ m, card: realityById.get(m.cardId)! }));
+// Unified lookup (trap #1): reflection cards live in their own namespace, not
+// in realityById. Also derive the correct jump-back href per card (trap #3).
+const cards = matrix.map((m) => {
+  const ref = reflectionById.get(m.cardId);
+  const card = ref ?? realityById.get(m.cardId)!;
+  const href = ref
+    ? `/reflections#${refCardAnchor(ref.num)}`
+    : `/reality-lens#${lensCardAnchor(card.num)}`;
+  return { m, card, href, isRef: Boolean(ref) };
+});
 ---
 <BaseLayout title="交叉图谱 / Cross Atlas" active="atlas"
   description="8 大跨库串联公理与 25 × 3 层认知交叉矩阵：哲学底座、CPV 诊断、芒格模型。">
@@ -72,11 +82,11 @@ const cards = matrix.map((m) => ({ m, card: realityById.get(m.cardId)! }));
           </tr>
         </thead>
         <tbody>
-          {cards.map(({ card }) => (
+          {cards.map(({ card, href }) => (
             <tr>
               <td style="color:var(--cinnabar)">{String(card.num).padStart(2, '0')}</td>
               <td>
-                <a href={`/reality-lens#${lensCardAnchor(card.num)}`} class="hover:underline">
+                <a href={href} class="hover:underline">
                   <I18nBlock zh={card.title} en={card.titleEn} />
                 </a>
               </td>
@@ -103,7 +113,7 @@ const cards = matrix.map((m) => ({ m, card: realityById.get(m.cardId)! }));
   <section class="archive-shell py-10 border-t" style="border-color:var(--rule)">
     <div class="eyebrow mb-5"><I18nText k="fullIndex" /></div>
     <div class="space-y-2">
-      {cards.map(({ m, card }) => (
+      {cards.map(({ m, card, href }) => (
         <div class="paper-card collapsible" id={`atlas-${card.id}`} data-collapsible data-open="false">
           <button type="button" class="collapsible-toggle w-full text-left p-4 flex items-center gap-4" data-collapsible-toggle>
             <span class="font-serif text-[1.25rem] font-bold shrink-0" style="color:var(--cinnabar)">{String(card.num).padStart(2, '0')}</span>
@@ -134,7 +144,7 @@ const cards = matrix.map((m) => ({ m, card: realityById.get(m.cardId)! }));
               </div>
             ))}
             <div class="sm:col-span-3 pt-2 border-t" style="border-color:var(--rule)">
-              <a href={`/reality-lens#${lensCardAnchor(card.num)}`} class="chip"><I18nText k="openFullCard" /> →</a>
+              <a href={href} class="chip"><I18nText k="openFullCard" /> →</a>
             </div>
           </div>
         </div>

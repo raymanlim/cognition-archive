@@ -12,6 +12,7 @@ const nav: { key: string; href: string; k: DictKey }[] = [
   { key: 'cognition', href: '/cognition/', k: 'navCognition' },
   { key: 'reality', href: '/reality-lens/', k: 'navReality' },
   { key: 'atlas', href: '/atlas/', k: 'navAtlas' },
+  { key: 'reflections', href: '/reflections/', k: 'navReflections' },
 ];
 ---
 <header class="sticky top-0 z-50 border-b no-print" style="background:var(--leaf); border-color:var(--rule)">
@@ -25,7 +26,7 @@ const nav: { key: string; href: string; k: DictKey }[] = [
       </span>
     </a>
 
-    <nav class="hidden md:flex items-center gap-4 lg:gap-6 text-[.95rem] font-medium" aria-label="Main navigation">
+    <nav class="hidden md:flex items-center gap-3 lg:gap-6 text-[.88rem] lg:text-[.95rem] font-medium" aria-label="Main navigation">
       {nav.map((n) => (
         <a href={n.href}
            class="pb-1 border-b-2 transition-colors whitespace-nowrap"

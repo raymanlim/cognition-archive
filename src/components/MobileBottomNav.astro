@@ -1,20 +1,24 @@
 ---
 import I18nText from './I18nText.astro';
+import type { DictKey } from '../data/uiDictionary';
 
 interface Props { active?: string }
 const { active = '' } = Astro.props;
-const items = [
-  { key: 'philosophy', href: '/philosophy/', markZh: '壹', markEn: 'I', zh: '壹·哲学', en: 'I · Phil.' },
-  { key: 'cognition', href: '/cognition/', markZh: '贰', markEn: 'II', zh: '贰·认知', en: 'II · Cog.' },
-  { key: 'reality', href: '/reality-lens/', markZh: '叁', markEn: 'III', zh: '叁·透镜', en: 'III · Lens' },
-  { key: 'atlas', href: '/atlas/', markZh: '肆', markEn: 'IV', zh: '肆·图谱', en: 'IV · Atlas' },
-] as const;
+// Labels resolve through uiDictionary (no bare Chinese strings in the component).
+// markZh/markEn are typographic numerals, not translatable UI text.
+const items: { key: string; href: string; markZh: string; markEn: string; k: DictKey }[] = [
+  { key: 'philosophy', href: '/philosophy/', markZh: '壹', markEn: 'I', k: 'mobilePhilosophy' },
+  { key: 'cognition', href: '/cognition/', markZh: '贰', markEn: 'II', k: 'mobileCognition' },
+  { key: 'reality', href: '/reality-lens/', markZh: '叁', markEn: 'III', k: 'mobileReality' },
+  { key: 'atlas', href: '/atlas/', markZh: '肆', markEn: 'IV', k: 'mobileAtlas' },
+  { key: 'reflections', href: '/reflections/', markZh: '伍', markEn: 'V', k: 'mobileReflections' },
+];
 ---
 <nav class="mobile-bottom-nav" aria-label="Mobile navigation">
   {items.map((it) => (
     <a href={it.href} aria-current={active === it.key ? 'page' : undefined}>
       <span class="nav-mark"><I18nText zh={it.markZh} en={it.markEn} /></span>
-      <I18nText zh={it.zh} en={it.en} />
+      <I18nText k={it.k} />
     </a>
   ))}
 </nav>
