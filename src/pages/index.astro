@@ -22,22 +22,22 @@ const divisions = [
   {
     mark: '壹', numeral: 'I', href: '/philosophy/',
     zh: '哲学源流', en: 'Philosophical Sources',
-    descZh: '27 位中西哲学家完整档案：核心命题、三步推导逻辑链、著作梯度、思想承启、金句与现代启发。按主题分组，组内严格按出生年份升序。',
-    descEn: '27 fully documented philosophers: core ideas, three-step reasoning chains, layered reading paths, intellectual lineage, canonical quotes and modern insight.',
+    descZh: '我把 27 位中西哲学家的档案按年代排好：核心命题、推导、可继续读的书、彼此的承启，也留了几处我读到时停顿的笔记。分组和顺序仍有，但不必把它们当作一条必须走完的流水线。',
+    descEn: 'I arranged 27 Chinese and Western philosophers by date: their central questions, arguments, books worth reading next, intellectual inheritances, and a few notes where my reading slowed down. The grouping and order remain, but they need not be treated as a conveyor belt.',
     countZh: '27 位 · 三大主题', countEn: '27 · 3 themes',
   },
   {
     mark: '贰', numeral: 'II', href: '/cognition/',
     zh: '思想认知', en: 'Cognition',
-    descZh: '《CPV 原理》交互式问题链（投影 → 结构恢复 → 位置 → L1-L7 → 跃迁 → 净值 → 动机 → 结构之镜），23 张综合卡片，以及芒格 6 大学科 / 52 个思维模型格栅。',
-    descEn: 'The interactive CPV problem chain, 23 structure cards, and Munger’s latticework of 6 disciplines / 52 mental models with a usable decision checklist.',
+    descZh: 'CPV 的问题链我读了许多遍：投影、结构恢复、位置、层级、净值、动机——它帮我看清楚很多原来只觉得「我哪里不对劲」的时刻。这里还有 23 张认知卡，以及芒格 52 个模型。它们不是答案，是几种我可以拿在手里反复翻看的角度。',
+    descEn: 'I have read CPV’s problem chain many times: projection, structural recovery, position, levels, net value, motivation. It helped me see moments I had only felt as “something is off with me.” Here are 23 cognition cards and Munger’s 52 models. They are not answers, only angles I can turn over in my hand.',
     countZh: 'CPV + 23 卡 + 52 模型', countEn: 'CPV + 23 + 52',
   },
   {
     mark: '叁', numeral: 'III', href: '/reality-lens/',
     zh: '现实透镜', en: 'Reality Lens',
-    descZh: '25 张现实拆解卡片，按作者与 8 大跨库串联主题过滤。每张卡片由算法自动挂载【哲学底座 + CPV 诊断 + 芒格模型】，右侧古籍眉批可跳转回源版块。',
-    descEn: '25 reality cards filterable by author and 8 cross-library axioms. Each is auto-linked to philosophical foundations, CPV diagnosis and Munger models in a marginalia rail.',
+    descZh: '25 张现实卡片，按作者和 8 个我反复回到的主题筛选。每张卡旁边会放一些可回查的哲学、CPV 与芒格线索；那不是判定，更像我读到时顺手夹进去的书签。现在我也在卡下补一句自己的备注。',
+    descEn: '25 reality cards, filterable by author and by eight themes I keep returning to. Beside each card are philosophical, CPV and Munger clues you can trace back — not verdicts, more like bookmarks I slipped in while reading. I now add a short note of my own beneath each one.',
     countZh: '25 卡 · 三层交叉', countEn: '25 · 3 layers',
   },
 ];
@@ -56,9 +56,8 @@ const divisions = [
         <I18nBlock class="mt-4 text-[1.05rem] sm:text-[1.2rem]"
           zh="行为是结构约束下的次优解" en="Behaviour Is a Second-Best Solution Under Constraint" />
         <div class="mt-8 max-w-2xl"><ObiStrip zh={mungerAxiom.zh} en={mungerAxiom.en} /></div>
-        <I18nBlock class="mt-7 body-text text-[.95rem] leading-[2]"
-          zh="一座关于认知、哲学与现实的思想文库。以投影—结构恢复—位置—层级—净值—动机为经，以 27 位哲学家、23 张认知卡片、52 个思维模型与 25 张现实透镜为纬，把散落的洞察连成可检索、可交叉、可复用的结构。"
-          en="An archive of cognition, philosophy and lived reality. Projection → structural recovery → position → levels → net value → motivation forms the warp; 27 philosophers, 23 cognition cards, 52 mental models and 25 reality lenses form the weft." />
+        <I18nBlock class="mt-7 body-text text-[.95rem] leading-[2]" k="heroBody" />
+        <I18nBlock class="mt-3 body-text text-[.88rem] leading-[1.9]" k="heroAfterthought" />
         <div class="flex flex-wrap gap-3 mt-8">
           <a href="/philosophy/" class="chip px-5 py-2.5 text-[.85rem] link-arrow"><I18nText k="heroEnter" /></a>
           <a href="/atlas/" class="chip px-5 py-2.5 text-[.85rem]"><I18nText k="heroAtlas" /></a>
@@ -127,7 +126,7 @@ const divisions = [
             <span class="font-serif text-[1.4rem] font-bold" style="color:var(--cinnabar)">{String(i + 1).padStart(2, '0')}</span>
             <I18nBlock class="text-[.88rem] font-bold" zh={a.name} en={a.nameEn} />
           </div>
-          <SourceText html={a.html} text={a.text} class="text-[.82rem] leading-relaxed line-clamp-3" />
+          <SourceText html={a.html} text={a.text} enHtml={a.htmlEn} class="text-[.82rem] leading-relaxed line-clamp-3" />
         </a>
       ))}
     </div>

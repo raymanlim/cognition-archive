@@ -28,7 +28,7 @@ import type { Axiom, CrossLink, CrossMatrix } from '../data/types';
 /* -------------------------------------------------------------------------- */
 /* 1. Eight cross-library axioms                                              */
 /* -------------------------------------------------------------------------- */
-interface RawAxiom { name: string; text: string; html: string }
+interface RawAxiom { name: string; text: string; html: string; textEn?: string; htmlEn?: string }
 const rawAxioms = metaRaw.axioms as unknown as RawAxiom[];
 
 const AXIOM_DEFS: { key: string; match: string; name: string; nameEn: string; keywords: string[] }[] = [
@@ -58,6 +58,8 @@ export const axioms: Axiom[] = AXIOM_DEFS.map((d) => {
     nameEn: d.nameEn,
     text: src?.text ?? '',
     html: src?.html ?? '',
+    textEn: src?.textEn ?? '',
+    htmlEn: src?.htmlEn ?? '',
     keywords: d.keywords,
   };
 });

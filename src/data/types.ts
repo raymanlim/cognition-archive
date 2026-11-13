@@ -173,6 +173,9 @@ export interface Axiom {
   nameEn: string;
   text: string;
   html: string;
+  /** Curator's English translation, kept alongside the Chinese source note. */
+  textEn?: string;
+  htmlEn?: string;
   keywords: string[];
 }
 

@@ -408,12 +408,25 @@ function parseIndex(md) {
   const lines = md.split('\n');
   const axioms = [];
   let inAxioms = false;
-  for (const l of lines) {
+  for (let i = 0; i < lines.length; i++) {
+    const l = lines[i];
     if (/^##\s+多家内容的对照与交叉点/.test(l)) { inAxioms = true; continue; }
     if (!inAxioms) continue;
     if (/^##\s+/.test(l)) break;
     const m = l.match(/^-\s+\*\*([^*]+)\*\*\s*[:：]\s*(.+)$/);
-    if (m) axioms.push({ name: m[1].trim(), text: plain(m[2]), html: mdInline(m[2]) });
+    if (!m) continue;
+    // A curator's voice is bilingual: the ZH essay stays verbatim Chinese and
+    // the EN translation follows on the next indented line starting with "EN:".
+    const name = m[1].trim();
+    const zh = m[2];
+    const enLine = lines[i + 1] ?? '';
+    const enMatch = enLine.match(/^\s+EN:\s*(.+)$/);
+    const en = enMatch ? enMatch[1] : '';
+    axioms.push({
+      name,
+      text: plain(zh), html: mdInline(zh),
+      textEn: en ? plain(en) : '', htmlEn: en ? mdInline(en) : '',
+    });
   }
 
   const comparison = tableAfter(md, /^\|\s*维度\s*\|/);

@@ -69,7 +69,7 @@ export interface PhilosopherCard {
   - `from`: `{ zh: "上古史官文化与《易》之阴阳观", en: "Ancient historiography & Yin-Yang cosmology" }`
   - `to`: `{ zh: "庄子、孙子兵法、禅宗及现代复杂系统自组织理论", en: "Zhuangzi, Sun Tzu, Zen Buddhism & Complex Self-Organizing Systems" }`
 - **`quote`**: `{ zh: "反者道之动，弱者道之用。天下万物生于有，有生于无。", en: "Reversal is the movement of the Tao; softness is the function of the Tao. All things are born of being, and being is born of non-being." }`
-- **`modernInsight`**: `{ zh: "在系统阻力极大时（《第五项修炼》你越推系统越反弹），学会收敛强推的控制欲，用“结构顺应”代替“用力过猛”。", en: "When facing systemic resistance, abandon forceful micromanagement and align with structural flows." }`
+- **`modernInsight`**: `{ zh: "工作的头几年，我总以为挫败感来自意志不够。后来读老子，才慢慢意识到很多事不是「不够努力」。这里的「顺势而为」不是劝你放弃，而是别往一个已经在倒塌的方向用全力——把结构看清楚了，使劲的方向反而会松下来。那种松开的感觉，我至今还记得。", en: "In my first years at work I thought every setback meant I had not willed hard enough. Reading Laozi slowly changed that: some things do not yield to more effort. 'Following the grain' is not an invitation to give up; it is a refusal to throw all your weight against a structure already collapsing. I still remember how it felt when the strain finally let go." }`
 
 #### 02. 孙子 (Sun Tzu)
 - **`id`**: `"phil-suntzu"`
@@ -94,7 +94,7 @@ export interface PhilosopherCard {
   - `from`: `{ zh: "先秦道家辩证法与齐国兵学传统", en: "Pre-Qin Taoist dialectics & Qi military tradition" }`
   - `to`: `{ zh: "克劳塞维茨《战争论》、现代博弈论与商业护城河理论", en: "Clausewitz, Modern Game Theory & Competitive Strategy" }`
 - **`quote`**: `{ zh: "夫兵形象水，水之形，避高而趋下；兵之形，避实而击虚。", en: "Military form is like water: water avoids heights and hastens to the lowlands; an army avoids strength and strikes weakness." }`
-- **`modernInsight`**: `{ zh: "呼应 Morris 与芒格：市场不奖励“谁更努力”，只奖励“谁处在更有利的生态位与结构中”——先算胜算（期望值），再挥棒。", en: "Echoing Munger and Morris: reality rewards advantageous structural positioning, not blind effort—calculate expected value before swinging." }`
+- **`modernInsight`**: `{ zh: "孙子说「先胜而后求战」，让我想起一个打德州扑克的朋友。他说他不猜别人手里是什么牌，先看自己坐在桌子的哪个位置、筹码够不够。市场大概也是一场又一场的回合，赢的常常不是最聪明的人，而是站在了合适位置上的人。落到现实里，便是先选赛道，再谈补拙。只是输掉的人，我至今不知道该怎么轻易释怀。", en: "Sun Tzu's 'win first, then fight' reminds me of a friend who plays poker. He never tries to guess the cards in other hands; he looks at where he sits at the table and whether his chips match the round. A market is much the same sequence of hands: the winner is rarely the cleverest, more often the one who happened to stand in the right place. In life that means choosing the track before trying to mend your weaknesses. I still do not know how to offer easy comfort to those who lost the hand." }`
 
 #### 03. 庄子 (Zhuangzi)
 - **`id`**: `"phil-zhuangzi"`
@@ -119,7 +119,7 @@ export interface PhilosopherCard {
   - `from`: `{ zh: "老子道家思想与杨朱贵己学说", en: "Laozi's Taoism & Yang Zhu's individualism" }`
   - `to`: `{ zh: "魏晋玄学、禅宗、海德格尔技术批判与当代反内卷思潮", en: "Xuanxue, Zen, Heidegger's critique of technology & anti-involution thought" }`
 - **`quote`**: `{ zh: "人皆知有用之用，而莫知无用之用也。", en: "Everyone knows the usefulness of what is useful, but no one knows the usefulness of what is useless." }`
-- **`modernInsight`**: `{ zh: "哲学与审美看似“无用”，却是防止你在功绩社会沦为单向度工具的“精神安全边际”。", en: "Philosophy and aesthetics seem 'useless,' yet they serve as the existential margin of safety against becoming a one-dimensional tool." }`
+- **`modernInsight`**: `{ zh: "有阵子加班到凌晨，我翻开了《逍遥游》。我不是说这本古书能帮你升职加薪——它不能。但合上屏幕的那几分钟，我好像给自己争到了一点空气。哲学大概是这样一种「安全边际」：它不解决吃饭问题，却让你在结构里喘一口气。", en: "There was a stretch when I worked past midnight and opened Zhuangzi's 'Free and Easy Wandering' afterwards. I am not saying an old book will get you promoted — it will not. But for a few minutes after closing the screen, I felt I had won back a little air. That, to me, is philosophy's margin of safety: it does not put food on the table, yet it lets you breathe inside the structure." }`
 
 #### 04. 王阳明 (Wang Yangming)
 - **`id`**: `"phil-wangyangming"`
@@ -173,7 +173,7 @@ export interface PhilosopherCard {
   - `from`: `{ zh: "批判亚里士多德《工具论》经院传统", en: "Critique of Aristotelian Scholastic Organon" }`
   - `to`: `{ zh: "洛克、贝克莱、休谟经验主义及芒格“人类误判心理学”", en: "Locke, Berkeley, Hume & Munger's Psychology of Human Misjudgment" }`
 - **`quote`**: `{ zh: "知识就是力量。人类理解力不是干燥的光，而是受到了意志和情感的浸染。", en: "Knowledge is power. The human understanding is no dry light, but receives an infusion from the will and affections." }`
-- **`modernInsight`**: `{ zh: "培根的“洞穴假相”即 CPV 的“位置投影”，“市场假相”即“Token 思维与语言低分辨率陷阱”。", en: "Bacon's 'Idols of the Cave' prefigure CPV's positional projection; 'Idols of the Marketplace' prefigure low-resolution token thinking." }`
+- **`modernInsight`**: `{ zh: "培根讲「四座假相」，最让我停顿的是「洞穴假相」：最深的偏见也许不来自无知，而来自你所站的位置。后来读 CPV 的「位置投影」，我想到的还是每个人各自的那个洞。社交媒体上那些低分辨率的句子之所以容易裹挟人，或许也是因为它们刚好经过了自己的洞。至于洞外的「真实」是什么，我不敢替它下结论。", en: "Bacon's four idols; the one that still makes me pause is the idol of the cave — that our deepest bias comes not from ignorance but from where we stand. When I later read CPV's 'positional projection', I kept picturing each of us inside a separate cave. Perhaps low-resolution sentences sweep through social media so easily precisely because they have already passed through our own caves. As for what 'reality' looks like outside them, I would rather not decide on its behalf." }`
 
 #### 06. 勒内·笛卡尔 (René Descartes)
 - **`id`**: `"phil-descartes"`
@@ -297,7 +297,7 @@ export interface PhilosopherCard {
   - `from`: `{ zh: "综合笛卡尔/莱布尼茨唯理论与洛克/休谟经验论", en: "Synthesizing Continental Rationalism and British Empiricism" }`
   - `to`: `{ zh: "费希特、谢林、黑格尔、罗尔斯正义论及现代建构主义认知心理学（图式理论）", en: "German Idealism, Rawlsian Justice & modern Constructivist Cognitive Schema Theory" }`
 - **`quote`**: `{ zh: "有两样东西，人们越是经常持久地对之凝神思索，它们就越是使内心充满常新而日增的惊奇和敬畏：我头上的星空和心中的道德律。", en: "Two things fill the mind with ever new and increasing admiration and awe: the starry heavens above me and the moral law within me." }`
-- **`modernInsight`**: `{ zh: "康德的“先天认识框架”就是 CPV 与芒格所说的“既有认知模型”：你以为你在看客观世界，其实你看到的永远是被你脑内“模具”加工后的输出；同时谨防掠夺型人格将人工具化。", en: "Kant's transcendental apparatus is the philosophical ancestor of mental models: you never see raw reality, only what your cognitive schema formats." }`
+- **`modernInsight`**: `{ zh: "康德说，我们看到的不是物自体，而是经过认知加工后的「现象」。这个说法曾让我不安：如果我的感受、我的判断都不算真实世界的一部分，我凭什么确认自己所见？读久一点，倒觉得它像一张安全网——每个确信「世界就该是这样」的人，也许只是戴着不同的模具。两个人对同一件事的愤怒不一样，未必是利益不同，也可能是模具不同。", en: "Kant says we never meet the thing-in-itself, only appearances already processed by our cognition. That once unsettled me: if my feelings and judgements are not part of the real world, on what grounds do I trust what I see? Reading longer, it began to feel like a safety net instead — everyone certain that 'this is simply how the world is' may just be wearing a different mould. When two people are angered by the same event, the difference may lie less in interest than in the mould." }`
 
 #### 11. 费迪南·德·索绪尔 (Ferdinand de Saussure)
 - **`id`**: `"phil-saussure"`
@@ -322,7 +322,7 @@ export interface PhilosopherCard {
   - `from`: `{ zh: "超越19世纪历史比较语言学", en: "Transcending 19th-century historical philology" }`
   - `to`: `{ zh: "列维-斯特劳斯、拉康、罗兰·巴特、鲍德里亚及 Nagi Yan“结构理论与语言投影”", en: "Lévi-Strauss, Lacan, Barthes, Baudrillard & Nagi Yan's Structural Projection Theory" }`
 - **`quote`**: `{ zh: "在语言里，一切都可以归结为差异，一切也都可以归结为组合。", en: "In language, everything boils down to differences, and everything boils down to combinations." }`
-- **`modernInsight`**: `{ zh: "完美对应《思想认知》卡片3、6、11、13：单看表层的“言语行为（Token）”毫无意义，必须看懂底层的“结构语法（Langue）”；实体本身就是关系差异网络的稳定解。", en: "Directly underpins Cognitive Cards 3, 6, 11, and 13: surface speech (tokens) means nothing without decoding the underlying relational structure (Langue)." }`
+- **`modernInsight`**: `{ zh: "索绪尔说意义来自系统里的差异。读到这里，我心里冒出一个不太安分的念头：如果语言不是标签，而是关系，我们所说的「意义」究竟从哪儿来？X 上再漂亮的句子，也要被它所在的关系网络验证。我隐隐觉得，事物之所以显得有意义，也许只是关系暂时起了作用。这个解释可靠到什么程度，我始终没有十足的把握。", en: "Saussure says meaning arises from difference within a system. Something unruly occurred to me there: if language is not a set of labels but a structure, where does what we call 'meaning' actually come from? Even the finest sentence on X has to be tested by the network of relations around it. I half suspect that things appear meaningful only because, for a while, relations are doing the work. I have never been fully sure how far that explanation can be trusted." }`
 
 #### 12. 约翰·杜威 (John Dewey)
 - **`id`**: `"phil-dewey"`
@@ -372,7 +372,7 @@ export interface PhilosopherCard {
   - `from`: `{ zh: "继承并颠覆弗雷格、罗素逻辑原子主义与奥古斯丁语言图画论（并受拉姆西与斯拉法启发）", en: "Inheriting and overturning Frege, Russell & Augustine's picture theory (catalyzed by Ramsey and Sraffa)" }`
   - `to`: `{ zh: "日常语言学派、库恩范式论、当代AI大语言模型语义哲学及 Nagi《语言的分辨率与协议》", en: "Ordinary Language Philosophy, Kuhn, LLM semantics & Nagi's 'Resolution of Language & Protocols'" }`
 - **`quote`**: `{ zh: "你的哲学目标是什么？——给苍蝇指出飞出捕蝇瓶的出路。（§309） / 根本别把理解想成“心灵过程”！（§154） / 我遵从规则时并不选择。我盲目地遵从规则。（§219）", en: "What is your aim in philosophy?—To港元 show the fly the way out of the fly-bottle. (§309) / Try not to think of understanding as a 'mental process' at all! (§154) / When I obey a rule, I do not choose. I obey the rule blindly. (§219)" }`
-- **`modernInsight`**: `{ zh: "直接打通《哲学研究》原典与《思想认知》卡片1/6/11/17：① 维氏“不要把理解想成神秘心灵过程，应用始终是理解的标准（§146, §154）”= Nagi 卡片17“Understanding isn't knowing—it's becoming operational”；② 维氏“语言是工具，概念引导我们进行探索（§569-570）”= 芒格与 CPV 的结构协议观。", en: "Directly bridges Philosophical Investigations (§146, §154, §569) with Nagi Cards 1/6/11/17: understanding is not a private mental state, but an operational capacity tested in public application." }`
+- **`modernInsight`**: `{ zh: "维特根斯坦说「意义即使用」。第一次读到，我有点抗拒——语言原来不只是表达思想的工具，它参与塑造思想本身。放在 X 的语境里尤其锋利：看了大量句子之后，你收下的不只是句子，还有它被使用的方式。Nagi 那句「Understanding isn't knowing—it's becoming operational」不是翻译，倒像一个相似的结构。我有时仍会停下来：语言的边界，真的就是思想的边界吗？", en: "Wittgenstein's 'meaning is use' resisted me at first — language, it seemed, was not merely a tool for expressing thought but part of how thought is formed. On X the point cuts especially close: after reading thousands of sentences, what you absorb is not only the sentences but their ways of being used. Nagi's 'Understanding isn't knowing — it's becoming operational' is not a translation of Wittgenstein; it feels like a similar structure. I still stop at the question: is the limit of language really the limit of thought?" }`
 
 #### 14. 卡尔·波普尔 (Karl Popper)
 - **`id`**: `"phil-popper"`
@@ -397,7 +397,7 @@ export interface PhilosopherCard {
   - `from`: `{ zh: "解决休谟归纳问题并批判逻辑实证主义", en: "Solving Hume's induction problem & critiquing Logical Positivism" }`
   - `to`: `{ zh: "索罗斯反身性理论、芒格“确认偏误/逆向证伪”及 Nagi 卡片22《争论的原理》", en: "Soros's Reflexivity, Munger's Inversion/Confirmation Bias & Nagi Card 22 'Principles of Argument'" }`
 - **`quote`**: `{ zh: "一个能够解释一切可能发生之事的理论，实际上什么也没有解释。错误中可能隐藏着通往真理的道路。", en: "A theory which is not refutable by any conceivable event is non-scientific. Irrefutability is not a virtue of a theory, but a vice." }`
-- **`modernInsight`**: `{ zh: "直接构成《思想认知》卡片22（争论的原理）与《芒格》总解析洞见三的理论地基：“一个能解释一切的模型，就是一个永远无法被现实纠正的自洽闭环”。每次下判断前先问：出现什么证据能证明我错了？", en: "The direct bedrock of Nagi Card 22 and Munger's Latticework warning: a model that explains away every counterexample is a self-sealing trap impervious to reality." }`
+- **`modernInsight`**: `{ zh: "波普尔说，一个不能被证伪的理论，其实什么也没解释。读思想认知卡片 22《争论的原理》时，我总想起同一件事：越能解释一切的说法，越可能已经无法被现实换掉。我自己有过一次难堪的教训——笃信一套商战模型去拆解一门生意，直到反例摆在面前，才发现模型一直在自说自话。现在下判断前，我尽量不问「我是对的吗」，而问「什么样的证据能证明我错了」。也得承认，我常常做不到。", en: "Popper says a theory that cannot be falsified explains nothing. Reading Cognition Card 22, 'The Principle of Argument', keeps bringing me back to the same worry: the more a claim can explain, the less likely reality can ever dislodge it. I learned this awkwardly, once trusting a business-war model to dissect a real business until a counterexample arrived and I saw the model had only been talking to itself. Before judging, I now try to ask not 'am I right?' but 'what evidence would prove me wrong?' I should admit I often fail at it." }`
 
 #### 15. 约翰·卡普托 (John D. Caputo)
 - **`id`**: `"phil-caputo"`
@@ -422,7 +422,7 @@ export interface PhilosopherCard {
   - `from`: `{ zh: "克尔凯郭尔、海德格尔、伽达默尔与德里达", en: "Kierkegaard, Heidegger, Gadamer & Derrida" }`
   - `to`: `{ zh: "当代后现代认识论、多元视角主义与 Nagi 卡片19/21", en: "Contemporary pluralist epistemology & Nagi Cards 19/21" }`
 - **`quote`**: `{ zh: "后现代不是否定真理，而是怀疑那些声称自己已经把绝对真理装进口袋的人。", en: "Postmodernism does not mean there is no truth; it means no one has the absolute truth in their pocket." }`
-- **`modernInsight`**: `{ zh: "对应小播《事实、观点与立场》及 Morris 卡片15（愤怒的X平台为何产生多种观点）：同一事件之所以在舆论场分裂成无数版本，是因为不同人用各自的诠释学框架切取了现实的不同投影面。", en: "Explains why viral news fractures into polarized narratives: different observers project distinct hermeneutic frameworks onto the same complex reality." }`
+- **`modernInsight`**: `{ zh: "卡普托谈「真理的三次跃迁」——从神圣真理、科学真理，到后现代的无数真理。我读得半懂不懂，有一处却一直留着：当每个人都说「这是我的真相」，谁愿意跟自己的那份真相一起承担重量？舆论撕裂的事件里，我渐渐不急着先判断谁在撒谎了。也许大家只是站在不同层面，看着结构投下的不同侧面。", en: "Caputo writes of truth's three leaps — from sacred truth to scientific truth to the countless truths of the postmodern. I only half understood it, but one question stayed: when everyone says 'this is my truth', who is willing to carry the weight of their own? In torn public arguments I have grown less eager to decide first who is lying. Perhaps people are simply standing at different levels, watching different faces of the same structure cast its shadow." }`
 
 ---
 
@@ -526,7 +526,7 @@ export interface PhilosopherCard {
   - `from`: `{ zh: "古希腊赫拉克利特流变说与康德、费希特、谢林德国古典哲学", en: "Heraclitus, Kant, Fichte & Schelling" }`
   - `to`: `{ zh: "马克思、霍耐特、齐泽克、Nagi 卡片5/9（张力是演化原动力/旧自洽断裂）及 DAN KOE 卡片10（容纳矛盾观点）", en: "Marx, Honneth, Žižek, Nagi's Tension-Driven Evolution & DAN KOE's holding contradictory ideas" }`
 - **`quote`**: `{ zh: "密涅瓦的猫头鹰要等黄昏到来，才会起飞。凡是合乎理性的东西都是现实的，凡是现实的东西都是合乎理性的。", en: "The owl of Minerva spreads its wings only with the falling of the dusk. What is rational is actual and what is actual is rational." }`
-- **`modernInsight`**: `{ zh: "黑格尔的“正—反—合”就是《CPV原理》第5章“旧自洽（正）➔ 现实冲突坍塌（反）➔ 新协议闭环（合）”的哲学母体；同时注意 Morris 卡片15指出的误区：黑格尔名言绝非让你美化现状的“存在即合理（即正确）”，而是指事物背后必有其生成的必然结构链条。", en: "Hegel's dialectic is the mother of CPV's transition loop (Old Coherence ➔ Collapse ➔ New Structural Loop); also corrects the popular misreading of 'what is actual is rational'—it means every phenomenon has an underlying structural generative chain, not that every existing flaw is morally right." }`
+- **`modernInsight`**: `{ zh: "黑格尔说矛盾是内在的——不是逻辑出了错，而是推动变化的引擎。读到这里我想到 CPV 的「跃迁」：旧自洽断裂，现实回击，才可能在新协议里重建。但 Morris 卡片 15 提醒过我的那点警惕也还在：「存在即合理」被滥用太久了，它不是让任何现状都显得体面。于我，矛盾更像是在问：它今天为什么会是这样？", en: "Hegel says contradiction is internal — not an error in logic but the engine of change. It made me think of CPV's 'transition': an old coherence breaks, reality pushes back, and only then can something be rebuilt in a new protocol. I also keep the caution I found in Morris's Card 15: 'what is actual is rational' has been misused for too long as a way to make every present state look respectable. For me, contradiction asks a quieter question: why does this exist in this shape, today?" }`
 
 #### 20. 卡尔·马克思 (Karl Marx)
 - **`id`**: `"phil-marx"`
@@ -551,7 +551,7 @@ export interface PhilosopherCard {
   - `from`: `{ zh: "批判性扬弃黑格尔辩证法、费尔巴哈唯物论与英国古典政治经济学", en: "Sublating Hegel, Feuerbach & British Classical Political Economy" }`
   - `to`: `{ zh: "法兰克福学派（阿多诺、马尔库塞、霍耐特）、鲍德里亚、齐泽克及本库《人是关系的涌现》《认知的作用性》《母亲角色的异化》", en: "Frankfurt School, Baudrillard, Žižek, Lifesinger Card 13, Morris Card 15 & Zuoyi Card 2" }`
 - **`quote`**: `{ zh: "哲学家们只是用不同的方式解释世界，问题在于改变世界。", en: "The philosophers have only interpreted the world, in various ways; the point, however, is to change it." }`
-- **`modernInsight`**: `{ zh: "马克思《提纲》第6条（人是社会关系的总和）与第11条（解释世界 vs 改变世界），直接构成了《思想认知》卡片13（玉伯：人是关系的涌现）与卡片15（Morris：真正的认知不只是解释世界，更是作用于世界）的哲学总根！", en: "Marx's Theses 6 and 11 directly anchor Cognitive Card 13 ('Humans as Emergence of Relations') and Card 15 ('Cognition Must Act Upon the World, Not Merely Explain It')." }`
+- **`modernInsight`**: `{ zh: "马克思说「人是社会关系的总和」。我第一次在 X 上谈「关系」这个词时，并没有喊解构。读卡片 13 时有点迟疑：人的确不是孤立的「自我」，而是在关系里慢慢浮现的。我们每一个人，都在别人的结构里寻找自己的答案。或许正因为这样，「改变世界」不止是一个想明白的念头，而是把关系重新编织一遍。", en: "Marx writes that the human being is the ensemble of social relations. The first time I used the word 'relation' on X, I did not call it deconstruction. Reading Card 13, I hesitated: we really are not isolated selves but something that gradually appears among relations. Each of us looks for an answer inside someone else's structure. Maybe that is why 'changing the world' is not merely a thought finally understood, but the reweaving of relations themselves." }`
 
 #### 21. 弗里德里希·尼采 (Friedrich Nietzsche)
 - **`id`**: `"phil-nietzsche"`
@@ -576,7 +576,7 @@ export interface PhilosopherCard {
   - `from`: `{ zh: "古希腊悲剧精神与对苏格拉底、叔本华的批判性超越", en: "Pre-Socratic tragic vitality & critique of Socrates and Schopenhauer" }`
   - `to`: `{ zh: "存在主义（海德格尔、萨特、加缪）、福柯权力谱系学、Nagi 卡片1/21（位置投影）与 Morris 卡片14/15/16", en: "Existentialism, Foucault, Nagi's Positional Projection & Morris Cards 14/15/16" }`
 - **`quote`**: `{ zh: "没有事实，只有阐释。每一个不曾起舞的日子，都是对生命的辜负。知道为什么而活的人，便能生存。", en: "There are no facts, only interpretations. He who has a why to live for can bear almost any how." }`
-- **`modernInsight`**: `{ zh: "三重跨库共振：① 尼采视角主义 = CPV“位置决定投影”；② 尼采对“奴隶道德怨恨”的剖析 = Morris 卡片14/15“把贫穷解释成善良、把对金钱竞争的不屑包装成精神超越，实则是替能力不足找理由”；③ 佐伊卡片3提醒：汲取尼采的思想锋芒，但切勿浪漫化他晚年的精神崩溃代价。", en: "Triple resonance: (1) Perspectivism = CPV positional projection; (2) Ressentiment = Morris's critique of disguising incompetence as moral superiority; (3) Zuoyi Card 3's warning: value Nietzsche's insight without romanticizing his mental breakdown." }`
+- **`modernInsight`**: `{ zh: "我对尼采的感情一直复杂。他说「怨恨」像一把刀——把贫穷解释成善良，把对竞争的不屑包装成精神超越。第一次在 X 上读到，我停了好一会儿，因为发现自己某些处境里也这样用过。这把刀让人清醒，刀锋也很冷。我至今不确定要不要在文章里保留下面这个判断，因为怕它正好说中我：有些人把能力不足包装成精神超越，只为抚平一道伤。佐伊卡片 3 提醒别浪漫化他晚年的崩溃，我对「锋利」从此多留了一分警惕。", en: "My feelings about Nietzsche have never been simple. His 'ressentiment' is a knife: poverty explained as goodness, disdain for competition dressed up as spiritual superiority. The first time I read it on X I stopped for a while, because I recognised a few of my own situations in it. The knife clarifies; its edge is also cold. I am still unsure whether to keep the following judgement here, afraid it names me too well: that some people package insufficiency as transcendence simply to smooth over a wound. Zuoyi's Card 3 warns against romanticising his late collapse. Since then I keep one extra measure of caution around 'sharpness'." }`
 
 #### 22. 赫伯特·马尔库塞 (Herbert Marcuse)
 - **`id`**: `"phil-marcuse"`
@@ -601,7 +601,7 @@ export interface PhilosopherCard {
   - `from`: `{ zh: "黑格尔、马克思、胡塞尔、海德格尔与弗洛伊德", en: "Hegel, Marx, Heidegger & Freud" }`
   - `to`: `{ zh: "鲍德里亚《消费社会》、德波《景观社会》、Nagi 卡片6/18（广告微型诈骗与低分辨率语言）及佐伊卡片16/19", en: "Baudrillard, Debord, Nagi Cards 6/18 & Zuoyi Cards 16/19" }`
 - **`quote`**: `{ zh: "自由的选择主人，这并没有消除主人和奴隶。在虚假的需求中，人们在毁灭中认出自己的灵魂，在商品中认出自己的生命。", en: "Free election of masters does not abolish the masters or the slaves. The people recognize themselves in their commodities; they find their soul in their automobile, hi-fi set, split-level home." }`
-- **`modernInsight`**: `{ zh: "马尔库塞对“虚假需求与单向度语言”的批判，与 Nagi 卡片6（广告是L1-L7认知剥削链）、卡片11（Token思维）、Morris 卡片15（被算法爆款改造形状）及小播《网络语言正在驯化我们的大脑》《Labubu情绪消费》严丝合缝。", en: "Directly illuminates Nagi's critique of advertising exploitation and token thinking, Morris's critique of algorithmic conditioning, and Xiaobo's analysis of emotional consumption." }`
+- **`modernInsight`**: `{ zh: "马尔库塞谈「虚假需求」——不是你真的想要，而是广告与社交媒体说你该想要。我好奇地读完这个理论，第一反应却是顺手截了一张图发朋友圈；随即意识到，这个动作可能正好反驳了我刚读的东西。再看 Nagi 卡片 6、卡片 11 里广告与 Token 的描述，它们不像术语，更像我日常让步的记录。这点让我有点不好意思，却也记住了。", en: "Marcuse writes of 'false needs' — not what you actually want, but what advertising and social media tell you to want. My first response after reading the theory, curiously, was to screenshot a line and post it; a moment later I realised the gesture might be rebutting everything I had just read. Nagi's Cards 6 and 11, on advertising and tokens, no longer read like terminology to me; they read like a record of my small daily concessions. It embarrassed me a little, and that is why I remember it." }`
 
 #### 23. 约翰·罗尔斯 (John Rawls)
 - **`id`**: `"phil-rawls"`
@@ -651,7 +651,7 @@ export interface PhilosopherCard {
   - `from`: `{ zh: "尼采谱系学、康德批判哲学与法国科学史传统", en: "Nietzschean genealogy & French history of science" }`
   - `to`: `{ zh: "韩炳哲《功绩社会》、巴特勒、Nagi 卡片2/4/7（幻觉教育制造秩序/权力是信息流控制）及佐伊卡片1/5/23", en: "Byung-Chul Han, Nagi Cards 2/4/7 ('Education as Order-Manufacturing') & Zuoyi Cards 1/5/23" }`
 - **`quote`**: `{ zh: "权力无处不在；不是因为它有着把一切都整合在自己周围的特权，而是因为它每时每刻、在每一点上、在一切关系中产生出来。", en: "Visibility is a trap. Power is everywhere; not because it embraces everything, but because it comes from everywhere." }`
-- **`modernInsight`**: `{ zh: "直接打通 Nagi 卡片4/7（教育不是启蒙而是执行宏大的秩序工程；外部评价取代真实反馈导致职场认知退化）与 DAN KOE 卡片9（教育体系制造顺从者而非自由思考者）。", en: "Directly connects Nagi Cards 4/7 ('Education manufactures predictable order; external evaluation degrades workplace cognition') and DAN KOE's critique of industrial schooling." }`
+- **`modernInsight`**: `{ zh: "福柯说权力不是压在头顶的东西，而是在每个毛细血管里运作。读这段话时我想起一个场景：朋友说，社交媒体上的点赞机制让自己变成了一个更好的人。可「更好」是谁定义的？Nagi 卡片里说，教育在执行宏大的秩序工程。深夜里，一条完美文案被捧上热搜，我常觉得那不只是展示，也许是一场连发帖者自己都不知道的仪式。说不清为什么，读福柯总让我不安。", en: "Foucault says power is not something pressing down from above; it works in every capillary. It reminded me of a friend telling me that likes on social media had made him a better person. But who defined 'better'? Nagi's cards describe education as a vast project of order. Late at night, when a flawless post is lifted onto the trending list, I often feel it is not just display — perhaps it is a ritual even the poster does not know they are performing. I cannot quite say why, but reading Foucault leaves me uneasy." }`
 
 #### 25. 阿克塞尔·霍耐特 (Axel Honneth)
 - **`id`**: `"phil-honneth"`
@@ -676,7 +676,7 @@ export interface PhilosopherCard {
   - `from`: `{ zh: "黑格尔主奴承认辩证法、米德社会心理学与哈贝马斯交往理性", en: "Hegel, G.H. Mead & Habermas" }`
   - `to`: `{ zh: "当代心理学、创伤修复及本库 Morris 卡片14/16（缺爱攻击性/否定毁人）与佐伊卡片1/5/25（分化/配得感）", en: "Contemporary trauma psychology, Morris Cards 14/16 & Zuoyi Cards 1/5/25" }`
 - **`quote`**: `{ zh: "个体的自我实现，依赖于由爱、法权和团结共同构成的相互承认关系的前提。", en: "The reproduction of social life is governed by the imperative of mutual recognition, through which individuals acquire self-confidence, self-respect, and self-esteem." }`
-- **`modernInsight`**: `{ zh: "霍耐特的承认理论是连接全站三大版块的超级枢纽：① 完美解释小播《害怕冲突、自尊敏感是因为主体性脆弱》；② 对应 Morris 卡片16《毁掉一个人最好的方法就是否定》与卡片14《缺爱的人更具攻击性》；③ 给出佐伊卡片25《配得感》的终极重建路径。", en: "A super-hub connecting all three pillars: explains why chronic negation destroys executive function (Morris Card 16), why fragile subjectivity fears conflict, and how to rebuild deep self-worth (Zuoyi Card 25)." }`
+- **`modernInsight`**: `{ zh: "霍耐特说，人对「承认」的需要是主体性的根基——爱、法权、社会贡献。听起来很空，可最让我哽住的是另一句：蔑视可以摧毁一个人。那不是一句好话就能补回来的。我想到一些在具体关系里被否定过的人——他们失去的不是一会儿的难过，而是一部分去做自己的力量。我自己也常因为害怕不被承认而犹豫。这个理论，我还需要时间慢慢消化，不想急着说「我正在被否定」。", en: "Honneth says the need for recognition is the ground of subjectivity — love, rights, social contribution. It sounds abstract, but the line that caught in my throat was another one: disrespect can destroy a person. No kind sentence simply repairs that. I think of people I have seen negated inside particular relationships; what they lost was not a passing sadness but part of the strength to act as themselves. I too hesitate, often, from fear of not being recognised. I need more time with this theory before I can say lightly, 'I am being denied.'" }`
 
 #### 26. 斯拉沃热·齐泽克 (Slavoj Žižek)
 - **`id`**: `"phil-zizek"`
@@ -701,7 +701,7 @@ export interface PhilosopherCard {
   - `from`: `{ zh: "黑格尔、马克思与雅克·拉康精神分析", en: "Hegel, Marx & Jacques Lacan" }`
   - `to`: `{ zh: "巴迪欧事件哲学、当代意识形态批判及本站版块三“现实透镜”三层解剖算法", en: "Badiou, contemporary cultural critique & this site's Reality Lens 3-layer dissection engine" }`
 - **`quote`**: `{ zh: "事件是超出了其原因的结果；它是窥视真实世界（实在界）的一道裂缝。", en: "An event is an effect that seems to exceed its causes—a crack in the surface of appearance through which we glimpse the Real." }`
-- **`modernInsight`**: `{ zh: "齐泽克与拉康的“三界理论”与 Nagi 的 CPV 框架完美同构：**想象界 = 有损表象投影（L1/L2）**，**象征界 = 符号规则与协议结构（L3-L5）**，**实在界 = 无法靠讲理抹平的底层约束与现实代价（卡片14/22）**。", en: "Žižek's Lacanian triad maps isomorphically onto CPV: **Imaginary = Surface Projection (L1/L2)**, **Symbolic = Protocol & Rule Structure (L3–L5)**, **The Real = Hard Structural Constraints & Real-World Costs (Cards 14/22)**." }`
+- **`modernInsight`**: `{ zh: "齐泽克说「事件是实在界的裂缝」。这听起来太玄了。我的理解总是从一个具体例子开始：比如某起舆论事件，它不只是表面的新闻，而像撕开了某个平时看不见的结构。你没有足够时间看清全部，但裂缝终究留下了。我甚至不确定，我们是在事件里看见了什么，还是先想相信，才替自己找到了一个「事件」。", en: "Žižek says an event is a fissure in the Real. That sounded too rarefied to me. My understanding always starts from one concrete case: an uproar in the news is not merely news; it seems to tear open a structure that was invisible the day before. You never have enough time to see the whole, yet the crack remains. I am not even sure whether we see something in an event, or first want to believe and then find ourselves an 'event' to believe in." }`
 
 #### 27. 韩炳哲 (Byung-Chul Han)
 - **`id`**: `"phil-han"`
@@ -726,7 +726,7 @@ export interface PhilosopherCard {
   - `from`: `{ zh: "海德格尔、本雅明、阿伦特、福柯与列维纳斯", en: "Heidegger, Benjamin, Arendt, Foucault & Levinas" }`
   - `to`: `{ zh: "本库 Nagi 卡片3/8/10/19（高认知独处是结构折叠/当算力不再伺候情绪）与佐伊卡片16/17/19/22", en: "Nagi Cards 3/8/10/19 ('Solitude as Structural Folding') & Zuoyi Cards 16/17/19/22" }`
 - **`quote`**: `{ zh: "功绩主体与自身作战。自我剥削比他者剥削更有效率，因为它伴随着一种自由的感觉。抑郁症就爆发于‘能够做一切’的时刻。", en: "The achievement-subject stands at war with itself. Self-exploitation is more efficient than allo-exploitation because it goes hand in hand with a feeling of freedom." }`
-- **`modernInsight`**: `{ zh: "韩炳哲的思想串联了全库多张现实卡片：① 解释小播《爱欲之死：为什么今天我们都不相信爱情了》与佐伊卡片17《承诺的消解》、卡片22《AI时代的情感博弈》；② 呼应佐伊卡片19《每天要能感觉到自己（具身觉醒对抗数字化抽离）》与 Nagi 卡片3《高认知者独处是结构折叠与内部结构维护》。", en: "Ties together Xiaobo's 'Agony of Eros,' Zuoyi Cards 17/19/22 (dissolution of promises & embodied awakening against digital alienation), and Nagi Card 3 (solitude as structural maintenance)." }`
+- **`modernInsight`**: `{ zh: "韩炳哲说，我们已经从「你应该」的规训社会，走进了「你能够」的功绩社会。最触动我的不是这句判断，而是它的后果：人不再反抗「不许」，而是被「可以」压住。回想社交媒体上那些完美生活的帖子，每一个都是你似乎也该够得着的榜样——它不是命令，是邀请；甜得让人不好意思拒绝。过度的积极会不会把人磨垮？我读到这里时，把「倦怠」看成了一种被太多可能淹没后的反应，而不是懒。这串念头最后落回我自己，让我在「还不够」里稍稍安静了一点。", en: "Byung-Chul Han says we have moved from a disciplinary society of 'you should' to an achievement society of 'you can'. What moved me was not the claim but its consequence: we no longer revolt against 'must not'; we are weighed down by 'may'. Think of the perfect lives on social media — each one an example you are vaguely invited to reach. Not a command, an invitation, sweet enough that refusing feels rude. Can too much positivity wear a person down? Reading him, I came to see burnout as a response to being flooded by possibilities, not laziness. The thought came back to me, and let me be a little quieter inside 'not enough'." }`
 
 ---
 

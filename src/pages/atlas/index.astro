@@ -55,7 +55,7 @@ const cards = matrix.map((m) => {
               <span class="badge">{count} <I18nText k="resultCount" /></span>
             </div>
             <I18nBlock as="div" class="mt-2 text-[1.02rem] font-bold" zh={a.name} en={a.nameEn} />
-            <SourceText html={a.html} text={a.text} class="mt-2 text-[.88rem] body-text leading-relaxed" />
+            <SourceText html={a.html} text={a.text} enHtml={a.htmlEn} class="mt-2 text-[.88rem] body-text leading-relaxed" />
             <div class="mt-3 flex flex-wrap gap-1">
               {a.keywords.slice(0, 5).map((k) => (
                 <span class="badge"><SourceText html={k} text={k} /></span>

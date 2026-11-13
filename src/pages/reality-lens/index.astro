@@ -5,6 +5,7 @@ import I18nBlock from '../../components/I18nBlock.astro';
 import CognitiveCard from '../../components/CognitiveCard.astro';
 import MarginaliaNote from '../../components/MarginaliaNote.astro';
 import { realityCards } from '../../data/reality-lens';
+import { curatorNotes } from '../../data/curatorNotes';
 import { dict } from '../../data/uiDictionary';
 import { axiomTopics, buildCrossLibraryMatrix } from '../../utils/cognitiveEngine';
 import { lensCardAnchor, lensItemAnchor } from '../../utils/anchors';
@@ -13,14 +14,14 @@ const authorFilters = Object.entries(dict.lensAuthorFilters);
 const topicFilters = axiomTopics;
 ---
 <BaseLayout title="现实透镜 / Reality Lens" active="reality"
-  description="25 张现实拆解卡片，按作者与 8 大跨库串联主题过滤，算法自动匹配哲学底座、CPV 诊断与芒格模型。">
+  description="25 张现实拆解卡片，按作者与 8 个反复回到的主题筛选；每张卡另有可回查的线索和一句策展人备注。">
 
   <section class="archive-shell page-head">
     <div class="eyebrow mb-3">DIVISION III</div>
     <I18nBlock as="div" class="display-title" zh="现实透镜" en="Reality Lens" />
     <I18nBlock as="div" class="mt-4 body-text text-[.95rem] max-w-3xl"
-      zh="25 张现实拆解卡片 · 三层认知交叉解剖 · 8 大跨库串联主题"
-      en="25 reality cards · three-layer cognitive dissection · 8 cross-library axioms" />
+      zh="25 张现实拆解卡片 · 三层阅读线索 · 8 个我反复回到的主题"
+      en="25 reality cards · three layers of reading clues · eight themes I keep returning to" />
   </section>
 
   <!-- Filters -->
@@ -58,6 +59,7 @@ const topicFilters = axiomTopics;
     <div class="space-y-9">
       {realityCards.map((c) => {
         const matrix = buildCrossLibraryMatrix(c.id);
+        const note = curatorNotes[c.id];
         return (
           <div data-filter-item data-tags={`${c.group} ${c.topics.join(' ')}`} id={lensItemAnchor(c.num)}>
             <div class="split-layout">
@@ -69,6 +71,10 @@ const topicFilters = axiomTopics;
                   extraTags={c.group}
                   asFilterItem={false}
                 >
+                  <div slot="extra" class="leaf-card p-4 mt-2" style="border-left:3px solid var(--pine)">
+                    <div class="field-label mb-2"><I18nText k="curatorNoteLabel" /></div>
+                    <I18nBlock as="div" class="body-text text-[.88rem] leading-[1.85]" t={note} />
+                  </div>
                   <div slot="extra" class="marginalia-drawer collapsible" data-collapsible data-open="false">
                     <button type="button" class="collapsible-toggle w-full flex items-center justify-between gap-2 px-3 py-2.5 text-[.82rem] font-bold"
                             style="background:var(--card-2);border:1px solid var(--cinnabar);color:var(--cinnabar)"
@@ -97,7 +103,7 @@ const topicFilters = axiomTopics;
 
   <section class="archive-shell pb-4">
     <I18nBlock as="p" class="source-note text-[.8rem]"
-      zh="联动眉批由 src/utils/cognitiveEngine.ts 的 buildCrossLibraryMatrix() 生成：策展映射 + 8 大公理关键词加权自动补全，点击可跳转至对应版块锚点。"
-      en="Marginalia links are produced by buildCrossLibraryMatrix(): curated mapping plus keyword-weighted augmentation over the 8 axioms. Click to jump to the source anchor." />
+      zh="眉批里的线索来自人工映射与关键词补全，点击可跳回原文所在版块；策展人备注则是另加的一层，不替作者下结论，也不改动原有挂载。"
+      en="The marginalia clues come from curated mappings and keyword augmentation; click to return to the relevant section. Curator’s notes are a separate layer: they do not speak for the source author or alter the original mounting." />
   </section>
 </BaseLayout>
