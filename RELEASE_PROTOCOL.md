@@ -90,8 +90,8 @@ powershell -ExecutionPolicy Bypass -File .\deploy-to-cf.ps1 -Mode publish -Publi
 
 ## 8. 当前基线（2026-11-14）
 
-- 内容发布已完成并上线；Codex 以 `-Publisher claude` 代执行 `-Mode publish`。HEAD / origin/main：`13f19ff72f0956bc4a06e7dfc60653993ff9f926`。旧基线 `95319b1` 已过期。
+- 内容发布已完成并上线；Codex 以 `-Publisher claude` 代执行 `-Mode publish`。内容 commit / 当时 HEAD：`13f19ff72f0956bc4a06e7dfc60653993ff9f926`。旧基线 `95319b1` 已过期。
 - 证据卡：`status=PUBLISHED_LIVE_VERIFIED`、`publisher=claude`、`local_css=live_css=/_astro/index.pfPcvcDK.css`、`css_state=MATCH`、`content=MATCH`、marker=`我做这个网站，不是因为你不懂思想`、六页 HTTP 200；Codex 已按第 5 节独立复核并标记 `ACCEPTED`。
 - 最新 `deploy-to-cf.ps1` 已在内容 publish 中完整跑过 8 道门禁：`astro check` 53 文件 0/0/0、`tsc --noEmit`、6 页 build、WCAG AA 对比度全过。今后若再改发布脚本，先 `verify` 再单独工具 commit。
-- 本次分两步：内容发布已完成；工具入库 commit 待执行（仅 `RELEASE_PROTOCOL.md` + `deploy-to-cf.ps1` + `deploy-to-cf.cmd`）。工具入库 commit 见 git log；发布资产由专门工具 commit 管理，日常内容 publish 不暂存它们。
+- 本次分两步均已完成：内容发布 commit `13f19ff...`；工具入库 commit `4165b46f9494e62c829da168b4e2044b601cfd8b`（仅 `RELEASE_PROTOCOL.md` + `deploy-to-cf.ps1` + `deploy-to-cf.cmd`），远端 HEAD 已核实一致。发布资产由专门工具 commit 管理，日常内容 publish 不暂存它们。当前 HEAD / origin/main：`4165b46...`。
 - `optimization-recommendations.md` 保持未追踪、不提交、不删除、不改 `.gitignore`；`astro.config.mjs` 的 `site` 字段本轮不动，线上主域仍是 `https://cognition.raymanlim.us.ci/`。
