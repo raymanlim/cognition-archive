@@ -14,6 +14,7 @@
 #  PUBLISH (only after Rayman says go):
 #    powershell -ExecutionPolicy Bypass -File .\deploy-to-cf.ps1 -Mode publish -Publisher codex
 #    (-Publisher accepts codex | claude | rayman; defaults to rayman)
+#    Optional -CommitMessage "..." overrides the generated commit message.
 #  Adds: remote-HEAD equality guard -> strict unknown-path guard
 #    -> git add <explicit allowlist> -> strict alignment gate -> commit
 #    -> push -> remote HEAD == new commit -> bounded live-CSS poll -> evidence card.
@@ -29,7 +30,8 @@ param(
   [string]$Mode = 'verify',
   [ValidateSet('codex', 'claude', 'rayman')]
   [string]$Publisher = 'rayman',
-  [string]$ContentMarker = '我做这个网站，不是因为你不懂思想'
+  [string]$ContentMarker = '我做这个网站，不是因为你不懂思想',
+  [string]$CommitMessage = ''
 )
 
 $ErrorActionPreference = 'Continue'
@@ -281,7 +283,13 @@ try {
     $CardAlignmentState = 'MATCH'
 
     Write-Log '[8/8] git commit'
-    & git commit -m 'Humanizing rewrites: curator voice + 25 curator notes + bilingual labels'
+    $commitMessage = if ([string]::IsNullOrWhiteSpace($CommitMessage)) {
+      "chore(site): publish $Publisher release $(Get-Date -Format 'yyyy-MM-dd HH:mm')"
+    } else {
+      $CommitMessage
+    }
+    Write-Log ("[8/8] commit message: " + $commitMessage)
+    & git commit -m $commitMessage
     Assert-Step 'git commit' $LASTEXITCODE
     $ReleaseCommit = (& git rev-parse HEAD).Trim()
     $ReleaseFiles = @($finalStaged | Where-Object { $_ })

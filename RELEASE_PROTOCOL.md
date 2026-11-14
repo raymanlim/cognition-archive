@@ -34,6 +34,8 @@ powershell -ExecutionPolicy Bypass -File .\deploy-to-cf.ps1 -Mode publish -Publi
 powershell -ExecutionPolicy Bypass -File .\deploy-to-cf.ps1 -Mode publish -Publisher rayman
 ```
 
+可选 `-CommitMessage "..."` 覆盖默认 `chore(site): publish <publisher> release <timestamp>`；禁止再把某次具体改动的标题硬编码进发布脚本。
+
 `deploy-to-cf.cmd` 是无参启动器，**永远只跑 verify**。
 
 ## 3. 发布前门禁（脚本已固化，不得绕过）
@@ -47,6 +49,7 @@ powershell -ExecutionPolicy Bypass -File .\deploy-to-cf.ps1 -Mode publish -Publi
 7. 产物：6 个 `dist/**/index.html` 全部存在。
 8. 暂存：只用显式 allowlist，且必须包含 `AGENT_SYNC.md`；硬排除 `optimization-recommendations.md`、`rewrite_plan.md`、`design.md`、`astro.config.mjs`、`RELEASE_PROTOCOL.md`、`deploy-to-cf.ps1`、`deploy-to-cf.cmd`、`scripts/check-alignment.mjs`、`dist/`、`node_modules/`、`.astro/`、`.workbuddy-ai/`。发布资产由专门的「工具 commit」管理；工具 commit 也必须更新 `AGENT_SYNC.md` 并跑 `node scripts/check-alignment.mjs --mode tooling --publisher <who> --base-head <parent HEAD>`。任何发布链改动都单独提工具 commit 并由另一方复核。禁止 `git add -A`；`optimization-recommendations.md` 不发布。任何既不在 Allow 也不在 Deny 的路径会触发硬失败，防止新源码被静默漏提。
 9. 云端铁律：`src/`、`scripts/` 不得出现 `D:\Obsidian` 绝对路径；项目不自持 vault 依赖。
+10. 规约自检：`scripts/check-alignment.mjs --mode verify` 会拒绝 `RELEASE_PROTOCOL.md` 再出现静态实时指针措辞，也会拒绝 `deploy-to-cf.ps1` 残留旧版硬编码 commit message。发布信息必须用 `-CommitMessage` 或生成的默认 message；静态文档只能写带 `as of <timestamp>` 的历史快照。
 
 任一失败：停在 commit/push 之前。若已 push 后失败，证据卡标记 `PUSHED_BUT_FAILED_POSTCHECK`，禁止盲目重试，先查远端 HEAD 与 Cloudflare Pages 日志。
 
@@ -63,7 +66,7 @@ powershell -ExecutionPolicy Bypass -File .\deploy-to-cf.ps1 -Mode publish -Publi
 
 - `VERIFY_ONLY_NO_PUSH`：只验证，没上线。
 - `ABORTED_BEFORE_PUSH`：publish 失败且未推送，可修复后重跑。
-- `PUBLISHED_LIVE_VERIFIED`：远端 HEAD == 新 commit、线上 CSS 哈希 == 本地 dist 哈希、线上首页出现内容 marker。
+- `PUBLISHED_LIVE_VERIFIED`：远端 HEAD == 新 commit、线上 CSS 哈希 == 本地 dist 哈希、线上首页出现内容 marker、`alignment=MATCH`。
 - `PUSHED_LIVE_UNVERIFIED`：推送成功但线上 CSS 或内容 marker 未刷新，不算上线完成。
 - `PUSHED_BUT_FAILED_POSTCHECK`：推送后校验失败，先排查再动。
 
@@ -92,11 +95,20 @@ powershell -ExecutionPolicy Bypass -File .\deploy-to-cf.ps1 -Mode publish -Publi
 - 锚点命名空间：`C01–C23`、`d01–d18`（num 101–118）、`ref-01..ref-10`（`sourceNum` 存 L1 编号）、`R01–R25`。
 - 中文大写数字「壹 贰 叁 肆 伍」，非日式「壱 弐 参」。
 
-## 8. 当前基线（2026-11-14）
+## 8. 历史基线与实时指针（as of 2026-11-14）
 
-- 内容发布已完成并上线；Codex 以 `-Publisher claude` 代执行 `-Mode publish`。内容 commit / 当时 HEAD：`13f19ff72f0956bc4a06e7dfc60653993ff9f926`。旧基线 `95319b1` 已过期。
-- 证据卡：`status=PUBLISHED_LIVE_VERIFIED`、`publisher=claude`、`local_css=live_css=/_astro/index.pfPcvcDK.css`、`css_state=MATCH`、`content=MATCH`、marker=`我做这个网站，不是因为你不懂思想`、六页 HTTP 200；Codex 已按第 5 节独立复核并标记 `ACCEPTED`。
-- 最新 `deploy-to-cf.ps1` 已在内容 publish 中完整跑过 8 道门禁：`astro check` 53 文件 0/0/0、`tsc --noEmit`、6 页 build、WCAG AA 对比度全过。今后若再改发布脚本，先 `verify` 再单独工具 commit。
-- 本次分两步均已完成：内容发布 commit `13f19ff...`；工具入库 commit `4165b46f9494e62c829da168b4e2044b601cfd8b`（仅 `RELEASE_PROTOCOL.md` + `deploy-to-cf.ps1` + `deploy-to-cf.cmd`），远端 HEAD 已核实一致。发布资产由专门工具 commit 管理，日常内容 publish 不暂存它们。当前 HEAD / origin/main：`4165b46...`。
+以下均为**历史快照**，仅用于溯源，不代表实时指针：
+
+| 时间 | Commit | 含义 |
+|---|---|---|
+| 2026-11-14 | `13f19ff...` | 内容发布上线；Codex 以 `-Publisher claude` 代执行 `-Mode publish`，证据卡 `PUBLISHED_LIVE_VERIFIED`，Codex 已按第 5 节独立复核并标记 `ACCEPTED`。 |
+| 2026-11-14 | `4165b46...` | 工具入库：`RELEASE_PROTOCOL.md` + `deploy-to-cf.ps1` + `deploy-to-cf.cmd`。 |
+| 2026-11-14 | `d4f0992...` | 基线文档修正：曾把 `4165b46...` 写成静态实时基线，CLAUDE 在该快照中指出此写法会随后续 commit 过期。此 commit 仅作历史记录。 |
+| 2026-11-14 | `73325f0...` | 对齐账本与 fail-closed 门禁落地：新增 `AGENT_SYNC.md`、`scripts/check-alignment.mjs`，并接入发布脚本。 |
+
+**实时指针唯一来源**：`git rev-parse HEAD` 与 `git ls-remote origin refs/heads/main`。静态文档不得把某个 commit hash 宣称为永久实时指针；后续 commit 推进指针时，不为了同步 hash 单独制造文档 commit，除非规约语义本身发生变化。若需引用历史指针，必须写明 `as of <timestamp>` 并标注「历史快照」。
+
+- 内容发布证据（历史）：`status=PUBLISHED_LIVE_VERIFIED`、`publisher=claude`、`local_css=live_css=/_astro/index.pfPcvcDK.css`、`css_state=MATCH`、`content=MATCH`、marker=`我做这个网站，不是因为你不懂思想`、六页 HTTP 200。
+- `deploy-to-cf.ps1` 已在内容 publish 中完整跑过 8 道门禁：`astro check` 53 文件 0/0/0、`tsc --noEmit`、6 页 build、WCAG AA 对比度全过。今后若再改发布脚本，先 `verify` 再单独工具 commit，并由另一方复核。
 - `optimization-recommendations.md` 保持未追踪、不提交、不删除、不改 `.gitignore`；`astro.config.mjs` 的 `site` 字段本轮不动，线上主域仍是 `https://cognition.raymanlim.us.ci/`。
-- 新增强制规则：`AGENT_SYNC.md` 是双方唯一的对齐记录；任何代码、数据、文案、发布工具或上传内容变更都必须先更新 `CURRENT ENTRY`，并由 `scripts/check-alignment.mjs` 在 publish 暂存后做精确文件清单校验。当前条目 `2026-11-14-add-agent-alignment-rule` 为工具规则落地，待 CLAUDE 复核后进入 Review Log。
+- `AGENT_SYNC.md` 是双方唯一的对齐记录；任何代码、数据、文案、发布工具或上传内容变更都必须先更新 `CURRENT ENTRY`，并由 `scripts/check-alignment.mjs` 在 publish 暂存后做精确文件清单校验。对齐账本首次落地条目 `2026-11-14-add-agent-alignment-rule` 已过期；后续每次变更必须覆盖为新的 `CURRENT ENTRY`。

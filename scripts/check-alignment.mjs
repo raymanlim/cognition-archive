@@ -87,6 +87,35 @@ function validateCommon(entry, strict) {
 const entry = readCurrentEntry();
 validateCommon(entry, mode !== 'verify');
 
+// Rule 7: static docs cannot claim a live HEAD, and the release script cannot
+// reuse a one-off commit title. These guards run even in lightweight verify mode.
+function validateProtocolAssets() {
+  const protocolPath = path.join(process.cwd(), 'RELEASE_PROTOCOL.md');
+  const deployPath = path.join(process.cwd(), 'deploy-to-cf.ps1');
+  if (!fs.existsSync(protocolPath)) fail('RELEASE_PROTOCOL.md is missing');
+  if (!fs.existsSync(deployPath)) fail('deploy-to-cf.ps1 is missing');
+
+  const protocol = fs.readFileSync(protocolPath, 'utf8');
+  const staticPointer = protocol
+    .split(/\r?\n/)
+    .find((line) =>
+      /(?:当前|实时)/.test(line) &&
+      /(?:HEAD|origin\/main)/.test(line) &&
+      /\b[0-9a-f]{7,40}\b/i.test(line)
+    );
+  if (staticPointer) {
+    fail(`RELEASE_PROTOCOL.md contains a static live-pointer claim: ${staticPointer.trim()}`);
+  }
+
+  const deploy = fs.readFileSync(deployPath, 'utf8');
+  const legacyMessage = 'Humanizing rewrites: curator voice + 25 curator notes + bilingual labels';
+  if (deploy.includes(legacyMessage)) {
+    fail('deploy-to-cf.ps1 still contains the legacy hardcoded commit message');
+  }
+}
+
+validateProtocolAssets();
+
 if (mode === 'verify') {
   console.log(`ALIGNMENT_VERIFY_OK entry=${entry.entry_id}`);
   process.exit(0);
