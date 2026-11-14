@@ -16,9 +16,11 @@
 ## 2. 唯一发布链
 
 ```text
-改码 → 对方审 diff → verify → Rayman 批准 → publish -Publisher <who>
+改码 → 更新 `AGENT_SYNC.md` CURRENT ENTRY → 对方审 diff 并签 `review_status` → verify → Rayman 批准 → publish -Publisher <who>
      → 对方复核证据卡 + git ls-remote + 线上 HTML → 标记 ACCEPTED
 ```
+
+**强制对齐规则**：无论 Codex 还是 CLAUDE 更新代码、数据、文案、发布工具，或向线上上传内容，都必须更新 `D:\03_Work_Projects\Cognition\AGENT_SYNC.md` 的 `CURRENT ENTRY`，列出本次精确文件清单、发布者、审查者、预期可见变化；没有这条记录，双方不对齐，publish 会被 `scripts/check-alignment.mjs` 拒绝。写的人不能同时是审查者。
 
 命令：
 
@@ -37,22 +39,23 @@ powershell -ExecutionPolicy Bypass -File .\deploy-to-cf.ps1 -Mode publish -Publi
 ## 3. 发布前门禁（脚本已固化，不得绕过）
 
 1. 并发护栏：`git ls-remote origin refs/heads/main` 与本地 HEAD 比对；publish 模式下不一致即 abort，不暂存、不提交、不推送。
-2. 数据解析：`parse-sources.mjs` + `parse-patch.mjs`（分开跑，不链式嵌套 npm）。
-3. 类型：`npx.cmd astro check` 必须 0 errors / 0 warnings / 0 hints；`npx.cmd tsc --noEmit` 通过。
-4. 构建：`npx.cmd astro build` 生成 6 个页面；不写死 `node_modules/astro/bin/astro.js`。
-5. 无障碍：`npm.cmd run check:contrast` 全过。
-6. 产物：6 个 `dist/**/index.html` 全部存在。
-7. 暂存：只用显式 allowlist；硬排除 `optimization-recommendations.md`、`rewrite_plan.md`、`design.md`、`astro.config.mjs`、`RELEASE_PROTOCOL.md`、`deploy-to-cf.ps1`、`deploy-to-cf.cmd`、`dist/`、`node_modules/`、`.astro/`、`.workbuddy-ai/`。发布资产 `RELEASE_PROTOCOL.md`、`deploy-to-cf.ps1`、`deploy-to-cf.cmd` 由专门的「工具 commit」管理；日常内容 publish 的 `$Deny` 硬排除它们。任何发布链改动都单独提工具 commit 并由另一方复核。禁止 `git add -A`；`optimization-recommendations.md` 不发布。任何既不在 Allow 也不在 Deny 的路径会触发硬失败，防止新源码被静默漏提。
-8. 云端铁律：`src/`、`scripts/` 不得出现 `D:\Obsidian` 绝对路径；项目不自持 vault 依赖。
+2. 对齐门禁：`AGENT_SYNC.md` 必须存在且 `CURRENT ENTRY` 可读；verify 记录 `alignment=VERIFY_OK`，publish 暂存后由 `node scripts/check-alignment.mjs --mode content` 校验文件清单、publisher、reviewer、base_head、内容 marker 与对方预审。
+3. 数据解析：`parse-sources.mjs` + `parse-patch.mjs`（分开跑，不链式嵌套 npm）。
+4. 类型：`npx.cmd astro check` 必须 0 errors / 0 warnings / 0 hints；`npx.cmd tsc --noEmit` 通过。
+5. 构建：`npx.cmd astro build` 生成 6 个页面；不写死 `node_modules/astro/bin/astro.js`。
+6. 无障碍：`npm.cmd run check:contrast` 全过。
+7. 产物：6 个 `dist/**/index.html` 全部存在。
+8. 暂存：只用显式 allowlist，且必须包含 `AGENT_SYNC.md`；硬排除 `optimization-recommendations.md`、`rewrite_plan.md`、`design.md`、`astro.config.mjs`、`RELEASE_PROTOCOL.md`、`deploy-to-cf.ps1`、`deploy-to-cf.cmd`、`scripts/check-alignment.mjs`、`dist/`、`node_modules/`、`.astro/`、`.workbuddy-ai/`。发布资产由专门的「工具 commit」管理；工具 commit 也必须更新 `AGENT_SYNC.md` 并跑 `node scripts/check-alignment.mjs --mode tooling --publisher <who> --base-head <parent HEAD>`。任何发布链改动都单独提工具 commit 并由另一方复核。禁止 `git add -A`；`optimization-recommendations.md` 不发布。任何既不在 Allow 也不在 Deny 的路径会触发硬失败，防止新源码被静默漏提。
+9. 云端铁律：`src/`、`scripts/` 不得出现 `D:\Obsidian` 绝对路径；项目不自持 vault 依赖。
 
 任一失败：停在 commit/push 之前。若已 push 后失败，证据卡标记 `PUSHED_BUT_FAILED_POSTCHECK`，禁止盲目重试，先查远端 HEAD 与 Cloudflare Pages 日志。
 
 ## 4. 发布证据卡
 
 每次运行（含 verify）都会把 `RELEASE EVIDENCE CARD` 写入 `%TEMP%\cognition-deploy.log`：
-`timestamp`、`publisher`、`mode`、`status`、`commit`、`remote_head`、7 项 gates、`local_css`、`live_css`、`css_state`、`content`、`marker`、`routes`、改动文件、`log` 路径。
+`timestamp`、`publisher`、`mode`、`status`、`commit`、`remote_head`、8 项 gates、`local_css`、`live_css`、`css_state`、`content`、`marker`、`alignment`、`routes`、改动文件、`log` 路径。
 
-文案/数据改动常常不改 CSS 哈希，因此发布判定额外使用**内容指纹**：`-ContentMarker`（默认首句「我做这个网站，不是因为你不懂思想」）。`PUBLISHED_LIVE_VERIFIED` 要求三者同时成立：远端 HEAD == 新 commit、CSS 哈希一致、线上首页出现该 marker。任何一项 pending 只算 `PUSHED_LIVE_UNVERIFIED`。
+文案/数据改动常常不改 CSS 哈希，因此发布判定额外使用**内容指纹**：`-ContentMarker`（默认首句「我做这个网站，不是因为你不懂思想」）。`PUBLISHED_LIVE_VERIFIED` 要求四者同时成立：远端 HEAD == 新 commit、CSS 哈希一致、线上首页出现该 marker、`alignment=MATCH`。任何一项 pending 只算 `PUSHED_LIVE_UNVERIFIED`。
 
 编码约定：Windows PowerShell 5.1 的 `Get-Content -Raw` 与 `Invoke-WebRequest.Content` 会按系统 ANSI 代码页解码，导致中文 marker 乱码。脚本对本地 `dist/index.html` 与线上响应都显式按 UTF-8 字节解码；改动这段代码时必须保留，否则内容指纹会假阴性。
 
@@ -70,9 +73,10 @@ powershell -ExecutionPolicy Bypass -File .\deploy-to-cf.ps1 -Mode publish -Publi
 
 1. `git ls-remote origin refs/heads/main` 是否等于证据卡 `commit`。
 2. 抓线上首页 HTML，确认 `/_astro/index.*.css` 等于证据卡 `local_css`。
-3. 六条路由均 200。
-4. 抽查改动是否真生效（例如新文案在 ZH/EN/BI 三态可见，署名 handle 未丢）。
-5. 在证据卡后追加一行 `ACCEPTED_BY=<other-agent> <timestamp>`；不一致则 `REJECTED` + 原因，交 Rayman 裁决。
+3. 核对 `AGENT_SYNC.md` 的 `CURRENT ENTRY` 与 `RELEASE EVIDENCE CARD` 的 publisher、文件清单、alignment 状态一致；工具 commit 则核对 Review Log 是否已补。
+4. 六条路由均 200。
+5. 抽查改动是否真生效（例如新文案在 ZH/EN/BI 三态可见，署名 handle 未丢）。
+6. 在 `AGENT_SYNC.md` Review Log 追加一行 `ACCEPTED_BY=<other-agent> <timestamp> <commit>`；不一致则 `REJECTED` + 原因，交 Rayman 裁决。
 
 ## 6. 冲突与回滚
 
@@ -95,3 +99,4 @@ powershell -ExecutionPolicy Bypass -File .\deploy-to-cf.ps1 -Mode publish -Publi
 - 最新 `deploy-to-cf.ps1` 已在内容 publish 中完整跑过 8 道门禁：`astro check` 53 文件 0/0/0、`tsc --noEmit`、6 页 build、WCAG AA 对比度全过。今后若再改发布脚本，先 `verify` 再单独工具 commit。
 - 本次分两步均已完成：内容发布 commit `13f19ff...`；工具入库 commit `4165b46f9494e62c829da168b4e2044b601cfd8b`（仅 `RELEASE_PROTOCOL.md` + `deploy-to-cf.ps1` + `deploy-to-cf.cmd`），远端 HEAD 已核实一致。发布资产由专门工具 commit 管理，日常内容 publish 不暂存它们。当前 HEAD / origin/main：`4165b46...`。
 - `optimization-recommendations.md` 保持未追踪、不提交、不删除、不改 `.gitignore`；`astro.config.mjs` 的 `site` 字段本轮不动，线上主域仍是 `https://cognition.raymanlim.us.ci/`。
+- 新增强制规则：`AGENT_SYNC.md` 是双方唯一的对齐记录；任何代码、数据、文案、发布工具或上传内容变更都必须先更新 `CURRENT ENTRY`，并由 `scripts/check-alignment.mjs` 在 publish 暂存后做精确文件清单校验。当前条目 `2026-11-14-add-agent-alignment-rule` 为工具规则落地，待 CLAUDE 复核后进入 Review Log。

@@ -5,7 +5,7 @@
 # ----------------------------------------------------------------------------
 #  v2 — shared release entry for Codex / Claude / Rayman.
 #  DEFAULT = VERIFY (deploy-to-cf.cmd calls it with no arguments):
-#    remote-HEAD guard (read-only) -> parse-sources -> parse-patch
+#    remote-HEAD guard -> alignment ledger read check -> parse-sources -> parse-patch
 #    -> astro check -> tsc --noEmit -> astro build -> check:contrast
 #    -> dist 6-page sanity -> git reports -> live CSS hash + six-page HTTP
 #    NO git add / commit / push.
@@ -15,9 +15,11 @@
 #    powershell -ExecutionPolicy Bypass -File .\deploy-to-cf.ps1 -Mode publish -Publisher codex
 #    (-Publisher accepts codex | claude | rayman; defaults to rayman)
 #  Adds: remote-HEAD equality guard -> strict unknown-path guard
-#    -> git add <explicit allowlist> -> commit
+#    -> git add <explicit allowlist> -> strict alignment gate -> commit
 #    -> push -> remote HEAD == new commit -> bounded live-CSS poll -> evidence card.
 #  If another publisher advanced origin/main, publish aborts before staging.
+#  AGENT_SYNC.md is mandatory in every release set: both agents must read the
+#  same current entry before code/content/tooling changes or uploads.
 #
 #  Log / evidence card: %TEMP%\cognition-deploy.log
 # ============================================================================
@@ -68,6 +70,7 @@ function Write-ReleaseCard {
     [string]$CssState,
     [string]$ContentState,
     [string]$ContentMarker,
+    [string]$AlignmentState,
     [string]$RoutesState,
     [string[]]$Files
   )
@@ -78,12 +81,13 @@ function Write-ReleaseCard {
   Write-Log ("status     : $Status")
   Write-Log ("commit     : $Commit")
   Write-Log ("remote_head: $RemoteHead")
-  Write-Log ('gates      : parse-sources | parse-patch | astro check | tsc --noEmit | astro build | check:contrast | dist-6-pages')
+  Write-Log ('gates      : alignment-ledger | parse-sources | parse-patch | astro check | tsc --noEmit | astro build | check:contrast | dist-6-pages')
   Write-Log ("local_css  : $LocalCss")
   Write-Log ("live_css   : $LiveCss")
   Write-Log ("css_state  : $CssState")
   Write-Log ("content    : $ContentState")
   Write-Log ("marker     : $ContentMarker")
+  Write-Log ("alignment  : $AlignmentState")
   Write-Log ("routes     : $RoutesState")
   Write-Log ('files      : ' + (($Files | Where-Object { $_ }) -join ', '))
   Write-Log ("log        : $LogPath")
@@ -95,6 +99,7 @@ function Write-ReleaseCard {
 # Release tooling was committed separately in the tooling commit; it is now in
 # $Deny so everyday releases cannot silently re-stage script edits.
 $Allow = @(
+  'AGENT_SYNC.md',
   '认知素材库.md',
   'PATCH_DATA_AND_I18N.md',
   'scripts/parse-sources.mjs',
@@ -121,7 +126,8 @@ $Deny = @(
   'astro.config.mjs',
   'RELEASE_PROTOCOL.md',
   'deploy-to-cf.ps1',
-  'deploy-to-cf.cmd'
+  'deploy-to-cf.cmd',
+  'scripts/check-alignment.mjs'
 )
 
 $Fatal = $false
@@ -134,6 +140,7 @@ $CardLocalCss = ''
 $CardLiveCss = ''
 $CardCssState = 'NOT_CHECKED'
 $CardContentState = 'NOT_CHECKED'
+$CardAlignmentState = 'NOT_CHECKED'
 $CardRoutesState = 'NOT_CHECKED'
 
 try {
@@ -155,6 +162,12 @@ try {
   if ($Mode -eq 'publish' -and $ReleaseRemoteHead -and $ReleaseRemoteHead -ne $ReleaseCommit) {
     throw "FAILED: origin/main ($ReleaseRemoteHead) differs from local HEAD ($ReleaseCommit). Another publisher went first — rebase/merge and re-verify before publishing."
   }
+
+  # ---- 0b. shared alignment ledger must exist and be readable in all modes ----
+  Write-Log '[align] node scripts/check-alignment.mjs --mode verify'
+  & node scripts/check-alignment.mjs --mode verify
+  Assert-Step 'alignment ledger readable' $LASTEXITCODE
+  $CardAlignmentState = 'VERIFY_OK'
 
   # ---- 1. parse (unchained: one process each, never nested inside npm) ----
   Write-Log '[1/8] node scripts/parse-sources.mjs'
@@ -259,6 +272,14 @@ try {
     }
     $finalStaged
 
+    # Strict alignment gate runs after staging: CURRENT ENTRY.files must equal
+    # the exact staged set, publisher/reviewer/base-head must match, and the
+    # other agent must have pre-reviewed content changes.
+    Write-Log '[align] node scripts/check-alignment.mjs --mode content'
+    & node scripts/check-alignment.mjs --mode content --publisher $Publisher --base-head $ReleaseCommit --content-marker $ContentMarker
+    Assert-Step 'alignment gate (content publish)' $LASTEXITCODE
+    $CardAlignmentState = 'MATCH'
+
     Write-Log '[8/8] git commit'
     & git commit -m 'Humanizing rewrites: curator voice + 25 curator notes + bilingual labels'
     Assert-Step 'git commit' $LASTEXITCODE
@@ -352,7 +373,7 @@ try {
   }
 
   if ($Mode -eq 'publish') {
-    if ($CardCssState -eq 'MATCH' -and $CardContentState -eq 'MATCH' -and $ReleaseRemoteHead -eq $ReleaseCommit) {
+    if ($CardCssState -eq 'MATCH' -and $CardContentState -eq 'MATCH' -and $CardAlignmentState -eq 'MATCH' -and $ReleaseRemoteHead -eq $ReleaseCommit) {
       $ReleaseStatus = 'PUBLISHED_LIVE_VERIFIED'
     } else {
       $ReleaseStatus = 'PUSHED_LIVE_UNVERIFIED'
@@ -363,7 +384,7 @@ try {
       $ReleaseFiles = @(& git @GitQ diff --name-only HEAD)
     }
   }
-  Write-ReleaseCard -Status $ReleaseStatus -Commit $ReleaseCommit -RemoteHead $ReleaseRemoteHead -LocalCss $CardLocalCss -LiveCss $CardLiveCss -CssState $CardCssState -ContentState $CardContentState -ContentMarker $ContentMarker -RoutesState $CardRoutesState -Files $ReleaseFiles
+  Write-ReleaseCard -Status $ReleaseStatus -Commit $ReleaseCommit -RemoteHead $ReleaseRemoteHead -LocalCss $CardLocalCss -LiveCss $CardLiveCss -CssState $CardCssState -ContentState $CardContentState -ContentMarker $ContentMarker -AlignmentState $CardAlignmentState -RoutesState $CardRoutesState -Files $ReleaseFiles
 
   Write-Log "---- deploy finished OK (mode=$Mode) ----"
   Write-Log "log: $LogPath"
@@ -375,7 +396,7 @@ try {
   Write-Log "---- deploy STOPPED: $($_.Exception.Message) ----"
   if (-not $Pushed) { Write-Log 'No commit/push was performed after the failing step.' }
   else { Write-Log 'Push already happened; do NOT retry blindly — inspect remote HEAD and Cloudflare Pages log.' }
-  Write-ReleaseCard -Status $ReleaseStatus -Commit $ReleaseCommit -RemoteHead $ReleaseRemoteHead -LocalCss $CardLocalCss -LiveCss $CardLiveCss -CssState $CardCssState -ContentState $CardContentState -ContentMarker $ContentMarker -RoutesState $CardRoutesState -Files $ReleaseFiles
+  Write-ReleaseCard -Status $ReleaseStatus -Commit $ReleaseCommit -RemoteHead $ReleaseRemoteHead -LocalCss $CardLocalCss -LiveCss $CardLiveCss -CssState $CardCssState -ContentState $CardContentState -ContentMarker $ContentMarker -AlignmentState $CardAlignmentState -RoutesState $CardRoutesState -Files $ReleaseFiles
   Write-Log "log: $LogPath"
 } finally {
   if ($TranscriptOn) { try { Stop-Transcript | Out-Null } catch { } }
